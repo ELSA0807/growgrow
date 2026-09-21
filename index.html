@@ -459,9 +459,9 @@ function render(){
   const tp=document.getElementById('todayProg'); if(tp) tp.style.width= me.task.done?'100%':'0%';
   const ts=document.getElementById('todaySub'); if(ts) ts.textContent= me.task.done?'秘密任務 1/50・已交，等艾兒莎回':'秘密任務 1/50・還有 3 天';
   const sbn=document.getElementById('startBtn'); if(sbn) sbn.textContent= me.task.done?'已交出去':'開始任務';
-  document.getElementById('lv').textContent=me.lv; document.getElementById('xp').textContent=me.xp.toLocaleString(); document.getElementById('days').textContent=Math.max(1,Math.round((Date.now()-new Date('2026-09-05'))/86400000)); document.getElementById('rankMe').textContent=me.rank||12;
+  const $=(id)=>document.getElementById(id)||{}; $('lv').textContent=me.lv; $('lv2').textContent=me.lv; $('xp').textContent=me.xp.toLocaleString(); $('days').textContent=Math.max(1,Math.round((Date.now()-new Date('2026-09-05'))/86400000)); $('rankMe').textContent=me.rank||12;
   const wk=document.getElementById('week'); if(wk) wk.innerHTML=me.week.map(x=>`<i class="${x?'on':''}"></i>`).join('')+'<span>M T W T F S S</span>';
-  renderRadial(); renderVillage(); renderValues(); renderHistory(); renderMentors(); renderRank(); renderMyHouse(); document.getElementById('lv2').textContent=me.lv; (document.getElementById('todaySub2')||{}).textContent=(document.getElementById('todaySub')||{}).textContent||'';
+  [renderRadial,renderVillage,renderValues,renderHistory,renderMentors,renderRank,renderMyHouse].forEach(f=>{ try{ f(); }catch(e){ console.warn('render part failed',f.name,e); } }); document.getElementById('lv2').textContent=me.lv; (document.getElementById('todaySub2')||{}).textContent=(document.getElementById('todaySub')||{}).textContent||'';
 }
 
 const districts=[
