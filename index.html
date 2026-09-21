@@ -231,6 +231,43 @@ svg.art{width:100%;height:auto;display:block}
 .bcast .bc-ic{font-size:18px}.bcast .bc-t{flex:1;font-size:13px;line-height:1.5}.bcast .bc-t b{display:block;font-family:"Noto Serif TC",serif;font-size:14px;color:#F6D66B}.bcast .chev{color:#F3EEE3}
 .nbar{margin:8px 20px 0;display:none;align-items:center;gap:10px;background:#FAF7F0;color:#1F2430;border:1.5px solid #B5382C;border-radius:14px;padding:9px 14px;cursor:pointer;font-size:13px}
 .nbar b{font-family:"Noto Serif TC",serif;font-size:14px;color:#B5382C}.nbar .nt{flex:1}
+.learn{margin:6px 20px 0}
+.learn h3{font-family:"Noto Serif TC",serif;font-weight:900;font-size:22px;margin:0;letter-spacing:.04em}
+.learn .k{font-size:12px;color:var(--stone);margin:2px 0 12px}
+.modgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+@media (max-width:420px){.modgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (min-width:900px){.modgrid{grid-template-columns:repeat(6,minmax(0,1fr))}}
+.mod{position:relative;border:1.5px solid #1F2430;border-radius:14px;background:var(--paper);padding:12px 12px 10px;cursor:pointer;text-align:left;font-family:inherit;color:var(--ink);overflow:hidden;min-height:118px;display:flex;flex-direction:column;justify-content:flex-end;transition:transform .15s}
+.mod:active{transform:scale(.97)}
+.mod svg{position:absolute;right:-6px;top:-6px;width:78px;height:78px}
+.mod .zh{font-family:"Noto Serif TC",serif;font-weight:900;font-size:22px;line-height:1.1}
+.mod .en{font-family:"Cormorant Garamond",serif;font-size:11px;letter-spacing:.22em;color:var(--ink-2);margin-top:2px}
+.mod .cnt{font-size:11px;color:var(--stone);margin-top:6px}
+.libhero{margin:14px 20px 0;display:flex;align-items:center;gap:14px;background:#1F2430;color:#F3EEE3;border-radius:16px;padding:20px 18px;cursor:pointer;border:0;width:calc(100% - 40px);text-align:left;font-family:inherit;position:relative;overflow:hidden}
+.libhero .t{font-family:"Noto Serif TC",serif;font-weight:900;font-size:26px;letter-spacing:.06em;color:#F6D66B}
+.libhero .d{font-size:13px;line-height:1.6;margin-top:4px;opacity:.9}
+.libhero .go{margin-left:auto;flex:none;width:44px;height:44px;border-radius:50%;background:#B5382C;display:grid;place-items:center;font-size:22px;color:#fff}
+.seg{display:flex;gap:8px;margin:12px 20px 0;flex-wrap:wrap}
+.seg button{border:1px solid #1F2430;background:transparent;border-radius:999px;padding:8px 16px;font-family:"Noto Serif TC",serif;font-weight:700;font-size:14px;cursor:pointer;color:var(--ink)}
+.seg button.on{background:#1F2430;color:#F3EEE3}
+.seg.sm button{font-family:inherit;font-weight:500;font-size:12px;padding:5px 12px;border-color:var(--line)}
+.seg.sm button.on{background:#B5382C;border-color:#B5382C;color:#fff}
+.clist{margin:12px 20px 0;display:grid;gap:10px}
+@media (min-width:900px){.clist{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.citem{border:1px solid #1F2430;border-radius:14px;background:var(--paper);padding:14px 16px;cursor:pointer;text-align:left;font-family:inherit;color:var(--ink);display:block;width:100%}
+.citem .cmeta{font-size:11px;color:var(--stone);letter-spacing:.06em;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.citem .tt{font-family:"Noto Serif TC",serif;font-weight:700;font-size:17px;line-height:1.45;margin-top:4px}
+.citem .ss{font-size:13px;color:var(--ink-2);line-height:1.7;margin-top:4px}
+.tagp{display:inline-block;border-radius:999px;padding:1px 9px;font-size:11px;font-weight:700}
+.tagp.free{background:#5C7A6E;color:#fff}.tagp.paid{background:#C6A44E;color:#1F2430}
+.post{margin:10px 20px 0;max-width:760px}
+.post h2{font-family:"Noto Serif TC",serif;font-weight:900;font-size:26px;line-height:1.35;margin:6px 0 8px}
+.post .body{font-size:16px;line-height:2;white-space:pre-wrap;word-break:break-word}
+.post audio{width:100%;margin:12px 0}
+.empty{margin:12px 20px 0;border:1px dashed var(--stone);border-radius:14px;padding:18px 16px;color:var(--stone);font-size:14px;line-height:1.8}
+.adminform{margin:14px 20px 0;border:1.5px solid #B5382C;border-radius:14px;padding:14px 16px;background:var(--paper)}
+.adminform input,.adminform select,.adminform textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:9px 12px;font-family:inherit;font-size:16px;background:#fff;margin-top:8px}
+.adminform textarea{min-height:140px;line-height:1.8}
 .dpad{position:absolute;left:10px;bottom:12px;z-index:2;display:grid;justify-items:center;gap:4px}
 .scenewrap,.scenewrap *{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
 .dpad button{width:46px;height:46px;border-radius:12px;border:1px solid #1F2430;background:rgba(250,247,240,.92);cursor:pointer;touch-action:none;display:grid;place-items:center;padding:0}
@@ -378,7 +415,11 @@ svg.art{width:100%;height:auto;display:block}
 
 <section class="view" id="v-growth">
   <div class="subhead"><button class="back" onclick="go('growth')">‹</button><div class="t serif">成長地圖</div><span style="width:28px"></span></div>
-  <div class="stats">
+  <div id="learnHero">
+    <div class="learn"><h3>六大學習模組</h3><div class="k">每個模組裡都有免費內容，也有更深的付費內容。從你現在最卡的那一塊開始。</div><div class="modgrid" id="modgrid"></div></div>
+    <button class="libhero" type="button" onclick="openLibrary('article')"><div><div class="t">文章與筆記</div><div class="d">艾兒莎寫的文章、隨手的筆記，還有 Podcast。想讀的時候，這裡一直都在。</div></div><div class="go">›</div></button>
+  </div>
+  <div class="stats" style="margin-top:18px">
     <div class="stat wide"><div class="big" style="color:var(--red)">第 <span id="days">17</span> 天</div><div style="flex:1"><div class="k">在島上的日子</div></div></div>
     <div class="stat"><div class="big">★ <span id="xp">1,240</span></div><div class="k">經驗值</div><div class="prog"><i style="width:62%"></i></div></div>
     <div class="stat"><div class="big">第 <span id="rankMe">12</span> 名</div><div class="k">島民排行（146 位）</div><div class="prog"><i style="width:92%"></i></div></div>
@@ -396,6 +437,24 @@ svg.art{width:100%;height:auto;display:block}
   </div>
   <svg class="art" viewBox="0 0 430 430" xmlns="http://www.w3.org/2000/svg" id="radial" aria-label="五個面向"></svg>
   
+</section>
+<section class="view" id="v-module">
+  <div class="subhead"><button class="back" onclick="go('growth')">‹</button><div class="t serif" id="modTitle">模組</div><span style="width:28px"></span></div>
+  <div class="card" style="margin-top:6px"><div class="sub" id="modDesc" style="font-size:14px;line-height:1.8"></div></div>
+  <div class="seg" id="modSeg"></div>
+  <div class="clist" id="modList"></div>
+  <div id="modAdmin"></div>
+</section>
+<section class="view" id="v-library">
+  <div class="subhead"><button class="back" onclick="go('growth')">‹</button><div class="t serif">文章與筆記</div><span style="width:28px"></span></div>
+  <div class="seg" id="libSeg"></div>
+  <div class="seg sm" id="libCat"></div>
+  <div class="clist" id="libList"></div>
+  <div id="libAdmin"></div>
+</section>
+<section class="view" id="v-post">
+  <div class="subhead"><button class="back" id="postBack">‹</button><div class="t serif" id="postKind">文章</div><span style="width:28px"></span></div>
+  <div class="post" id="postBody"></div>
 </section>
 <section class="view" id="v-msgs">
   <div class="subhead"><button class="back" onclick="go('village')">‹</button><div class="t serif">對話</div><span style="width:28px"></span></div>
@@ -926,6 +985,9 @@ const DB={
   async uploadVoice(blob,ext,seconds){ const path=me.id+'/'+Date.now()+'.'+ext; const up=await sb.storage.from('voice').upload(path,blob,{contentType:blob.type||('audio/'+ext),upsert:false}); if(up.error) throw up.error; const {error}=await sb.from('messages').insert({thread_type:'mentor',thread_key:'mentor:elsa',from_person:me.id,body:'（語音訊息 '+seconds+' 秒）',state:'pending',audio_path:path,audio_seconds:seconds}); if(error) throw error; return path; },
   async voiceUrl(path){ const {data,error}=await sb.storage.from('voice').createSignedUrl(path,3600); if(error) throw error; return data.signedUrl; },
   async aiDraft(id){ const {data,error}=await sb.functions.invoke('draft-reply',{body:{message_id:id}}); if(error) throw error; if(data&&data.error) throw new Error(data.error); return (data&&data.draft)||''; },
+  async contents(){ const {data,error}=await sb.from('contents').select('*').order('sort').order('published_at',{ascending:false}); if(error) throw error; return data||[]; },
+  async saveContent(row){ const {error}=await sb.from('contents').insert(row); if(error) throw error; },
+  async setContentPublished(id,on){ const {error}=await sb.from('contents').update({published:on}).eq('id',id); if(error) throw error; },
   async notifs(){ const {data}=await sb.from('notifications').select('id,kind,title,body,created_at,read_at').eq('person_id',me.id).order('created_at',{ascending:false}).limit(40); return data||[]; },
   async markNotifsRead(){ const {error}=await sb.from('notifications').update({read_at:new Date().toISOString()}).eq('person_id',me.id).is('read_at',null); if(error) throw error; },
   async event(kind,value){ try{ await sb.from('events').insert({person_id:me.id,kind,value}); }catch(e){} }
@@ -948,7 +1010,7 @@ async function bootLive(){
   // 小語
   const ns=await DB.notes(); if(ns.length){ me.note=ns[0].body; }
   // 廣播
-  await refreshBroadcast(); refreshNotifs(); if(typeof initWhisper==='function'){ initWhisper(); loadMentorLog(); }
+  await refreshBroadcast(); refreshNotifs(); if(typeof renderModules==='function'){ contentsLoaded=false; renderModules(); } if(typeof initWhisper==='function'){ initWhisper(); loadMentorLog(); }
   if(me.admin){ document.getElementById('reviewTab').style.display='grid'; renderReviewLive(); }
   DB.event('login',{});
   return true;
@@ -1081,6 +1143,45 @@ function closeSheet(){document.getElementById('sheet').classList.remove('open');
 let sampleFn=null; (async()=>{try{sampleFn=await window.claude?.use?.('sample');}catch(e){sampleFn=null;}})();
 const history=[];
 function addBub(t,who){const log=document.getElementById('log');const b=document.createElement('div');b.className='bub '+who;b.textContent=t;log.appendChild(b);b.scrollIntoView({block:'nearest'});return b;}
+// ===== 六大學習模組＋文章與筆記 =====
+const MODULES=[
+ {k:'wealth',zh:'財富',en:'WEALTH',c:'#C6A44E',d:'錢怎麼進來、怎麼留下來、怎麼替你工作。從把數字寫出來開始，到內在資本和外在資本怎麼一起長。',ic:'<circle cx="46" cy="40" r="20" fill="#C6A44E" stroke="#1F2430" stroke-width="2.5"/><rect x="38" y="32" width="16" height="16" fill="none" stroke="#1F2430" stroke-width="2.5"/><ellipse cx="30" cy="62" rx="18" ry="6" fill="#F0D98A" stroke="#1F2430" stroke-width="2"/>'},
+ {k:'relation',zh:'關係',en:'RELATIONSHIPS',c:'#E9A3B3',d:'伴侶、家人、朋友、圈層。怎麼開口、怎麼劃線、怎麼選一個人說真話，還有怎麼走進你想待的圈子。',ic:'<path d="M14 58 L30 40 L46 58Z" fill="#1F2430"/><rect x="18" y="58" width="24" height="14" fill="#E9A3B3" stroke="#1F2430" stroke-width="2"/><path d="M40 50 L56 32 L72 50Z" fill="#1F2430"/><rect x="44" y="50" width="24" height="18" fill="#F3EEE3" stroke="#1F2430" stroke-width="2"/><path d="M30 76 Q44 66 58 72" fill="none" stroke="#B5382C" stroke-width="2.5" stroke-dasharray="4 4"/>'},
+ {k:'life',zh:'人生',en:'LIFE',c:'#B5382C',d:'你想過什麼樣的日子、你願意拿什麼去換。人生 CEO 的那一套：價值觀、取捨、還有那些沒人教過你的苦。',ic:'<circle cx="54" cy="26" r="13" fill="#B5382C"/><path d="M4 74 L30 38 L46 58 L58 44 L78 74Z" fill="#1F2430"/><path d="M22 74 Q34 60 30 50" fill="none" stroke="#F3EEE3" stroke-width="2" stroke-dasharray="3 4"/>'},
+ {k:'career',zh:'職涯',en:'CAREER',c:'#7FA6B8',d:'跳級不是跳槽。怎麼談薪水、怎麼換跑道、怎麼把自己放到國際的位置上，下一步的最小動作是什麼。',ic:'<path d="M12 72 H28 V58 H44 V44 H60 V30 H76" fill="none" stroke="#1F2430" stroke-width="3"/><path d="M60 30 L76 30 L76 14" fill="none" stroke="#1F2430" stroke-width="3"/><path d="M68 14 L76 6 L84 14Z" fill="#B5382C"/><rect x="12" y="72" width="64" height="4" fill="#7FA6B8"/>'},
+ {k:'business',zh:'商業',en:'BUSINESS',c:'#5C7A6E',d:'一人公司、副業、創業。第一個一萬從哪裡來、怎麼定價、怎麼放手，還有怎麼不把自己做死。',ic:'<rect x="18" y="40" width="48" height="32" fill="#F3EEE3" stroke="#1F2430" stroke-width="2.5"/><path d="M12 40 L20 24 H64 L72 40Z" fill="#5C7A6E" stroke="#1F2430" stroke-width="2.5"/><rect x="36" y="52" width="12" height="20" fill="#1F2430"/><path d="M66 24 V8 L80 13 L66 18" fill="#B5382C" stroke="#1F2430" stroke-width="1.5"/>'},
+ {k:'ai',zh:'AI',en:'INTELLIGENCE',c:'#9B86B5',d:'把 AI 變成你的同事，而不是你的焦慮。艾兒莎自己每天怎麼用、哪些事可以交出去、哪些事不能。',ic:'<path d="M46 8 L53 34 L80 40 L53 47 L46 74 L39 47 L12 40 L39 34Z" fill="#9B86B5" stroke="#1F2430" stroke-width="2.5"/><circle cx="70" cy="16" r="4" fill="#F6D66B" stroke="#1F2430" stroke-width="1.5"/><circle cx="20" cy="64" r="3" fill="#F6D66B" stroke="#1F2430" stroke-width="1.5"/>'}
+];
+const KINDS={course:'課程',article:'文章',note:'筆記',podcast:'Podcast',download:'下載'};
+let CONTENTS=[], contentsLoaded=false, modCur=null, modTab='free', libTab='article', libCat='all';
+async function loadContents(force){ if(contentsLoaded&&!force) return; if(LIVE&&me.id){ try{ CONTENTS=await DB.contents(); }catch(e){ CONTENTS=[]; } } contentsLoaded=true; }
+function visibleContents(){ return CONTENTS.filter(c=>c.published!==false||me.admin); }
+async function renderModules(){ const g=document.getElementById('modgrid'); if(!g) return; await loadContents(); g.innerHTML=''; MODULES.forEach(m=>{ const n=visibleContents().filter(c=>c.module===m.k); const f=n.filter(c=>c.access!=='paid').length, p=n.length-f; const b=document.createElement('button'); b.type='button'; b.className='mod'; b.style.background='linear-gradient(160deg,'+m.c+'33 0%,var(--paper) 62%)'; b.innerHTML='<svg viewBox="0 0 88 88" aria-hidden="true">'+m.ic+'</svg><div class="zh">'+m.zh+'</div><div class="en">'+m.en+'</div><div class="cnt">'+(n.length?('免費 '+f+'・付費 '+p):'整理中')+'</div>'; b.addEventListener('click',()=>openModule(m.k)); g.appendChild(b); }); }
+async function openModule(k){ modCur=MODULES.find(m=>m.k===k); if(!modCur) return; modTab='free'; go('module'); if(LIVE&&me.id) DB.event('view_module',{module:k}); await loadContents(); renderModule(); }
+function renderModule(){ const m=modCur; document.getElementById('modTitle').textContent=m.zh+' '+m.en; document.getElementById('modDesc').textContent=m.d; const all=visibleContents().filter(c=>c.module===m.k); const free=all.filter(c=>c.access!=='paid'), paid=all.filter(c=>c.access==='paid');
+  const seg=document.getElementById('modSeg'); seg.innerHTML=''; [['free','免費內容 '+free.length],['paid','付費內容 '+paid.length]].forEach(([t,l])=>{ const b=document.createElement('button'); b.type='button'; b.textContent=l; b.className=modTab===t?'on':''; b.addEventListener('click',()=>{ modTab=t; if(LIVE&&me.id) DB.event('module_tab',{module:m.k,tab:t}); renderModule(); }); seg.appendChild(b); });
+  const list=document.getElementById('modList'); const rows=modTab==='free'?free:paid; list.innerHTML=''; if(!rows.length){ list.innerHTML='<div class="empty" style="margin:0;grid-column:1/-1">'+(modTab==='free'?'這個模組的免費內容，艾兒莎正在整理，整理好會出現在島上廣播。':'這個模組的付費內容還沒有上架。上架的時候，島民會先知道。')+'</div>'; } rows.forEach(c=>list.appendChild(contentCard(c,'module')));
+  renderContentAdmin('modAdmin',{module:m.k,access:modTab}); }
+async function openLibrary(tab){ libTab=tab||'article'; libCat='all'; go('library'); if(LIVE&&me.id) DB.event('view_library',{tab:libTab}); await loadContents(); renderLibrary(); }
+function renderLibrary(){ const seg=document.getElementById('libSeg'); seg.innerHTML=''; [['article','文章專區'],['podcast','Podcast 專區']].forEach(([t,l])=>{ const b=document.createElement('button'); b.type='button'; b.textContent=l; b.className=libTab===t?'on':''; b.addEventListener('click',()=>{ libTab=t; if(LIVE&&me.id) DB.event('library_tab',{tab:t}); renderLibrary(); }); seg.appendChild(b); });
+  const cat=document.getElementById('libCat'); cat.innerHTML=''; [['all','全部']].concat(MODULES.map(m=>[m.k,m.zh])).forEach(([k,l])=>{ const b=document.createElement('button'); b.type='button'; b.textContent=l; b.className=libCat===k?'on':''; b.addEventListener('click',()=>{ libCat=k; renderLibrary(); }); cat.appendChild(b); });
+  const kinds=libTab==='podcast'?['podcast']:['article','note']; const rows=visibleContents().filter(c=>kinds.includes(c.kind)&&(libCat==='all'||c.module===libCat)); const list=document.getElementById('libList'); list.innerHTML=''; if(!rows.length){ list.innerHTML='<div class="empty" style="margin:0;grid-column:1/-1">'+(libTab==='podcast'?'Podcast 還沒有上架，第一集放上來的時候會在島上廣播。':'這一類還沒有文章。艾兒莎寫好就會放上來。')+'</div>'; } rows.forEach(c=>list.appendChild(contentCard(c,'library')));
+  renderContentAdmin('libAdmin',{kind:libTab==='podcast'?'podcast':'article',access:'free',module:libCat==='all'?'life':libCat}); }
+function contentCard(c,from){ const m=MODULES.find(x=>x.k===c.module); const b=document.createElement('button'); b.type='button'; b.className='citem'; if(c.published===false) b.style.opacity='.5';
+  b.innerHTML='<div class="cmeta"><span class="tagp '+(c.access==='paid'?'paid':'free')+'">'+(c.access==='paid'?'付費':'免費')+'</span><span>'+esc(KINDS[c.kind]||'內容')+'</span>'+(m?'<span>・'+m.zh+'</span>':'')+(c.duration?'<span>・'+esc(c.duration)+'</span>':'')+(c.access==='paid'&&c.price?'<span>・NT$'+Number(c.price).toLocaleString()+'</span>':'')+(c.published===false?'<span>・已下架</span>':'')+'</div><div class="tt">'+esc(c.title)+'</div>'+(c.summary?'<div class="ss">'+esc(c.summary)+'</div>':'');
+  b.addEventListener('click',()=>openContent(c,from)); return b; }
+function openContent(c,from){ if(LIVE&&me.id) DB.event(c.access==='paid'?'open_paid_content':'open_content',{id:c.id,title:c.title,module:c.module,kind:c.kind}); const m=MODULES.find(x=>x.k===c.module); document.getElementById('postKind').textContent=KINDS[c.kind]||'內容'; document.getElementById('postBack').onclick=()=>go(from==='library'?'library':'module');
+  const when=(c.published_at||c.created_at||'').slice(0,10); let h='<div style="font-size:12px;color:var(--stone)"><span class="tagp '+(c.access==='paid'?'paid':'free')+'">'+(c.access==='paid'?'付費':'免費')+'</span> '+(m?m.zh+'・':'')+esc(when)+(c.duration?'・'+esc(c.duration):'')+'</div><h2>'+esc(c.title)+'</h2>'; if(c.summary) h+='<p style="font-size:15px;color:var(--ink-2);line-height:1.9;margin:0 0 12px">'+esc(c.summary)+'</p>';
+  if(c.access==='paid'){ h+='<div class="card" style="margin:0;border-color:#C6A44E"><div class="lbl serif" style="font-size:16px">這是付費內容'+(c.price?'・NT$'+Number(c.price).toLocaleString():'')+'</div><div class="sub" style="line-height:1.8;margin-top:4px">解鎖之後，可以完整地看。</div><div class="rowb">'+(c.url?'<a class="btn pill" style="text-decoration:none" target="_blank" rel="noopener" href="'+esc(c.url)+'" onclick="if(LIVE&&me.id)DB.event(\'click_unlock\',{id:\''+c.id+'\'})">前往解鎖</a>':'<button class="btn pill" onclick="askUnlock(\''+c.id+'\')">我想解鎖，請艾兒莎告訴我怎麼做</button>')+'</div></div>'; }
+  else { if(c.audio_url) h+='<audio controls preload="none" src="'+esc(c.audio_url)+'"></audio>'; if(c.body) h+='<div class="body">'+esc(c.body)+'</div>'; if(c.url) h+='<div class="rowb"><a class="btn pill" style="text-decoration:none" target="_blank" rel="noopener" href="'+esc(c.url)+'">'+(c.kind==='podcast'?'去聽這一集':c.kind==='course'?'去上這堂課':'打開連結')+'</a></div>'; if(!c.body&&!c.url&&!c.audio_url) h+='<div class="empty" style="margin:0">內容整理中。</div>'; }
+  if(me.admin&&c.id) h+='<div class="rowb" style="margin-top:18px"><button class="btn ghost pill" onclick="togglePublish(\''+c.id+'\','+(c.published===false)+')">'+(c.published===false?'重新上架':'下架這一則')+'</button></div>';
+  document.getElementById('postBody').innerHTML=h; go('post'); }
+async function askUnlock(id){ const c=CONTENTS.find(x=>x.id===id); if(!c) return; if(LIVE&&me.id){ try{ await DB.sendMentor('elsa','我想解鎖付費內容：「'+c.title+'」'); DB.event('ask_unlock',{id}); }catch(e){ toast('送不出去：'+e.message); return; } } toast('已經告訴艾兒莎了，她會回你'); }
+async function togglePublish(id,on){ try{ await DB.setContentPublished(id,on); await loadContents(true); toast(on?'已重新上架':'已下架'); go('growth'); renderModules(); }catch(e){ toast('改不了：'+e.message); } }
+function renderContentAdmin(elId,preset){ const el=document.getElementById(elId); if(!el) return; if(!me.admin||!LIVE){ el.innerHTML=''; return; } const opt=(arr,sel)=>arr.map(([v,l])=>'<option value="'+v+'"'+(v===sel?' selected':'')+'>'+l+'</option>').join('');
+  el.innerHTML='<div class="adminform"><div class="lbl serif" style="font-size:16px">建島人：新增一則內容</div><div class="sub" style="font-size:12px;color:var(--stone)">只有你看得到這一塊。存了之後島民立刻看得到。</div><select id="'+elId+'-module">'+opt(MODULES.map(m=>[m.k,m.zh]),preset.module)+'</select><select id="'+elId+'-kind">'+opt(Object.entries(KINDS),preset.kind||'article')+'</select><select id="'+elId+'-access">'+opt([['free','免費'],['paid','付費']],preset.access||'free')+'</select><input id="'+elId+'-title" placeholder="標題"><input id="'+elId+'-summary" placeholder="一兩句摘要（列表上會顯示）"><textarea id="'+elId+'-body" placeholder="內文（免費內容會直接在島上顯示；付費內容這格留空）"></textarea><input id="'+elId+'-url" placeholder="連結（課程頁、Podcast 連結，或付費內容的購買頁）"><input id="'+elId+'-audio" placeholder="音檔網址（Podcast 要在島上直接播才需要）"><input id="'+elId+'-duration" placeholder="長度，例如：8 分鐘閱讀／32 分鐘"><input id="'+elId+'-price" inputmode="numeric" placeholder="價格（付費才填，只填數字）"><div class="rowb"><button class="btn pill" onclick="saveContentForm(\''+elId+'\')">上架</button></div></div>'; }
+async function saveContentForm(elId){ const v=k=>(document.getElementById(elId+'-'+k).value||'').trim(); const row={module:v('module'),kind:v('kind'),access:v('access'),title:v('title'),summary:v('summary')||null,body:v('body')||null,url:v('url')||null,audio_url:v('audio')||null,duration:v('duration')||null,price:v('price')?parseInt(v('price').replace(/\D/g,''),10)||null:null}; if(!row.title){ toast('先寫標題'); return; } if(row.access==='paid'&&row.body){ toast('付費內容的內文請留空，放連結就好，不然等於公開了'); return; } try{ await DB.saveContent(row); DB.event('add_content',{title:row.title}); await loadContents(true); toast('上架了'); renderModules(); if(elId==='modAdmin') renderModule(); else renderLibrary(); }catch(e){ toast('存不進去：'+e.message); } }
+renderModules();
 const WHISPER_BANK=[
  ['你最近有一件想嘗試，但一直有點猶豫的事嗎？',['有，我怕失敗。','有，我其實想試試看！','有，但我需要更多時間想。']],
  ['如果明天突然多出完整的一天，沒有人找你，你第一個想做的是？',['睡覺，什麼都不做','做那件一直沒時間做的事','還是會拿去處理別人的事']],
