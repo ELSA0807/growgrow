@@ -26,6 +26,8 @@ body{margin:0;background:var(--ivory);color:var(--ink);font-family:"Noto Sans TC
 .serif{font-family:"Noto Serif TC","Songti TC",serif}
 .en{font-family:"Cormorant Garamond",Georgia,serif;letter-spacing:.28em;font-size:11px;color:var(--ink-2)}
 .app{max-width:430px;margin:0 auto;min-height:100%;position:relative;padding-bottom:84px;background:var(--ivory)}
+@media (min-width:768px){ .app{max-width:none;padding-bottom:0;padding-left:96px} .tabs{left:0;right:auto;top:0;bottom:0;width:96px;border-top:0;border-right:1px solid var(--line);padding:16px 0} .tabs div{flex-direction:column;justify-content:flex-start;gap:14px;max-width:none} .tabs button{padding:8px 0} .scenewrap canvas{height:72vh} .card,.mine,.bcast,.sky,.hist,.mentors,.stats,.districts,.rank,.choices,.bubble,.log,.chatform,.steps,.meta,.cta,.letters{max-width:1100px} .sky,.card,.mine,.bcast{margin-left:auto;margin-right:auto} .head{max-width:1100px;margin:0 auto} .subhead{max-width:1100px;margin:0 auto} }
+@media (min-width:1200px){ .app{padding-left:120px} .tabs{width:120px} }
 .view{display:none}.view.on{display:block}
 .head{display:flex;align-items:flex-end;justify-content:space-between;padding:18px 20px 8px}
 .logo{line-height:1}
@@ -156,7 +158,7 @@ svg.art{width:100%;height:auto;display:block}
 
 
 .scenewrap{margin:8px 0 0;border-top:1px solid #1F2430;border-bottom:1px solid #1F2430;overflow:hidden;background:#DCE0DD;touch-action:none}
-.scenewrap canvas{width:100%;height:auto;display:block}
+.scenewrap canvas{width:100%;height:auto;display:block;max-height:78vh}
 
 
 .scene-back{position:absolute;left:10px;top:10px;z-index:2}
@@ -257,8 +259,9 @@ svg.art{width:100%;height:auto;display:block}
     <div class="scenewrap"><canvas id="scene" width="860" height="1180" aria-label="跳級之島世界"></canvas>
       <button class="btn ghost pill scene-back" id="sceneBack" style="display:none">‹ 回到島</button>
       <div class="zoomctl"><button id="zin" aria-label="放大">＋</button><button id="zout" aria-label="縮小">－</button></div>
-      <div class="dpad" id="dpad" style="display:none"><button data-d="up">▲</button><div class="mid"><button data-d="left">◀</button><button data-d="right">▶</button></div><button data-d="down">▼</button></div>
-      <div class="walkhint" id="walkhint" style="display:none">用方向鍵走路，走到村口的門牌就能離開</div>
+      <div class="dpad" id="dpad"><button data-d="up">▲</button><div class="mid"><button data-d="left">◀</button><button data-d="right">▶</button></div><button data-d="down">▼</button></div>
+      <button class="btn pill" id="knock" style="position:absolute;left:50%;transform:translateX(-50%);bottom:14px;z-index:3;display:none">敲門</button>
+      <div class="walkhint" id="walkhint">用方向鍵走到村名招牌就進村</div>
     </div>
     <div class="mine">
       <div class="mine-grid">
@@ -285,6 +288,7 @@ svg.art{width:100%;height:auto;display:block}
     <div style="flex:1"><div class="lbl">今日任務</div><div class="sub" id="todaySub2">秘密任務 1/50・還有 3 天</div></div>
     <div class="chev">›</div>
   </div>
+  <div class="card row" id="decorCard"></div>
 </section>
 <section class="view" id="v-map">
   <div class="head">
@@ -461,7 +465,7 @@ function render(){
   const sbn=document.getElementById('startBtn'); if(sbn) sbn.textContent= me.task.done?'已交出去':'開始任務';
   const $=(id)=>document.getElementById(id)||{}; $('lv').textContent=me.lv; $('lv2').textContent=me.lv; $('xp').textContent=me.xp.toLocaleString(); $('days').textContent=Math.max(1,Math.round((Date.now()-new Date('2026-09-05'))/86400000)); $('rankMe').textContent=me.rank||12;
   const wk=document.getElementById('week'); if(wk) wk.innerHTML=me.week.map(x=>`<i class="${x?'on':''}"></i>`).join('')+'<span>M T W T F S S</span>';
-  [renderRadial,renderVillage,renderValues,renderHistory,renderMentors,renderRank,renderMyHouse].forEach(f=>{ try{ f(); }catch(e){ console.warn('render part failed',f.name,e); } }); document.getElementById('lv2').textContent=me.lv; (document.getElementById('todaySub2')||{}).textContent=(document.getElementById('todaySub')||{}).textContent||'';
+  [renderRadial,renderVillage,renderValues,renderHistory,renderMentors,renderRank,renderMyHouse,renderDecorCard].forEach(f=>{ try{ f(); }catch(e){ console.warn('render part failed',f.name,e); } }); document.getElementById('lv2').textContent=me.lv; (document.getElementById('todaySub2')||{}).textContent=(document.getElementById('todaySub')||{}).textContent||'';
 }
 
 const districts=[
@@ -525,14 +529,16 @@ const villagers=[
 // ===== 世界＋村子場景引擎 =====
 (function(){
   const cv=document.getElementById('scene'); if(!cv) return; const ctx=cv.getContext('2d');
-  const W=cv.width,H=cv.height; const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let W=cv.width,H=cv.height; const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function fit(){ const r=cv.getBoundingClientRect(); if(r.width<50) return; const wide=window.innerWidth>=768; const targetH= wide? Math.min(window.innerHeight*0.72, 900) : r.width*1180/860; cv.style.height=targetH+'px'; const nw=Math.round(r.width*1.4), nh=Math.round(targetH*1.4); if(nw!==cv.width||nh!==cv.height){ cv.width=nw; cv.height=nh; W=nw; H=nh; } }
+  fit(); window.addEventListener('resize',fit);
   const WORLD={w:2600,h:2400};
   let mode='world'; let cur=null; // current village
   const cam={x:WORLD.w/2-W/2,y:WORLD.h/2-H/2,z:.55,tx:0,ty:0,tz:.55}; cam.tx=cam.x; cam.ty=cam.y;
   let t=0; const clouds=Array.from({length:8},(_,i)=>({x:Math.random()*WORLD.w,y:120+Math.random()*300,s:.6+Math.random()*.9}));
   const birds=Array.from({length:6},(_,i)=>({x:Math.random()*WORLD.w,y:200+Math.random()*200}));
   // village people (built when entering)
-  let people=[], houses=[], bubbles=[]; let chan=null; const online={}; let lastTrack=0;
+  let people=[], houses=[], bubbles=[]; let worldMe=null; let chan=null; const online={}; let lastTrack=0;
   async function joinPresence(v){ if(!LIVE||!sb) return; leavePresence(); const mv=myV(); chan=sb.channel('pos:'+v.k,{config:{presence:{key:String(me.id||'me')}}});
     chan.on('presence',{event:'sync'},()=>{ const st=chan.presenceState(); for(const k in online) delete online[k]; for(const k in st){ const last=st[k][st[k].length-1]; if(k!==String(me.id)) online[k]=last; } });
     await chan.subscribe(async(status)=>{ if(status==='SUBSCRIBED'){ const meP=people.find(pn=>pn.p.me); await chan.track({x:meP?meP.x:0,y:meP?meP.y:0,name:mv.name,color:mv.color,lvl:me.lv,id:me.id}); } }); }
@@ -541,14 +547,14 @@ const villagers=[
   function trackMe(pn){ if(!chan) return; const now=performance.now(); if(now-lastPos>5000){ lastPos=now; if(LIVE&&cur) DB.event('position',{village:cur.k,x:Math.round(pn.x),y:Math.round(pn.y)}); } if(now-lastTrack<120) return; lastTrack=now; const mv=myV(); chan.track({x:Math.round(pn.x),y:Math.round(pn.y),name:mv.name,color:mv.color,lvl:me.lv,id:me.id}); }
   function villagePeople(v){ return villagers.filter(p=>p.v===v.k); }
   function claimed(p){ return !!(p.mentor || (p.name && p.name!=='我' && p.name!=='示範島民') || p.sign || p.about); }
-  const VW={w:1700,h:1500}; // 村子世界
+  const VW={w:1800,h:1500}; // 村子世界
   let gate={x:850,y:1380};
   function buildVillage(v){
     const ps=villagePeople(v).filter(claimed); const mine=villagePeople(v).find(p=>p.me);
     const list=ps.slice(); if(mine&&!claimed(mine)) list.push(mine); // 我沒認領也給一塊空地
-    houses=[]; const cols=4, lotW=340, lotH=330, x0=230, y0=420;
+    houses=[]; const cols=3, lotW=480, lotH=470, x0=300, y0=460;
     list.forEach((p,i)=>{ const cx=x0+(i%cols)*lotW, cy=y0+Math.floor(i/cols)*lotH; houses.push({id:i,x:cx,y:cy,w:96,c:p.color||'#5C7A6E',lvl:p.lvl??(p.me?me.lv:2+(i*3)%5),owner:p,empty:p.me&&!claimed(p)}); });
-    VW.h=Math.max(1500, y0+Math.ceil(list.length/cols)*lotH+420); gate={x:VW.w/2,y:VW.h-140};
+    VW.h=Math.max(1500, y0+Math.ceil(list.length/cols)*lotH+520); gate={x:VW.w/2,y:VW.h-200};
     people=list.map((p,i)=>{const h=houses[i]; const sx=p.me? gate.x : h.x+48, sy=p.me? gate.y-90 : h.y+120; return {p,h,x:sx,y:sy,tx:sx,ty:sy,t:Math.random()*100,speed:.3+Math.random()*.3,state:'idle',wait:Math.random()*3,say:'',sayT:0,next:2+Math.random()*6};});
     if(!people.some(pn=>pn.p.me)){ const mv=myV(); people.push({p:mv,h:null,x:gate.x,y:gate.y-90,tx:gate.x,ty:gate.y-90,t:0,speed:.4,state:'idle',wait:99,say:'',sayT:0,next:99,visitor:true}); }
   }
@@ -586,11 +592,16 @@ const villagers=[
   function drawVillageIcon(v){
     const nC=villagePeople(v).filter(claimed).length; const r=170+v.prog*60+Math.min(80,nC*6); ctx.fillStyle='#5C7A6E'; ctx.strokeStyle='#1F2430'; ctx.lineWidth=3; islandShape(v.x,v.y,r); ctx.fill(); ctx.stroke();
     ctx.save(); islandShape(v.x,v.y,r); ctx.clip(); ctx.strokeStyle='rgba(31,36,48,.14)'; ctx.lineWidth=1; for(let k=v.x-r*2;k<v.x+r*2;k+=14){ ctx.beginPath(); ctx.moveTo(k,v.y-r); ctx.lineTo(k+r*2,v.y+r); ctx.stroke(); } ctx.restore();
-    const n=Math.max(1,Math.min(12,nC)); for(let i=0;i<n;i++){ const a=i*2.4, rr=30+(i%3)*45; const hx=v.x+Math.cos(a)*rr-20, hy=v.y+Math.sin(a)*rr*.7-10; house({id:i,x:hx,y:hy,w:40,c:['#B5382C','#5C7A6E','#3A4150','#C6A44E','#8A8F99','#B9C6C9'][i%6]},false); }
+    const n=Math.max(1,Math.min(9,nC)); const cols=3, gw=62, gh=64; const x0=v.x-((Math.min(n,cols)-1)*gw)/2-20, y0=v.y-Math.floor((n-1)/cols)*gh/2-10; for(let i=0;i<n;i++){ const hx=x0+(i%cols)*gw, hy=y0+Math.floor(i/cols)*gh; house({id:i,x:hx,y:hy,w:40,c:['#B5382C','#5C7A6E','#3A4150','#C6A44E','#8A8F99','#B9C6C9'][i%6]},false); }
     if(v.prog>.5){ ctx.fillStyle='rgba(246,214,107,'+(.15+.1*Math.sin(t*2))+')'; ctx.beginPath(); ctx.arc(v.x,v.y,r*.9,0,Math.PI*2); ctx.fill(); }
     if(v.mentor){ ctx.strokeStyle='#C6A44E'; ctx.lineWidth=4; ctx.setLineDash([6,8]); ctx.beginPath(); ctx.arc(v.x,v.y,r+18,0,Math.PI*2); ctx.stroke(); ctx.setLineDash([]); }
-    ctx.fillStyle='#F3EEE3'; ctx.strokeStyle='#1F2430'; ctx.lineWidth=2.5; ctx.fillRect(v.x-90,v.y-r-58,180,40); ctx.strokeRect(v.x-90,v.y-r-58,180,40); ctx.fillRect(v.x-4,v.y-r-18,8,26);
-    ctx.fillStyle='#1F2430'; ctx.textAlign='center'; ctx.font='700 24px "Noto Serif TC",serif'; ctx.fillText(v.name,v.x,v.y-r-25); if(v.count!=null){ ctx.font='500 12px "Noto Sans TC",sans-serif'; ctx.fillText(v.count+' 位島民',v.x,v.y-r-8); }
+    // 村名招牌：像一顆按鈕，離島面有距離，不壓到房子
+    const pw=230, ph=54, py=v.y-r-96; ctx.fillStyle='rgba(31,36,48,.18)'; ctx.beginPath(); ctx.roundRect(v.x-pw/2+4,py+5,pw,ph,14); ctx.fill();
+    ctx.fillStyle=v.mentor?'#C6A44E':'#1F2430'; ctx.strokeStyle='#F3EEE3'; ctx.lineWidth=3; ctx.beginPath(); ctx.roundRect(v.x-pw/2,py,pw,ph,14); ctx.fill(); ctx.stroke();
+    ctx.fillStyle='#1F2430'; ctx.fillRect(v.x-4,py+ph,8,r-ph+96-r+6); ctx.fillRect(v.x-4,py+ph,8,36);
+    ctx.fillStyle=v.mentor?'#1F2430':'#F3EEE3'; ctx.textAlign='center'; ctx.font='700 26px "Noto Serif TC",serif'; ctx.fillText(v.name,v.x-(v.count!=null?22:0),py+36);
+    if(v.count!=null){ ctx.fillStyle='#B5382C'; ctx.beginPath(); ctx.roundRect(v.x+pw/2-70,py+14,58,26,13); ctx.fill(); ctx.fillStyle='#fff'; ctx.font='700 13px "Noto Sans TC",sans-serif'; ctx.fillText(v.count+' 人',v.x+pw/2-41,py+32); }
+    v._plaque={x:v.x-pw/2,y:py,w:pw,h:ph};
     ctx.fillStyle='#F3EEE3'; ctx.fillRect(v.x-60,v.y+r+14,120,8); ctx.strokeRect(v.x-60,v.y+r+14,120,8); ctx.fillStyle='#B5382C'; ctx.fillRect(v.x-60,v.y+r+14,120*v.prog,8);
   }
   function drawWorld(){
@@ -601,6 +612,14 @@ const villagers=[
     clouds.forEach(c=>{ c.x+= reduce?0:1.2*c.s*dtGlobal*60; if(c.x>WORLD.w+150)c.x=-150; ctx.fillStyle='rgba(250,247,240,.9)'; ctx.beginPath(); ctx.arc(c.x,c.y,26*c.s,0,Math.PI*2); ctx.arc(c.x+30*c.s,c.y-10*c.s,30*c.s,0,Math.PI*2); ctx.arc(c.x+62*c.s,c.y,24*c.s,0,Math.PI*2); ctx.fill(); });
     ctx.setLineDash([10,14]); ctx.strokeStyle='rgba(31,36,48,.35)'; ctx.lineWidth=2; for(let i=0;i<VILLAGES.length-1;i++){ const a=VILLAGES[i],b=VILLAGES[i+1]; ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.quadraticCurveTo((a.x+b.x)/2,(a.y+b.y)/2-120,b.x,b.y); ctx.stroke(); } ctx.setLineDash([]);
     VILLAGES.forEach(drawVillageIcon);
+    // 我在本島上也可以走：走到村名招牌就進村
+    if(!worldMe){ worldMe={p:myV(),x:WORLD.w/2,y:WORLD.h/2+120,t:0,state:'idle'}; }
+    { const pn=worldMe; const sp=5*60*dtGlobal; let mx=0,my=0; if(keys.up)my-=1; if(keys.down)my+=1; if(keys.left)mx-=1; if(keys.right)mx+=1;
+      if(mx||my){ const l=Math.hypot(mx,my); pn.x=Math.max(60,Math.min(WORLD.w-60,pn.x+mx/l*sp)); pn.y=Math.max(160,Math.min(WORLD.h-60,pn.y+my/l*sp)); pn.state='walk'; cam.tx=pn.x-W/2/cam.tz; cam.ty=pn.y-H/2/cam.tz; clampWorld();
+        const hit=VILLAGES.find(v=>v._plaque && pn.x>v._plaque.x-10 && pn.x<v._plaque.x+v._plaque.w+10 && pn.y>v._plaque.y-10 && pn.y<v._plaque.y+v._plaque.h+40);
+        if(hit){ keys.up=keys.down=keys.left=keys.right=false; enterVillage(hit); toast('走進 '+hit.name); return; } }
+      else pn.state='idle';
+      person(pn); }
     birds.forEach((b,i)=>{ b.x+= reduce?0:30*dtGlobal; if(b.x>WORLD.w+40)b.x=-40; const f=Math.sin(t*8+i)*4; ctx.strokeStyle='#1F2430'; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(b.x-8,b.y+f); ctx.lineTo(b.x,b.y-2); ctx.lineTo(b.x+8,b.y+f); ctx.stroke(); });
   }
   function yard(h){
@@ -613,6 +632,22 @@ const villagers=[
     if(lv>=3){ ctx.fillStyle='#8A8F99'; ctx.fillRect(x+w*.3,y+w*.78,44,10); ctx.fillRect(x+w*.3,y+w*.88,4,8); ctx.fillRect(x+w*.3+40,y+w*.88,4,8); } // 長椅
     if(lv>=4){ ctx.fillStyle='#B9C6C9'; ctx.beginPath(); ctx.ellipse(x-30,y+w*.95,26,12,0,0,Math.PI*2); ctx.fill(); ctx.strokeStyle='#1F2430'; ctx.lineWidth=1.5; ctx.stroke(); } // 小池
     if(lv>=5){ ctx.fillStyle='rgba(246,214,107,'+(.6+.4*Math.sin(t*4))+')'; [x-56,x+w+56].forEach(lx=>{ ctx.beginPath(); ctx.arc(lx,y-60,6,0,Math.PI*2); ctx.fill(); ctx.fillStyle='#1F2430'; ctx.fillRect(lx-2,y-54,4,30); ctx.fillStyle='rgba(246,214,107,.9)'; }); }
+    // 任務解鎖的擺設
+    const dec=(h.owner&&h.owner.decor)||[]; let dx=x-60, dy=y+w*.95;
+    dec.forEach((k,i)=>{ const px=dx+i*44, py=dy; ctx.strokeStyle='#1F2430'; ctx.lineWidth=1.5;
+      if(k==='tree'){ ctx.fillStyle='#5C7A6E'; ctx.beginPath(); ctx.arc(px,py-16,14,0,Math.PI*2); ctx.fill(); ctx.stroke(); ctx.fillStyle='#B5382C'; [[-6,-20],[5,-12],[0,-24]].forEach(([a,b])=>{ctx.beginPath(); ctx.arc(px+a,py+b,3,0,Math.PI*2); ctx.fill();}); ctx.fillStyle='#1F2430'; ctx.fillRect(px-2,py-4,4,14); }
+      else if(k==='bench'){ ctx.fillStyle='#8A8F99'; ctx.fillRect(px-16,py-6,32,8); ctx.fillRect(px-14,py+2,4,8); ctx.fillRect(px+10,py+2,4,8); }
+      else if(k==='gate'){ ctx.fillStyle='#1F2430'; ctx.fillRect(px-10,py-22,20,30); ctx.fillStyle='#C6A44E'; ctx.beginPath(); ctx.arc(px+5,py-6,2.5,0,Math.PI*2); ctx.fill(); }
+      else if(k==='mailbox'){ ctx.fillStyle='#B5382C'; ctx.beginPath(); ctx.roundRect(px-8,py-18,16,14,4); ctx.fill(); ctx.stroke(); ctx.fillStyle='#1F2430'; ctx.fillRect(px-1.5,py-4,3,14); }
+      else if(k==='cat'){ ctx.fillStyle='#1F2430'; ctx.beginPath(); ctx.ellipse(px,py,10,6,0,0,Math.PI*2); ctx.fill(); ctx.beginPath(); ctx.arc(px+9,py-6,5,0,Math.PI*2); ctx.fill(); ctx.beginPath(); ctx.moveTo(px+6,py-10); ctx.lineTo(px+7,py-15); ctx.lineTo(px+9,py-10); ctx.moveTo(px+10,py-10); ctx.lineTo(px+12,py-15); ctx.lineTo(px+13,py-10); ctx.fill(); }
+      else if(k==='pond'){ ctx.fillStyle='#B9C6C9'; ctx.beginPath(); ctx.ellipse(px,py,20,10,0,0,Math.PI*2); ctx.fill(); ctx.stroke(); }
+      else if(k==='flag'){ ctx.fillStyle='#1F2430'; ctx.fillRect(px-1,py-30,2,36); ctx.fillStyle='#C6A44E'; ctx.beginPath(); ctx.moveTo(px+1,py-30); ctx.lineTo(px+20,py-24); ctx.lineTo(px+1,py-18); ctx.closePath(); ctx.fill(); }
+      else if(k==='lantern'){ ctx.fillStyle='rgba(246,214,107,'+(.7+.3*Math.sin(t*3))+')'; ctx.beginPath(); ctx.arc(px-6,py-14,5,0,Math.PI*2); ctx.arc(px+6,py-14,5,0,Math.PI*2); ctx.fill(); ctx.fillStyle='#1F2430'; ctx.fillRect(px-7,py-9,2,14); ctx.fillRect(px+5,py-9,2,14); }
+      else if(k==='hammock'){ ctx.strokeStyle='#1F2430'; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(px-18,py-14); ctx.quadraticCurveTo(px,py+2,px+18,py-14); ctx.stroke(); ctx.fillRect(px-20,py-16,3,18); ctx.fillRect(px+17,py-16,3,18); }
+      else if(k==='telescope'){ ctx.fillStyle='#3A4150'; ctx.save(); ctx.translate(px,py-8); ctx.rotate(-0.6); ctx.fillRect(-4,-14,8,26); ctx.restore(); ctx.fillStyle='#1F2430'; ctx.fillRect(px-1,py-4,2,12); }
+      else if(k==='drum'){ ctx.fillStyle='#B5382C'; ctx.beginPath(); ctx.roundRect(px-10,py-16,20,18,3); ctx.fill(); ctx.stroke(); ctx.fillStyle='#F3EEE3'; ctx.beginPath(); ctx.ellipse(px,py-16,10,4,0,0,Math.PI*2); ctx.fill(); ctx.stroke(); }
+      else if(k==='well'){ ctx.fillStyle='#8A8F99'; ctx.beginPath(); ctx.ellipse(px,py-2,12,6,0,0,Math.PI*2); ctx.fill(); ctx.stroke(); ctx.fillStyle='#1F2430'; ctx.fillRect(px-12,py-22,3,20); ctx.fillRect(px+9,py-22,3,20); ctx.fillRect(px-14,py-24,28,3); }
+    });
   }
   function emptyLot(h){ const x=h.x,y=h.y,w=h.w; ctx.setLineDash([8,8]); ctx.strokeStyle='#1F2430'; ctx.lineWidth=2; ctx.strokeRect(x-20,y-30,w+40,w*.9); ctx.setLineDash([]); ctx.fillStyle='#1F2430'; ctx.font='700 14px "Noto Serif TC",serif'; ctx.textAlign='center'; ctx.fillText('這是你的地',x+w/2,y+w*.3); ctx.font='500 11px "Noto Sans TC",sans-serif'; ctx.fillText('到「我的家」取名字，房子就會蓋起來',x+w/2,y+w*.5); }
   function drawVillage(v){
@@ -634,9 +669,10 @@ const villagers=[
     people.forEach(pn=>{
       if(pn.p.me){
         const sp=4.2*60*dtGlobal; let mx=0,my=0; if(keys.up)my-=1; if(keys.down)my+=1; if(keys.left)mx-=1; if(keys.right)mx+=1;
-        if(mx||my){ const l=Math.hypot(mx,my); pn.x=Math.max(120,Math.min(VW.w-120,pn.x+mx/l*sp)); pn.y=Math.max(330,Math.min(VW.h-60,pn.y+my/l*sp)); pn.state='walk'; trackMe(pn); if(Math.hypot(pn.x-gate.x,pn.y-gate.y)<46){ keys.up=keys.down=keys.left=keys.right=false; leaveVillage(); toast('回到本島了'); return; } } else pn.state='idle';
+        if(mx||my){ const l=Math.hypot(mx,my); pn.x=Math.max(120,Math.min(VW.w-120,pn.x+mx/l*sp)); pn.y=Math.max(330,Math.min(VW.h-60,pn.y+my/l*sp)); pn.state='walk'; trackMe(pn); if(Math.hypot(pn.x-gate.x,pn.y-gate.y)<80){ keys.up=keys.down=keys.left=keys.right=false; leaveVillage(); toast('回到本島了'); return; } } else pn.state='idle';
         // 鏡頭跟著我
         cam.tx=pn.x-W/2/cam.tz; cam.ty=pn.y-H/2/cam.tz;
+        const near=houses.find(h=>!h.empty && h.owner && !h.owner.me && Math.hypot(pn.x-(h.x+h.w/2),pn.y-(h.y+h.w*.5))<150); const kb=document.getElementById('knock'); if(kb){ if(near){ kb.style.display='block'; kb.textContent='敲 '+near.owner.name+' 的門'; kb.onclick=()=>knock(near.owner); } else kb.style.display='none'; }
       } else if(LIVE){
         const o=pn.p.id!=null?online[String(pn.p.id)]:null;
         if(o){ const dx=o.x-pn.x, dy=o.y-pn.y; const d=Math.hypot(dx,dy); if(d>1){ const step=Math.min(d,6*60*dtGlobal); pn.x+=dx/d*step; pn.y+=dy/d*step; pn.state='walk'; } else pn.state='idle'; pn.p.online=true; }
@@ -652,7 +688,7 @@ const villagers=[
   }
   const keys={up:false,down:false,left:false,right:false};
   document.querySelectorAll('#dpad button').forEach(b=>{ const d=b.dataset.d; const on=e=>{e.preventDefault();keys[d]=true;}; const off=e=>{e.preventDefault();keys[d]=false;}; b.addEventListener('pointerdown',on); b.addEventListener('pointerup',off); b.addEventListener('pointercancel',off); b.addEventListener('pointerleave',off); });
-  window.addEventListener('keydown',e=>{ if(mode!=='village') return; const m={ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',w:'up',s:'down',a:'left',d:'right'}[e.key]; if(m){ keys[m]=true; e.preventDefault(); } });
+  window.addEventListener('keydown',e=>{ if(mode!=='village'&&mode!=='world') return; const m={ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',w:'up',s:'down',a:'left',d:'right'}[e.key]; if(m){ keys[m]=true; e.preventDefault(); } });
   window.addEventListener('keyup',e=>{ const m={ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',w:'up',s:'down',a:'left',d:'right'}[e.key]; if(m) keys[m]=false; });
   let dtGlobal=0;
   function frame(dt){
@@ -672,8 +708,8 @@ const villagers=[
     if(mode==='world'){ const v=VILLAGES.find(v=>Math.hypot(w.x-v.x,w.y-v.y)<230); if(v){ enterVillage(v); } }
     else { const pn=people.find(pn=>Math.hypot(w.x-pn.x,w.y-pn.y)<34); if(pn){ openIslander(pn.p); return; } const h=houses.find(h=>w.x>h.x-20&&w.x<h.x+h.w+20&&w.y>h.y-h.w*.5&&w.y<h.y+h.w*.8); if(h){ const pn=people.find(p=>p.h===h); if(pn) openIslander(pn.p); } }
   });
-  function enterVillage(v){ cur=v; buildVillage(v); mode='village'; const meP=people.find(pn=>pn.p.me); cam.tz=.9; cam.z=.9; cam.tx=meP.x-W/2/cam.tz; cam.ty=meP.y-H/2/cam.tz; cam.x=cam.tx; cam.y=cam.ty; document.getElementById('dpad').style.display='grid'; document.getElementById('walkhint').style.display='block'; joinPresence(v); if(LIVE) DB.event('enter_village',{village:v.k}); document.getElementById('sceneBack').style.display='inline-block'; document.getElementById('sceneTitle').textContent=v.name; document.getElementById('sceneHint').textContent=v.desc+' 點島民可以對話或看她的資料。'; openVillagePanel(v); }
-  function leaveVillage(){ mode='world'; leavePresence(); if(LIVE&&cur) DB.event('leave_village',{village:cur.k}); document.getElementById('dpad').style.display='none'; document.getElementById('walkhint').style.display='none'; cam.tx=cur.x-W/2/.55; cam.ty=cur.y-H/2/.55; cam.tz=.55; cam.x=cam.tx; cam.y=cam.ty; cam.z=.55; clampWorld(); cur=null; document.getElementById('sceneBack').style.display='none'; document.getElementById('sceneTitle').textContent='八個村子'; document.getElementById('sceneHint').textContent='拖曳看整座島，點一個村子進去，可以認識裡面的島民：）村子越是繁榮，代表這一區的村民們很認真的跟上任務喔！'; }
+  function enterVillage(v){ cur=v; buildVillage(v); mode='village'; const meP=people.find(pn=>pn.p.me); cam.tz=.9; cam.z=.9; cam.tx=meP.x-W/2/cam.tz; cam.ty=meP.y-H/2/cam.tz; cam.x=cam.tx; cam.y=cam.ty; document.getElementById('dpad').style.display='grid'; document.getElementById('walkhint').style.display='block'; document.getElementById('walkhint').textContent='方向鍵走路；走到村口「回本島」就離開；靠近別人的家會出現敲門'; joinPresence(v); if(LIVE) DB.event('enter_village',{village:v.k}); document.getElementById('sceneBack').style.display='inline-block'; document.getElementById('sceneTitle').textContent=v.name; document.getElementById('sceneHint').textContent=v.desc+' 點島民可以對話或看她的資料。'; openVillagePanel(v); }
+  function leaveVillage(){ mode='world'; leavePresence(); if(LIVE&&cur) DB.event('leave_village',{village:cur.k}); document.getElementById('dpad').style.display='grid'; document.getElementById('walkhint').style.display='block'; document.getElementById('walkhint').textContent='用方向鍵走到村名招牌就進村'; cam.tx=cur.x-W/2/.55; cam.ty=cur.y-H/2/.55; cam.tz=.55; cam.x=cam.tx; cam.y=cam.ty; cam.z=.55; clampWorld(); cur=null; document.getElementById('sceneBack').style.display='none'; document.getElementById('sceneTitle').textContent='八個村子'; document.getElementById('sceneHint').textContent='拖曳看整座島，點一個村子進去，可以認識裡面的島民：）村子越是繁榮，代表這一區的村民們很認真的跟上任務喔！'; }
   document.getElementById('sceneBack').addEventListener('click',leaveVillage);
   // zoom: buttons, wheel, pinch
   function zoomBy(f,cx,cy){ const nz=Math.max(.3,Math.min(2.5,cam.tz*f)); const r=cv.getBoundingClientRect(); const sx=(cx??r.width/2)*W/r.width, sy=(cy??r.height/2)*H/r.height; const wx=sx/cam.z+cam.x, wy=sy/cam.z+cam.y; cam.tz=nz; cam.tx=wx-sx/nz; cam.ty=wy-sy/nz; clampWorld(); }
@@ -686,6 +722,32 @@ const villagers=[
   ['pointerup','pointercancel','pointerleave'].forEach(t=>cv.addEventListener(t,ev=>{ pts.delete(ev.pointerId); if(pts.size<2) pinch=null; }));
   window.__enterVillage=enterVillage;
 })();
+async function knock(x){
+  const online=!!x.online; const p=document.getElementById('panel'); const nm=x.name;
+  if(LIVE) DB.event('knock',{who:x.id||nm,online});
+  p.innerHTML=`<div class="en">${online?'KNOCK KNOCK':'NOT HOME'}</div><h4 class="serif">${online?nm+' 在家':nm+' 不在家'}</h4><p>${online?'她在線上。打個招呼，她那邊會馬上看到。':'留一句話，她回來看得到，也會知道是你來過。'}</p><textarea id="knockMsg" placeholder="${online?'哈囉，我是隔壁的……':'路過你家，看到你招牌上寫的那句……'}"></textarea><div class="rowb"><button class="btn pill" onclick="sendKnock('${esc(nm)}','${x.id||''}',${online})">${online?'打招呼':'留言'}</button><button class="btn ghost pill" onclick="closeSheet()">算了</button></div>`;
+  document.getElementById('sheet').classList.add('open');
+}
+async function sendKnock(nm,id,online){ const t=(document.getElementById('knockMsg').value||'').trim()||(online?'哈囉！':'路過你家，來打個招呼。'); if(LIVE&&id){ try{ const key='dm:'+[me.id,id].sort().join(':'); await sb.from('messages').insert({thread_type:'dm',thread_key:key,from_person:me.id,to_person:id,body:t,state:'visible'}); DB.event('dm',{to:id,online}); }catch(e){ toast('送不出去：'+e.message); return; } }
+  if(!threads.find(x=>x.who===nm)) threads.unshift({who:nm,last:'我：'+t,dm:true,id}); else threads.find(x=>x.who===nm).last='我：'+t; renderThreads(); closeSheet(); toast(online?'打過招呼了':'留言放在她門口了'); }
+async function loadDMs(){ if(!LIVE) return; const {data}=await sb.from('messages').select('id,body,created_at,from_person,to_person,thread_key,fp:from_person(nickname,name),tp:to_person(nickname,name)').eq('thread_type','dm').or('from_person.eq.'+me.id+',to_person.eq.'+me.id).order('created_at',{ascending:false}).limit(200); const seen={}; (data||[]).forEach(m=>{ const otherId=m.from_person===me.id?m.to_person:m.from_person; const other=m.from_person===me.id?(m.tp?.nickname||m.tp?.name):(m.fp?.nickname||m.fp?.name); if(!otherId||seen[otherId]) return; seen[otherId]=1; if(!threads.find(t=>t.id===otherId)) threads.splice(2,0,{who:other||'島民',last:(m.from_person===me.id?'我：':'')+m.body,dm:true,id:otherId}); }); renderThreads(); }
+async function openDM(t){ const p=document.getElementById('panel'); let rows=[]; if(LIVE){ const key='dm:'+[me.id,t.id].sort().join(':'); const {data}=await sb.from('messages').select('body,created_at,from_person').eq('thread_key',key).order('created_at'); rows=data||[]; } 
+  p.innerHTML=`<div class="en">DOORSTEP</div><h4 class="serif">${esc(t.who)}</h4><div class="log" style="margin:10px 0 0">${rows.map(r=>`<div class="bub ${r.from_person===me.id?'me':''}">${esc(r.body)}</div>`).join('')||'<div class="sub">還沒有對話。</div>'}</div><form class="chatform" style="margin:10px 0 0" onsubmit="return sendDM(event,'${t.id}','${esc(t.who)}')"><input id="dmsg" placeholder="寫給她"><button class="btn pill" type="submit">送出</button></form><div class="rowb"><button class="btn ghost pill" onclick="closeSheet()">關閉</button></div>`;
+  document.getElementById('sheet').classList.add('open'); }
+async function sendDM(e,id,who){ e.preventDefault(); const i=document.getElementById('dmsg'); const t=i.value.trim(); if(!t) return false; if(LIVE){ try{ const key='dm:'+[me.id,id].sort().join(':'); await sb.from('messages').insert({thread_type:'dm',thread_key:key,from_person:me.id,to_person:id,body:t,state:'visible'}); DB.event('dm',{to:id}); }catch(err){ toast('送不出去：'+err.message); return false; } } const th=threads.find(x=>x.id===id); if(th) th.last='我：'+t; renderThreads(); openDM({id,who}); return false; }
+// ===== 任務解鎖擺設（每個任務給幾個很跳 tone 的選項，最多選兩個；選擇本身就是資料）=====
+const DECOR={
+  tree:{n:'一棵會結果的樹',d:'慢慢長，但長了就有東西可以分人'}, bench:{n:'誰都可以來坐的長椅',d:'你家門口對所有人開放'}, gate:{n:'一道只有自己知道密碼的門',d:'你需要一個誰都進不來的地方'},
+  mailbox:{n:'一個紅色郵筒',d:'你想收到信，多過想寄信'}, cat:{n:'一隻不理人的貓',d:'你羨慕牠'}, pond:{n:'一個小池塘',d:'你需要靜下來的地方'},
+  flag:{n:'一面自己畫的旗',d:'你想被看見，但要用自己的方式'}, lantern:{n:'兩盞晚上會亮的燈籠',d:'你常常晚上才活過來'}, hammock:{n:'一張吊床',d:'你其實最想做的是休息'},
+  telescope:{n:'一支望遠鏡',d:'你在看很遠的地方'}, drum:{n:'一面鼓',d:'你有話想大聲說'}, well:{n:'一口井',d:'你相信東西要往下挖才有'}
+};
+const TASK_DECOR={T1:['tree','bench','gate','cat','pond','mailbox'],T2:['flag','lantern','hammock','telescope','drum','well']};
+function openDecorChoice(taskCode){ const opts=TASK_DECOR[taskCode]||[]; const mv=myV(); mv.decor=mv.decor||[]; const p=document.getElementById('panel');
+  p.innerHTML=`<div class="en">UNLOCKED</div><h4 class="serif">解鎖任務 ${taskCode==='T1'?'1/50':'2/50'}：幫你的家挑擺設</h4><p>任選一到兩個，會立刻出現在你家院子。挑什麼沒有對錯，但艾兒莎會看。</p><div id="decorList">${opts.map(k=>`<label class="islander" style="cursor:pointer"><input type="checkbox" value="${k}" ${mv.decor.includes(k)?'checked':''} style="width:18px;height:18px"><div><b>${DECOR[k].n}</b><div class="sub" style="font-size:12px;color:var(--stone)">${DECOR[k].d}</div></div></label>`).join('')}</div><div class="rowb"><button class="btn pill" onclick="saveDecor('${taskCode}')">放進院子</button><button class="btn ghost pill" onclick="closeSheet()">等一下再選</button></div>`;
+  document.getElementById('sheet').classList.add('open'); }
+async function saveDecor(taskCode){ const picked=[...document.querySelectorAll('#decorList input:checked')].map(i=>i.value); const opts=TASK_DECOR[taskCode]||[]; if(picked.filter(k=>opts.includes(k)).length>2){ toast('這個任務最多選兩個'); return; } const mv=myV(); mv.decor=(mv.decor||[]).filter(k=>!opts.includes(k)).concat(picked); if(LIVE){ try{ await DB.saveProfile({decor:mv.decor}); DB.event('choose_decor',{task:taskCode,picked}); }catch(e){ toast('存不進去：'+e.message); return; } } closeSheet(); toast('院子長出東西了'); renderVillage(); renderDecorCard(); }
+function renderDecorCard(){ const el=document.getElementById('decorCard'); if(!el) return; const mv=myV(); const unlocked=me.task.done; el.innerHTML= unlocked? `<div class="flag">🌱</div><div style="flex:1"><div class="lbl">解鎖任務 1/50，可以升級房子的繁榮</div><div class="sub">任選一到兩個擺設放進院子${(mv.decor||[]).length?'（已選 '+(mv.decor||[]).map(k=>DECOR[k]?.n).join('、')+'）':''}</div></div><div class="chev">›</div>` : `<div class="flag">🔒</div><div style="flex:1"><div class="lbl">交出任務 1/50，就能升級房子</div><div class="sub">交了之後可以挑擺設，院子會開始長東西</div></div><div class="chev">›</div>`; el.onclick=()=>{ if(unlocked) openDecorChoice('T1'); else go('task'); }; }
 function openVillagePanel(v){
   const ps=villagers.filter(p=>p.v===v.k&&(p.mentor||p.sign||p.about||(p.name&&p.name!=='我'&&p.name!=='示範島民'))); const p=document.getElementById('panel');
   p.innerHTML=`<div class="en">${v.en} VILLAGE</div><h4 class="serif">${v.name}</h4><p>${v.desc}</p>
@@ -715,7 +777,7 @@ function openWelcome(){ const p=document.getElementById('panel'); p.innerHTML=`<
 function startThread(name){ if(!threads.find(t=>t.who===name)) threads.unshift({who:name,last:'（你們還沒講過話）'}); closeSheet(); go('msgs'); renderThreads(); toast('開了一個跟 '+name+' 的對話'); }
 function renderThreads(){ const el=document.getElementById('threads'); if(!el) return; el.innerHTML=''; threads.forEach(t=>{ const d=document.createElement('div'); d.className='thread'; const locked=t.lock&&me.lv<5; d.style.opacity=locked?'.6':'1'; d.style.cursor=locked?'default':'pointer';
     d.innerHTML=`<div class="ic" style="width:40px;height:40px;border-radius:50%;background:${t.elsa?'#B5382C':t.group?'#5C7A6E':'#DCE0DD'};display:grid;place-items:center;color:#fff">${t.elsa?'✦':t.group?'⌂':t.lock?'🔒':'✉'}</div><div style="flex:1"><div class="who">${t.who}</div><div class="last">${t.last}</div></div>${locked?'<span style="font-size:11px;background:#1F2430;color:#fff;border-radius:999px;padding:2px 8px">🔑 LV.5</span>':''}`;
-    d.addEventListener('click',()=>{ if(t.welcome) openWelcome(); else if(t.group) openGroup(); else if(t.elsa) go('mentor'); else if(locked) toast('任務做到 LV.5 就能敲門'); else toast('島民之間的對話正式版開放'); }); el.appendChild(d); }); }
+    d.addEventListener('click',()=>{ if(t.welcome) openWelcome(); else if(t.group) openGroup(); else if(t.elsa) go('mentor'); else if(locked) toast('任務做到 LV.5 就能敲門'); else if(t.dm) openDM(t); else toast('島民之間的對話正式版開放'); }); el.appendChild(d); }); }
 
 function renderVillage(){
   const st=document.getElementById('street'); if(st) st.innerHTML=''; renderThreads();
@@ -791,7 +853,7 @@ const DB={
   async session(){ const {data}=await sb.auth.getSession(); return data.session; },
   async loadMe(){ const ses=await this.session(); if(!ses) return null; const {data,error}=await sb.from('people').select('*').eq('email',ses.user.email.toLowerCase()).maybeSingle(); if(error) throw error; return data; },
   async saveProfile(fields){ const {error}=await sb.from('people').update(fields).eq('id',me.id); if(error) throw error; },
-  async villagers(vkey){ const {data}=await sb.from('people').select('id,nickname,name,house_color,signboard,about,village_key,role').eq('village_key',vkey); return data||[]; },
+  async villagers(vkey){ const {data}=await sb.from('people').select('id,nickname,name,house_color,signboard,about,village_key,role,decor').eq('village_key',vkey); return data||[]; },
   async villages(){ const {data}=await sb.from('villages').select('*'); return data||[]; },
   async villageCounts(){ const {data}=await sb.from('people').select('village_key'); const c={}; (data||[]).forEach(r=>{c[r.village_key]=(c[r.village_key]||0)+1}); return c; },
   async assignments(){ const {data}=await sb.from('assignments').select('*, tasks(*)').eq('person_id',me.id).order('sent_at'); return data||[]; },
@@ -818,7 +880,8 @@ async function bootLive(){
   vs.forEach(v=>{ const t=VILLAGES.find(x=>x.k===v.key); if(t){ t.prog=Number(v.prosperity||0); t.desc=v.description||t.desc; t.greeting=v.greeting; t.count=counts[v.key]||0; } });
   // 同村島民換成真人
   const same=await DB.villagers(me.vkey); const keep=villagers.filter(v=>v.me||v.mentor); villagers.length=0; keep.forEach(v=>villagers.push(v));
-  same.filter(r=>r.id!==me.id).forEach(r=>villagers.push({name:r.nickname||r.name,v:r.village_key,tags:[],sign:r.signboard||'',about:r.about||'',color:r.house_color||'#5C7A6E',murmur:[r.signboard||'……'],id:r.id}));
+  same.filter(r=>r.id!==me.id).forEach(r=>villagers.push({name:r.nickname||r.name,v:r.village_key,tags:[],sign:r.signboard||'',about:r.about||'',color:r.house_color||'#5C7A6E',murmur:[r.signboard||'……'],id:r.id,decor:Array.isArray(r.decor)?r.decor:[]}));
+  loadDMs();
   // 任務
   const as=await DB.assignments(); me.live_assignments=as;
   const t1=as.find(a=>a.task_code==='T1'); if(t1){ me.task.done=t1.status!=='sent'; me.history=me.history.filter(h=>!h.live); as.forEach(a=>{ if(a.reply_text) me.history.push({live:true,n:'秘密任務 '+(a.tasks?.no||'')+'・'+(a.tasks?.title||''),when:(a.replied_at||'').slice(0,16).replace('T',' '),snip:a.reply_text.slice(0,60),full:a.reply_text,reply:a.next_step||'',st:a.next_step?'done':'wait'}); }); }
@@ -933,7 +996,7 @@ async function submitTask(){
   if(LIVE){ const a=(me.live_assignments||[]).find(x=>x.task_code==='T1'); if(!a){toast('這個任務還沒指派給你');return;} try{ await DB.submitReply(a.id, ['我的觀察是','總觀察時間','整體觀察完成後的感受','觀察紀錄'].map((k,i)=>k+'：'+(v[i]||'')).join('\n')); DB.event('submit_task',{task:'T1'}); }catch(e){ toast('交不出去：'+e.message); return; } }
   me.task.done=true; me.xp+=80; me.flags+=1; me.week[4]=1; me.streak+=1; me.milestones[2].done=true; me.milestones[2].now=false; me.milestones[3].now=true;
   me.history.push({n:'秘密任務 1/50・觀察一個會呼吸的生物', when:new Date().toLocaleString('zh-TW',{hour12:false}).slice(0,16), snip:v[0], full:v.filter(Boolean).join('\n'), st:'wait'});
-  closeSheet(); render(); toast('交出去了，路往前一段 +80 XP'); go('task');
+  closeSheet(); render(); toast('交出去了，路往前一段 +80 XP'); go('village'); setTimeout(()=>openDecorChoice('T1'),600);
 }
 function closeSheet(){document.getElementById('sheet').classList.remove('open'); if(window.__resetCam) window.__resetCam();}
 
