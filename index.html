@@ -1,0 +1,981 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>跳級之島 GROW GROW ISLAND</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg">
+<link rel="apple-touch-icon" href="icon.svg">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="跳級之島">
+<meta name="theme-color" content="#1F2430">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700&family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ivory:#F3EEE3; --paper:#FAF7F0; --ink:#1F2430; --ink-2:#3A4150; --stone:#8A8F99; --line:#D9D2C3;
+  --red:#B5382C; --gold:#C6A44E; --teal:#5C7A6E; --mist:#DCE0DD; --sea:#B9C6C9;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ --ivory:#F3EEE3; } }
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--ivory);color:var(--ink);font-family:"Noto Sans TC","PingFang TC",sans-serif;font-size:15px;line-height:1.7}
+.serif{font-family:"Noto Serif TC","Songti TC",serif}
+.en{font-family:"Cormorant Garamond",Georgia,serif;letter-spacing:.28em;font-size:11px;color:var(--ink-2)}
+.app{max-width:430px;margin:0 auto;min-height:100%;position:relative;padding-bottom:84px;background:var(--ivory)}
+.view{display:none}.view.on{display:block}
+.head{display:flex;align-items:flex-end;justify-content:space-between;padding:18px 20px 8px}
+.logo{line-height:1}
+.logo .zh{font-family:"Noto Serif TC",serif;font-weight:900;font-size:34px;letter-spacing:.06em;color:var(--ink)}
+.logo .en{display:block;margin-top:4px}
+.lv{display:flex;align-items:center;gap:8px;background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:6px 10px 6px 6px}
+.seal{width:30px;height:30px;border-radius:50%;background:var(--red);display:grid;place-items:center;color:#fff;font-family:"Noto Serif TC",serif;font-size:13px;font-weight:700}
+.lv b{font-family:"Cormorant Garamond",serif;font-size:14px;letter-spacing:.08em}
+.bar{width:54px;height:5px;background:var(--line);border-radius:3px;overflow:hidden}.bar i{display:block;height:100%;background:var(--red);width:62%}
+.subhead{display:flex;align-items:center;justify-content:space-between;padding:16px 20px 6px}
+.subhead .t{font-family:"Noto Serif TC",serif;font-size:22px;font-weight:700}
+.back{background:none;border:0;font-size:22px;color:var(--ink);padding:4px 8px 4px 0;cursor:pointer}
+svg.art{width:100%;height:auto;display:block}
+.pin{cursor:pointer}.pin:focus{outline:none}
+.pin text{font-family:"Noto Sans TC",sans-serif;font-size:11px;fill:var(--ink)}
+.pin .en{font-family:"Cormorant Garamond",serif;font-size:10px;letter-spacing:.08em;fill:var(--ink-2)}
+.card{margin:14px 20px 0;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.card.row{display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer}
+.flag{width:34px;height:34px;display:grid;place-items:center;background:var(--ivory);border-radius:10px;font-size:18px}
+.card .lbl{font-family:"Noto Serif TC",serif;font-weight:700;font-size:17px}
+.card .sub{font-size:12px;color:var(--stone)}
+.chev{color:var(--stone);font-size:18px}
+.prog{height:4px;background:var(--line);border-radius:2px;margin-top:8px;overflow:hidden}.prog i{display:block;height:100%;background:var(--red);width:0}
+.tabs{position:fixed;left:0;right:0;bottom:0;background:var(--paper);border-top:1px solid var(--line);padding:8px 0 calc(10px + env(safe-area-inset-bottom,0px))}
+.tabs div{max-width:430px;margin:0 auto;display:flex;justify-content:space-around}
+.tabs button{background:none;border:0;font-family:inherit;font-size:11px;color:var(--stone);display:grid;place-items:center;gap:2px;cursor:pointer;padding:2px 10px}
+.tabs button span:first-child{font-size:20px;line-height:1}
+.tabs button.on{color:var(--red)}
+.bubble{margin:14px 20px 0;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px 16px;font-family:"Noto Serif TC",serif;font-size:17px;line-height:1.6;position:relative}
+.bubble:after{content:"";position:absolute;left:28px;top:-8px;width:14px;height:14px;background:var(--paper);border-left:1px solid var(--line);border-top:1px solid var(--line);transform:rotate(45deg)}
+.choices{margin:12px 20px 0;display:grid;gap:8px}
+.choice{display:flex;align-items:center;gap:12px;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:15px;cursor:pointer;text-align:left;font-family:inherit;color:var(--ink)}
+.choice i{width:18px;height:18px;border-radius:50%;background:var(--red);display:inline-block;flex:none}
+.choice.c2 i{background:var(--teal);border-radius:3px;transform:rotate(45deg) scale(.8)}
+.choice.c3 i{background:var(--ink-2);border-radius:4px}
+.choice b{flex:1;font-weight:500}
+.mic{margin:22px auto 6px;width:78px;height:78px;border-radius:50%;background:var(--red);display:grid;place-items:center;color:#fff;font-size:30px;box-shadow:0 0 0 10px rgba(181,56,44,.12),0 0 0 20px rgba(181,56,44,.06);border:0;cursor:pointer}
+.log{margin:12px 20px 0;display:grid;gap:8px}
+.bub{max-width:88%;padding:9px 12px;border-radius:12px;font-size:14px;line-height:1.6;border:1px solid var(--line);background:var(--paper)}
+.bub.me{margin-left:auto;background:#fff}
+.bub.elsa{font-family:"Noto Serif TC",serif;font-size:15px}
+.chatform{display:flex;gap:8px;margin:10px 20px 0}
+.chatform input{flex:1;border:1px solid var(--line);border-radius:999px;padding:10px 14px;font-size:15px;font-family:inherit;background:#fff;min-width:0}
+.btn{background:var(--red);color:#fff;border:0;border-radius:12px;padding:12px 18px;font-size:16px;font-weight:700;font-family:"Noto Serif TC",serif;cursor:pointer;letter-spacing:.06em}
+.btn.ghost{background:var(--paper);color:var(--ink);border:1px solid var(--line)}
+.btn.pill{border-radius:999px;padding:10px 16px;font-size:14px}
+.steps{margin:14px 20px 0;display:grid;gap:12px}
+.step{display:flex;align-items:center;gap:12px}
+.step .n{width:30px;height:30px;border-radius:50%;background:var(--red);color:#fff;display:grid;place-items:center;font-family:"Cormorant Garamond",serif;font-weight:600;font-size:16px;flex:none}
+.step .txt{flex:1;font-size:15px;border-bottom:1px solid var(--line);padding-bottom:6px}
+.meta{margin:16px 20px 0;display:flex;background:var(--paper);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.meta div{flex:1;text-align:center;padding:10px 6px;font-size:13px;border-right:1px solid var(--line)}
+.meta div:last-child{border:0}
+.meta b{font-family:"Cormorant Garamond",serif;font-size:16px;letter-spacing:.04em}
+.cta{margin:16px 20px 0}.cta .btn{width:100%;padding:16px}
+.stats{margin:12px 20px 0;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.stat .big{font-family:"Cormorant Garamond",serif;font-size:28px;font-weight:600;letter-spacing:.04em;line-height:1}
+.stat .k{font-size:12px;color:var(--stone)}
+.week{display:flex;gap:6px;margin-top:8px;align-items:center}.week i{width:10px;height:10px;border-radius:50%;border:1.5px solid var(--red);display:inline-block}.week i.on{background:var(--red)}
+.week span{font-family:"Cormorant Garamond",serif;font-size:10px;letter-spacing:.2em;color:var(--stone);margin-left:auto}
+.stat.wide{grid-column:1/-1;display:flex;align-items:center;gap:12px}
+.sheet{position:fixed;inset:0;background:rgba(31,36,48,.5);display:none;align-items:flex-end;justify-content:center;z-index:9}
+.sheet.open{display:flex}
+.panel{width:100%;max-width:430px;background:var(--paper);border-radius:22px 22px 0 0;padding:18px 20px 30px;max-height:84vh;overflow:auto}
+.panel h4{font-family:"Noto Serif TC",serif;font-size:21px;margin:4px 0 8px}
+.panel p{margin:0 0 10px;font-size:15px}
+.panel label{display:block;font-weight:700;font-size:13px;color:var(--ink-2);margin-top:10px}
+.panel textarea{width:100%;min-height:96px;border:1px solid var(--line);border-radius:12px;padding:12px;font-family:inherit;font-size:15px;background:#fff}
+.rowb{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.gate{position:fixed;inset:0;background:var(--ivory);z-index:20;display:grid;place-items:center;padding:24px}
+.gate .box{width:100%;max-width:360px;text-align:center}
+.gate .zh{font-family:"Noto Serif TC",serif;font-weight:900;font-size:44px;letter-spacing:.08em;line-height:1.1}
+.gate input{width:100%;border:1px solid var(--line);border-radius:999px;padding:12px 16px;font-size:18px;text-align:center;letter-spacing:8px;font-family:inherit;margin:18px 0 12px;background:#fff}
+.gate p{color:var(--stone);font-size:13px;margin:6px 0 0}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:96px;background:var(--ink);color:#fff;padding:10px 16px;border-radius:999px;font-size:14px;display:none;z-index:30}
+
+.village{position:relative}
+.village .sky{padding:14px 20px 0}
+.village .sky .t{font-family:"Noto Serif TC",serif;font-size:22px;font-weight:700}
+.village .sky .k{font-size:12px;color:var(--stone)}
+.street{display:flex;gap:14px;overflow-x:auto;padding:12px 20px 18px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
+.street::-webkit-scrollbar{display:none}
+.house{flex:0 0 150px;scroll-snap-align:start;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:10px 10px 12px;cursor:pointer;position:relative}
+.house.me{border-color:var(--red);box-shadow:0 0 0 3px rgba(181,56,44,.12)}
+.house svg{width:100%;height:auto;display:block}
+.house .name{font-family:"Noto Serif TC",serif;font-weight:700;font-size:14px;margin-top:6px}
+.house .dist{font-size:11px;color:var(--stone)}
+.house .sign{margin-top:6px;font-size:12px;line-height:1.5;background:var(--ivory);border:1px solid var(--line);border-radius:8px;padding:6px 8px;min-height:44px;color:var(--ink-2)}
+.smoke{animation:smoke 3s ease-in-out infinite;opacity:.6}
+@keyframes smoke{0%{transform:translateY(0);opacity:.6}100%{transform:translateY(-14px);opacity:0}}
+.busy{animation:busy 2.2s ease-in-out infinite}
+@keyframes busy{0%,100%{transform:translateX(0)}50%{transform:translateX(6px)}}
+@media (prefers-reduced-motion: reduce){.smoke,.busy{animation:none}}
+.mine{margin:22px 20px 0;background:var(--paper);border:1px solid var(--red);border-radius:14px;padding:14px 16px}
+.mine .lbl{font-family:"Noto Serif TC",serif;font-weight:700;font-size:16px}
+.mine textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px;font-family:inherit;font-size:14px;background:#fff;min-height:56px;margin-top:8px}
+.districts{margin:12px 20px 0;display:grid;gap:10px}
+.district{display:flex;align-items:center;gap:12px;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:12px 14px;cursor:pointer}
+.district .ic{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-size:22px;flex:none}
+.district .n{font-family:"Noto Serif TC",serif;font-weight:700;font-size:16px}
+.district .d{font-size:12px;color:var(--stone)}
+.district .c{margin-left:auto;font-family:"Cormorant Garamond",serif;font-size:22px;font-weight:600}
+
+
+/* 成長地圖：往桌遊盤面靠一點 */
+#v-growth{background:var(--ivory);min-height:100vh;padding-bottom:20px}
+#v-growth .subhead .t{color:#1F2430}
+.boardframe{margin:8px 12px 0;background:#FAF7F0;border:1px solid #1F2430;border-radius:8px;padding:10px 10px 12px;position:relative}
+.boardframe .cells{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:10px}
+.cell{aspect-ratio:1;background:#F7E1E6;border:1px solid #1F2430;border-radius:3px;display:grid;place-items:center;font-size:16px;position:relative}
+.cell small{position:absolute;right:2px;bottom:0;font-family:"Cormorant Garamond",serif;font-size:8px;color:#1F2430}
+.cell.on{background:#F6D66B}
+.boardin{background:#F3EEE3;border:1px solid #1F2430;border-radius:6px;padding:12px}
+.vals{display:grid;gap:10px}
+.val{background:#FAF7F0;border:1px solid #1F2430;border-radius:6px;padding:10px 12px;position:relative}
+.val .rank{position:absolute;left:-6px;top:-8px;background:#F6D66B;border:1px solid #1F2430;border-radius:3px;font-family:"Cormorant Garamond",serif;font-weight:600;font-size:12px;padding:1px 6px;letter-spacing:.1em}
+.val .vn{font-family:"Noto Serif TC",serif;font-weight:700;font-size:17px;margin-left:8px}
+.val .line{display:flex;justify-content:space-between;font-size:12px;color:var(--ink-2);margin-top:6px;gap:8px}
+.val .line b{font-weight:500;color:var(--ink)}
+.val .meter{height:8px;border:1px solid #1F2430;border-radius:4px;background:#fff;margin-top:6px;overflow:hidden}
+.val .meter i{display:block;height:100%;background:repeating-linear-gradient(90deg,#B5382C 0 6px,#E9A3B3 6px 8px)}
+.val .why{font-size:12px;color:var(--stone);margin-top:6px;font-style:italic}
+.medal{margin:12px auto 0;width:150px;text-align:center;background:#FAF7F0;border:2px solid #1F2430;border-radius:50%;padding:14px 8px;font-family:"Cormorant Garamond",serif;font-size:11px;letter-spacing:.2em;line-height:1.3}
+.medal b{display:block;font-family:"Noto Serif TC",serif;font-size:15px;letter-spacing:.1em;margin:2px 0}
+#v-growth .stats{margin-top:10px}#v-growth .stat{border-color:#1F2430}
+#v-growth .card{border-color:#1F2430}
+
+
+.scenewrap{margin:8px 0 0;border-top:1px solid #1F2430;border-bottom:1px solid #1F2430;overflow:hidden;background:#DCE0DD;touch-action:none}
+.scenewrap canvas{width:100%;height:auto;display:block}
+
+
+.scene-back{position:absolute;left:10px;top:10px;z-index:2}
+.zoomctl{position:absolute;right:10px;top:10px;z-index:2;display:grid;gap:6px}
+.zoomctl button{width:36px;height:36px;border-radius:50%;border:1px solid #1F2430;background:#FAF7F0;font-size:20px;line-height:1;cursor:pointer;font-family:inherit}
+.hist{margin:16px 20px 0}
+.hist .h{font-family:"Noto Serif TC",serif;font-weight:700;font-size:18px;margin-bottom:8px}
+.hrec{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:10px;cursor:pointer}
+.hrec .top{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.hrec .n{font-family:"Noto Serif TC",serif;font-weight:700}
+.hrec .when{font-size:11px;color:var(--stone);font-family:"Cormorant Garamond",serif;letter-spacing:.06em}
+.hrec .snip{font-size:13px;color:var(--ink-2);margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hrec .st{display:inline-block;font-size:11px;border-radius:999px;padding:1px 8px;background:#E3E7E3;color:#1F2430;margin-top:6px}
+.hrec .st.wait{background:#F6D66B}
+.mentors{margin:18px 20px 0}
+.mentors .h{font-family:"Noto Serif TC",serif;font-weight:700;font-size:18px;margin-bottom:4px}
+.mentors .k{font-size:12px;color:var(--stone);margin-bottom:10px}
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mcard{position:relative;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:12px;cursor:pointer;min-height:96px}
+.mcard .av{width:36px;height:36px;border-radius:50%;background:#DCE0DD;border:1px solid #1F2430;display:grid;place-items:center;font-family:"Noto Serif TC",serif;font-weight:700;font-size:14px}
+.mcard .mn{font-family:"Noto Serif TC",serif;font-weight:700;margin-top:6px}
+.mcard .mr{font-size:11px;color:var(--stone)}
+.mcard.locked:after{content:"🔒 LV.5 解鎖";position:absolute;right:8px;top:8px;font-size:10px;background:#1F2430;color:#fff;border-radius:999px;padding:2px 7px}
+.mcard.locked{opacity:.75}
+.rank{margin:12px 20px 0;display:grid;gap:8px}
+.rrow{display:flex;align-items:center;gap:12px;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:10px 14px;cursor:pointer}
+.rrow .pos{width:30px;font-family:"Cormorant Garamond",serif;font-weight:600;font-size:22px;text-align:center}
+.rrow .rn{font-family:"Noto Serif TC",serif;font-weight:700}
+.rrow .rb{flex:1}
+.rrow .meter{height:6px;background:var(--line);border-radius:3px;overflow:hidden;margin-top:4px}
+.rrow .meter i{display:block;height:100%;background:#B5382C}
+.rrow .pct{font-family:"Cormorant Garamond",serif;font-size:16px}
+.scenewrap{position:relative}
+.tagchip{display:inline-block;font-size:11px;border:1px solid #1F2430;border-radius:999px;padding:1px 8px;margin:2px 4px 2px 0;background:#F3EEE3}
+.islander{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)}
+.islander .dot{width:12px;height:12px;border-radius:50%;background:#B5382C;flex:none}
+.islander b{font-family:"Noto Serif TC",serif;font-weight:700}
+.thread{display:flex;align-items:center;gap:12px;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:12px 14px;cursor:pointer}
+.thread .who{font-family:"Noto Serif TC",serif;font-weight:700}
+.thread .last{font-size:12px;color:var(--stone)}
+
+
+.logo{display:inline-block}
+.logo .zh{display:block;letter-spacing:.06em;margin-right:-.06em}
+.logo .en{display:flex;justify-content:space-between;width:100%;letter-spacing:0;margin-top:4px}
+.logo .en span{display:inline-block}
+.logo .en span.sp{width:.35em}
+.gate .en{display:flex;justify-content:space-between;letter-spacing:0;width:100%;margin-top:2px}
+.gate .en span{display:inline-block}.gate .en span.sp{width:.35em}
+.gate .zh{display:inline-block;letter-spacing:.08em;margin-right:-.08em}
+.gate .box .logoin{display:inline-block;text-align:left}
+
+.swatches{display:flex;gap:8px;margin-top:6px}
+.sw{width:26px;height:26px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px #1F2430;cursor:pointer}
+.sw.on{box-shadow:0 0 0 3px #1F2430}
+
+.mine-grid{display:grid;grid-template-columns:150px 1fr;gap:14px;align-items:start}
+.preview{background:#F3EEE3;border:1px solid var(--line);border-radius:12px;padding:6px;min-height:150px}
+.preview svg{width:100%;height:auto;display:block}
+.mine .k{font-size:12px;color:var(--stone)}
+.mine input{width:100%;border:1px solid var(--line);border-radius:999px;padding:8px 12px;font-family:inherit;font-size:14px;background:#fff;margin-top:6px}
+@media (max-width:380px){.mine-grid{grid-template-columns:120px 1fr}}
+
+.bcast{margin:10px 20px 0;display:flex;align-items:center;gap:10px;background:#1F2430;color:#F3EEE3;border-radius:14px;padding:10px 14px;cursor:pointer}
+.bcast .bc-ic{font-size:18px}.bcast .bc-t{flex:1;font-size:13px;line-height:1.5}.bcast .bc-t b{display:block;font-family:"Noto Serif TC",serif;font-size:14px;color:#F6D66B}.bcast .chev{color:#F3EEE3}
+.dpad{position:absolute;left:10px;bottom:12px;z-index:2;display:grid;justify-items:center;gap:4px;user-select:none}
+.dpad button{width:44px;height:44px;border-radius:12px;border:1px solid #1F2430;background:rgba(250,247,240,.92);font-size:16px;cursor:pointer;touch-action:none}
+.dpad .mid{display:flex;gap:44px}
+.walkhint{position:absolute;right:10px;bottom:16px;z-index:2;font-size:11px;background:rgba(31,36,48,.8);color:#F3EEE3;border-radius:999px;padding:4px 10px}
+.pulse{animation:pulse 1.8s ease-in-out infinite;transform-origin:center;transform-box:fill-box}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+@media (prefers-reduced-motion: reduce){.pulse{animation:none}}
+</style>
+</head>
+<body>
+<div class="gate" id="gate">
+  <div class="box">
+    <svg viewBox="0 0 200 90" width="200" height="90" aria-hidden="true"><circle cx="150" cy="30" r="18" fill="#B5382C"/><path d="M0 80 L40 40 L70 66 L100 30 L135 62 L160 50 L200 80 Z" fill="#1F2430"/><path d="M0 84 Q100 74 200 84 L200 90 L0 90Z" fill="#B9C6C9"/></svg>
+    <div class="logoin"><div class="zh">跳級之島</div><div class="en"><span>G</span><span>R</span><span>O</span><span>W</span><span class="sp"></span><span>G</span><span>R</span><span>O</span><span>W</span><span class="sp"></span><span>I</span><span>S</span><span>L</span><span>A</span><span>N</span><span>D</span></div></div>
+    <form id="gateForm">
+      <input id="code" inputmode="numeric" maxlength="5" placeholder="•••••" autocomplete="off">
+      <input id="gateEmail" type="email" placeholder="你報名時的 email" style="display:none;letter-spacing:0;font-size:16px">
+      <button class="btn" type="submit" style="width:100%" id="gateBtn">上島</button>
+    </form>
+    <p id="gateMsg">初代島民請輸入報名時的轉帳五碼（示範版：任何五碼都可以；輸入 00000 進建島人模式）</p>
+  </div>
+</div>
+
+<div class="app">
+<section class="view on" id="v-village">
+  <div class="head">
+    <div class="logo"><span class="zh">跳級之島</span><span class="en"><span>G</span><span>R</span><span>O</span><span>W</span><span class="sp"></span><span>G</span><span>R</span><span>O</span><span>W</span><span class="sp"></span><span>I</span><span>S</span><span>L</span><span>A</span><span>N</span><span>D</span></span></div>
+    <div class="lv"><div class="seal" title="第一代島民">Ⅰ</div><div><b>LV.<span id="lv2">1</span></b><div class="bar"><i></i></div></div></div>
+  </div>
+  <div class="village">
+    <div class="bcast" id="bcast" onclick="openBroadcasts()"><span class="bc-ic">📣</span><div class="bc-t"><b>島上廣播</b><span id="bcastText">建島人還沒廣播。</span></div><span class="chev">›</span></div>
+    <div class="sky" id="sceneHead"><div class="t" id="sceneTitle">八個村子</div><div class="k" id="sceneHint">拖曳看整座島，點一個村子進去，可以認識裡面的島民：）村子越是繁榮，代表這一區的村民們很認真的跟上任務喔！</div></div>
+    <div class="scenewrap"><canvas id="scene" width="860" height="1180" aria-label="跳級之島世界"></canvas>
+      <button class="btn ghost pill scene-back" id="sceneBack" style="display:none">‹ 回到島</button>
+      <div class="zoomctl"><button id="zin" aria-label="放大">＋</button><button id="zout" aria-label="縮小">－</button></div>
+      <div class="dpad" id="dpad" style="display:none"><button data-d="up">▲</button><div class="mid"><button data-d="left">◀</button><button data-d="right">▶</button></div><button data-d="down">▼</button></div>
+      <div class="walkhint" id="walkhint" style="display:none">用方向鍵走路，走到村口的門牌就能離開</div>
+    </div>
+    <div class="mine">
+      <div class="mine-grid">
+        <div class="preview" id="myHouse"></div>
+        <div class="mine-form">
+          <div class="lbl">我的家</div>
+          <div class="k">幫你的家取個名字，建議用你的暱稱，島上的人會這樣叫你。</div>
+          <input id="myName" placeholder="例如：貓舍的她">
+          <div class="k" style="margin-top:8px">房子的顏色</div>
+          <div class="swatches" id="swatches"></div>
+        </div>
+      </div>
+      <div class="lbl" style="margin-top:16px">我家門口的招牌</div>
+      <div class="k">一天一句，寫給島上路過的島民看。</div>
+      <textarea id="mySign" placeholder="今天：把該寄的信寄出去了，醜的也寄。"></textarea>
+      <div class="rowb"><button class="btn pill" onclick="confirmSign()">確認掛上去</button></div>
+      <div class="lbl" style="margin-top:16px">我要說的話</div>
+      <div class="k">來到你家的人會看到這段。你想讓島上的人知道什麼，就寫什麼。</div>
+      <textarea id="myAbout" placeholder="例如：我是護理師，正在把副業做起來。想找一起早起的人。"></textarea>
+      <div class="rowb" style="justify-content:space-between"><button class="btn pill" onclick="confirmAbout()">確認說出去</button><button class="btn pill" style="background:#5C7A6E" onclick="goHome()">回我家看看</button></div>
+    </div>
+  <div class="card row" onclick="go('task')">
+    <div class="flag">🚩</div>
+    <div style="flex:1"><div class="lbl">今日任務</div><div class="sub" id="todaySub2">秘密任務 1/50・還有 3 天</div></div>
+    <div class="chev">›</div>
+  </div>
+</section>
+<section class="view" id="v-map">
+  <div class="head">
+    <div class="logo"><span class="zh">跳級之島</span><span class="en"><span>G</span><span>R</span><span>O</span><span>W</span><span class="sp"></span><span>G</span><span>R</span><span>O</span><span>W</span><span class="sp"></span><span>I</span><span>S</span><span>L</span><span>A</span><span>N</span><span>D</span></span></div>
+    <div class="lv"><div class="seal" title="第一代島民">Ⅰ</div><div><b>LV.<span id="lv">1</span></b><div class="bar"><i id="lvbar"></i></div></div></div>
+  </div>
+  <svg class="art" viewBox="0 0 430 560" xmlns="http://www.w3.org/2000/svg" aria-label="成長之路" id="mapArt">
+    <defs>
+      <pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="#1F2430" stroke-width="1" opacity=".18"/></pattern>
+      <linearGradient id="sea" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#DCE0DD"/><stop offset="1" stop-color="#B9C6C9"/></linearGradient>
+    </defs>
+    <rect width="430" height="560" fill="#F3EEE3"/>
+    <circle cx="330" cy="86" r="42" fill="#B5382C"/>
+    <path d="M0 200 L60 130 L120 190 L180 120 L250 200 L310 150 L430 210 L430 260 L0 260Z" fill="#8A8F99" opacity=".55"/>
+    <path d="M0 240 L80 170 L150 230 L220 160 L300 240 L360 190 L430 250 L430 300 L0 300Z" fill="#3A4150" opacity=".85"/>
+    <path d="M0 292 Q215 276 430 292 L430 560 L0 560Z" fill="url(#sea)"/>
+    <g stroke="#8A8F99" stroke-width="1" fill="none" opacity=".6">
+      <path d="M20 330 q20 -6 40 0 t40 0 t40 0"/><path d="M250 370 q20 -6 40 0 t40 0 t40 0"/><path d="M60 460 q20 -6 40 0 t40 0 t40 0"/><path d="M280 500 q20 -6 40 0 t40 0"/>
+    </g>
+    <path d="M0 300 L110 270 L190 300 L160 360 L80 380 L0 350Z" fill="#5C7A6E"/>
+    <path d="M0 300 L110 270 L190 300 L160 360 L80 380 L0 350Z" fill="url(#hatch)"/>
+    <path d="M240 330 L330 300 L430 330 L430 420 L330 430 L250 400Z" fill="#5C7A6E"/>
+    <path d="M240 330 L330 300 L430 330 L430 420 L330 430 L250 400Z" fill="url(#hatch)"/>
+    <path d="M30 430 L150 410 L240 450 L200 520 L80 540 L10 500Z" fill="#5C7A6E"/>
+    <path d="M30 430 L150 410 L240 450 L200 520 L80 540 L10 500Z" fill="url(#hatch)"/>
+    <path d="M300 460 L410 440 L430 480 L430 560 L280 560 L260 500Z" fill="#3A4150"/>
+    <g fill="#1F2430"><path d="M60 300 l6 -18 l6 18z M74 296 l5 -14 l5 14z M350 306 l6 -18 l6 18z M366 302 l5 -14 l5 14z M120 424 l6 -18 l6 18z M138 420 l5 -14 l5 14z"/></g>
+    <g><rect x="392" y="330" width="10" height="34" fill="#F3EEE3" stroke="#1F2430" stroke-width="1.5"/><rect x="390" y="326" width="14" height="6" fill="#B5382C"/></g>
+    <path id="road" d="M70 330 C 140 330, 130 380, 190 372 S 300 340, 320 380 S 210 470, 150 470 S 300 520, 360 490" fill="none" stroke="#F3EEE3" stroke-width="16" stroke-linecap="round"/>
+    <path d="M70 330 C 140 330, 130 380, 190 372 S 300 340, 320 380 S 210 470, 150 470 S 300 520, 360 490" fill="none" stroke="#1F2430" stroke-width="1.5" stroke-dasharray="4 5" stroke-linecap="round"/>
+    <g id="pins"></g>
+  </svg>
+  <div class="card row" onclick="go('task')">
+    <div class="flag">🚩</div>
+    <div style="flex:1"><div class="lbl">今日任務</div><div class="sub" id="todaySub">秘密任務 1/50・還有 3 天</div><div class="prog"><i id="todayProg"></i></div></div>
+    <div class="chev">›</div>
+  </div>
+  <div class="card row" onclick="openNote()">
+    <div class="flag">✦</div>
+    <div style="flex:1"><div class="lbl">艾兒莎給你的話</div><div class="sub">有一則新的</div></div>
+    <div class="chev">›</div>
+  </div>
+</section>
+
+<section class="view" id="v-task">
+  <div class="subhead"><button class="back" onclick="go('growth')">‹</button><div class="t serif">今日任務</div><span style="width:28px"></span></div>
+  <svg class="art" viewBox="0 0 430 190" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <rect width="430" height="190" fill="#F3EEE3"/><circle cx="330" cy="70" r="44" fill="#B5382C"/>
+    <path d="M0 150 L70 90 L140 140 L210 80 L290 150 L350 120 L430 160 L430 190 L0 190Z" fill="#1F2430"/>
+    <g stroke="#1F2430" stroke-width="1" fill="none" opacity=".5"><path d="M40 60 h120"/><path d="M40 72 h80"/><path d="M40 84 h100"/></g>
+  </svg>
+  <div class="card"><div class="lbl serif" id="taskTitle">秘密任務 1/50・觀察一個會呼吸的生物</div><div class="sub">選一個離你近、看得到本尊、會呼吸的生物，觀察總時間至少 10 分鐘，可零碎累積。不要互動，就是看。</div></div>
+  <div class="steps" id="steps"></div>
+  <div class="meta"><div>⏱ <b>10 min</b></div><div>📅 <b>5 天內</b></div><div>★ <b>+80 XP</b></div></div>
+  <div class="cta"><button class="btn" id="startBtn" onclick="openTask()">開始任務</button></div>
+  <div class="hist"><div class="h">過往任務與我的紀錄</div><div id="histList"></div></div>
+</section>
+
+<section class="view" id="v-mentor">
+  <div class="subhead"><button class="back" onclick="go('growth')">‹</button><div class="t serif">AI Mentor</div><span style="width:28px"></span></div>
+  <svg class="art" viewBox="0 0 430 170" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <rect width="430" height="170" fill="#F3EEE3"/><circle cx="110" cy="70" r="46" fill="#B5382C"/>
+    <path d="M0 140 L90 100 L160 130 L260 90 L340 130 L430 110 L430 170 L0 170Z" fill="#3A4150"/>
+    <path d="M300 150 l18 -46 l18 46z M340 146 l14 -36 l14 36z" fill="#1F2430"/>
+  </svg>
+  <div class="bubble" id="mentorQ">你最近有一件想嘗試，但一直有點猶豫的事嗎？</div>
+  <div class="choices" id="choices">
+    <button class="choice c1" onclick="pick('我怕失敗。')"><i></i><b>我怕失敗。</b><span class="chev">›</span></button>
+    <button class="choice c2" onclick="pick('我想試試看！')"><i></i><b>我想試試看！</b><span class="chev">›</span></button>
+    <button class="choice c3" onclick="pick('我需要更多時間思考。')"><i></i><b>我需要更多時間思考。</b><span class="chev">›</span></button>
+  </div>
+  <div class="log" id="log"></div>
+  <form class="chatform" id="chatForm"><input id="msg" placeholder="或者直接寫給艾兒莎"><button class="btn pill" type="submit">送出</button></form>
+  <button class="mic" id="mic" title="用說的">🎙</button>
+  <div style="text-align:center;font-size:12px;color:var(--stone);margin-bottom:10px">按住用說的（正式版開放）</div>
+  <div class="mentors"><div class="h">島上的其他 Mentor</div><div class="k">任務做到 LV.5 之後就可以敲門。先讓你看看有誰。</div><div class="mgrid" id="mgrid"></div></div>
+</section>
+
+<section class="view" id="v-growth">
+  <div class="subhead"><button class="back" onclick="go('growth')">‹</button><div class="t serif">成長地圖</div><span style="width:28px"></span></div>
+  <div class="stats">
+    <div class="stat wide"><div class="big" style="color:var(--red)">第 <span id="days">17</span> 天</div><div style="flex:1"><div class="k">在島上的日子</div></div></div>
+    <div class="stat"><div class="big">★ <span id="xp">1,240</span></div><div class="k">經驗值</div><div class="prog"><i style="width:62%"></i></div></div>
+    <div class="stat"><div class="big">第 <span id="rankMe">12</span> 名</div><div class="k">島民排行（146 位）</div><div class="prog"><i style="width:92%"></i></div></div>
+  </div>
+  <div class="boardframe">
+    <div class="boardin">
+      <div class="serif" style="text-align:center;font-weight:700;font-size:20px;margin-bottom:2px">每月復盤</div>
+      <div class="sub" style="text-align:center;color:var(--stone);font-size:12px;margin-bottom:10px">9 月・月底開門，三欄加上你排的前三個價值觀</div>
+      <div class="hrec" style="cursor:default"><div class="n" style="font-size:14px">這個月被推翻的一個信念</div><div style="font-size:14px;color:var(--ink-2);margin-top:2px">「我要準備好才能開始」——觀察任務證明我不用準備。</div></div>
+      <div class="hrec" style="cursor:default"><div class="n" style="font-size:14px">四個任務的實況</div><div style="font-size:14px;color:var(--ink-2);margin-top:2px">1/50 交了、2/50 進行中、3、4 還沒到。</div></div>
+      <div class="hrec" style="cursor:default"><div class="n" style="font-size:14px">下個月只解一件事</div><div style="font-size:14px;color:var(--ink-2);margin-top:2px">副業的第一筆 500 元。</div></div>
+      <div class="serif" style="text-align:center;font-weight:700;font-size:16px;margin:14px 0 8px">你排的前三個價值觀，和你這個月真的怎麼過</div>
+      <div class="vals" id="vals"></div>
+    </div>
+  </div>
+  <svg class="art" viewBox="0 0 430 430" xmlns="http://www.w3.org/2000/svg" id="radial" aria-label="五個面向"></svg>
+  
+</section>
+<section class="view" id="v-msgs">
+  <div class="subhead"><button class="back" onclick="go('village')">‹</button><div class="t serif">對話</div><span style="width:28px"></span></div>
+  <div class="districts" id="threads"></div>
+  <div class="card"><div class="lbl serif" style="font-size:15px">誰可以跟誰講話</div><div class="sub">島民之間可以互相留話與對話；艾兒莎的對話在 Mentor 分頁。正式版的對話都會存在你自己的紀錄裡。</div></div>
+</section>
+<section class="view" id="v-review">
+  <div class="subhead"><button class="back" onclick="go('village')">‹</button><div class="t serif">審核對話</div><span style="width:28px"></span></div>
+  <div class="card"><div class="lbl serif" style="font-size:15px">只有建島人看得到這頁</div><div class="sub">任何島民寫給你或其他 Mentor 的話，都會先到這裡：你會收到通知、看到原文、看到 AI 幫你擬的回覆，你放行之後對方才看得到。沒放行的，對方只會看到「已送出，艾兒莎看過之後會回你」。</div></div>
+  <div style="margin:12px 20px 0" id="reviewList"></div>
+</section>
+<section class="view" id="v-groups">
+  <div class="subhead"><button class="back" onclick="go('village')">‹</button><div class="t serif">排名</div><span style="width:28px"></span></div>
+  <div class="card"><div class="lbl serif">村子的任務實踐度</div><div class="sub">依每一區島民交任務的比例排。點村名可以進村。</div></div>
+  <div class="rank" id="rank"></div>
+  <div class="districts" id="districts" style="display:none"></div>
+</section>
+</div>
+
+<div class="tabs"><div>
+  <button class="on" data-v="village" onclick="go('village')"><span>🏘</span><span>村</span></button>
+  <button data-v="task" onclick="go('task')"><span>🚩</span><span>任務</span></button>
+  <button data-v="mentor" onclick="go('mentor')"><span>✦</span><span>Mentor</span></button>
+  <button data-v="msgs" onclick="go('msgs')"><span>✉</span><span>對話</span></button>
+  <button data-v="growth" onclick="go('growth')"><span>✩</span><span>成長</span></button>
+  <button data-v="groups" onclick="go('groups')"><span>♛</span><span>排名</span></button>
+  <button data-v="review" id="reviewTab" onclick="go('review')" style="display:none;position:relative"><span>✓</span><span>審核</span><i id="reviewBadge" style="position:absolute;top:-2px;right:2px;background:#B5382C;color:#fff;border-radius:999px;font-size:10px;padding:0 5px;font-style:normal;display:none">0</i></button>
+</div></div>
+
+<div class="sheet" id="sheet" onclick="if(event.target===this)closeSheet()"><div class="panel" id="panel"></div></div>
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+// ====== 正式版設定：填上你的 Supabase 專案網址和 anon key，兩行填好就從示範變正式 ======
+const CONFIG={ url:'https://mxdhxfkiipangeoafcpn.supabase.co', anonKey:'sb_publishable_586-vdVQZ6stl1PjNzUtoA_obWsV7CJ' };
+const LIVE=!!(CONFIG.url&&CONFIG.anonKey);
+const sb= LIVE ? window.supabase.createClient(CONFIG.url, CONFIG.anonKey) : null;
+const me={
+  lv:1, xp:1240, streak:7, flags:18, week:[1,1,1,1,0,0,0],
+  milestones:[
+    {id:'aware', zh:'自我覺察', t:0.04, done:true},
+    {id:'action', zh:'行動', t:0.40, now:true},
+    {id:'review', zh:'復盤', t:0.70},
+    {id:'future', zh:'未來', t:0.96}
+  ],
+  task:{steps:['選一個會呼吸的生物，寫下為什麼是他','零碎累積觀察滿 10 分鐘，不互動','用你自己的方式記錄，交出去'], done:false},
+  note:'你不是懶，你是把全部產能都給了別人，然後用「懶」兩個字替自己結案。這一年我們把產能搬回來一點，一次一點就好。'
+};
+const mentorPersona=`你是艾兒莎（Elsa），台灣的人生 mentor，也是《跳級之島》的建島人。語氣：完整、有溫度、直接但不說教的句子；不要條列、不要分析腔；繁體中文；一次回三到五句。原則：把對方自己說過的話當材料反問；任務永遠小到不好意思拒絕；收尾是「我要更了解你」不是「我要解決你」。這位島民的背景：首談時艾兒莎的觀察是「不是懶，是把產能都給了別人」；目前任務是觀察一個會呼吸的生物。`;
+
+document.getElementById('gateForm').addEventListener('submit',async e=>{e.preventDefault();
+  if(LIVE){ const em=document.getElementById('gateEmail').value.trim().toLowerCase(); if(!em){toast('先填 email');return;} try{ await DB.signIn(em); document.getElementById('gateMsg').textContent='連結寄到 '+em+' 了，打開信點一下就進來。'; document.getElementById('gateBtn').textContent='再寄一次'; }catch(err){ document.getElementById('gateMsg').textContent='寄不出去：'+err.message; } return; }
+  const c=document.getElementById('code').value.trim(); if(c==='00000'){ me.admin=true; document.getElementById('reviewTab').style.display='grid'; } document.getElementById('gate').style.display='none';render(); renderReview&&renderReview();});
+window.addEventListener('load',async()=>{ if(!LIVE) return; document.getElementById('code').style.display='none'; document.getElementById('gateEmail').style.display='block'; document.getElementById('gateMsg').textContent='輸入你報名時的 email，我們寄一個連結給你，點一下就進來，不用密碼。'; document.getElementById('gateBtn').textContent='寄連結給我';
+  const ses=await DB.session(); if(ses){ const ok=await bootLive(); if(ok){ document.getElementById('gate').style.display='none'; render(); } }
+  sb.auth.onAuthStateChange(async(ev,session)=>{ if(ev==='SIGNED_IN'&&session&&!me.id){ const ok=await bootLive(); if(ok){ document.getElementById('gate').style.display='none'; render(); } } });
+});
+function toast(t){const el=document.getElementById('toast');el.textContent=t;el.style.display='block';setTimeout(()=>el.style.display='none',2200);}
+function go(v){ if(typeof LIVE!=='undefined'&&LIVE&&me.id) DB.event('view',{tab:v}); document.querySelectorAll('.view').forEach(x=>x.classList.toggle('on',x.id==='v-'+v));document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));window.scrollTo(0,0);}
+const ns='http://www.w3.org/2000/svg'; const mk=(t,a)=>{const e=document.createElementNS(ns,t);for(const k in a)e.setAttribute(k,a[k]);return e;};
+
+function render(){
+  const road=document.getElementById('road'); const L=road.getTotalLength(); const g=document.getElementById('pins'); g.innerHTML='';
+  me.milestones.forEach((m,i)=>{
+    const p=road.getPointAtLength(L*m.t); const grp=mk('g',{class:'pin',tabindex:0});
+    const c=mk('circle',{cx:p.x,cy:p.y,r:11,fill: m.done?'#B5382C': m.now?'#C6A44E':'#F3EEE3',stroke:'#1F2430','stroke-width':2}); if(m.now)c.setAttribute('class','pulse'); grp.appendChild(c);
+    const w=m.zh.length*15+22; const above=(i%2===0); const ly= above? p.y-44 : p.y+22; const lx=Math.min(430-w-6, Math.max(6, p.x-w/2));
+    grp.appendChild(mk('rect',{x:lx,y:ly,width:w,height:24,rx:4,fill:'#F3EEE3',stroke:'#1F2430','stroke-width':1.2}));
+    const z=mk('text',{x:lx+w/2,y:ly+17,'text-anchor':'middle','font-size':'13','font-weight':'700'}); z.textContent=m.zh; grp.appendChild(z);
+    grp.addEventListener('click',()=>openMilestone(m)); g.appendChild(grp);
+  });
+  const st=document.getElementById('steps'); st.innerHTML=''; me.task.steps.forEach((s,i)=>{const d=document.createElement('div');d.className='step';d.innerHTML=`<div class="n">${i+1}</div><div class="txt">${s}</div>`;st.appendChild(d);});
+  document.getElementById('todayProg').style.width= me.task.done?'100%':'0%';
+  document.getElementById('todaySub').textContent= me.task.done?'秘密任務 1/50・已交，等艾兒莎回':'秘密任務 1/50・還有 3 天';
+  document.getElementById('startBtn').textContent= me.task.done?'已交出去':'開始任務';
+  document.getElementById('lv').textContent=me.lv; document.getElementById('xp').textContent=me.xp.toLocaleString(); document.getElementById('days').textContent=Math.max(1,Math.round((Date.now()-new Date('2026-09-05'))/86400000)); document.getElementById('rankMe').textContent=me.rank||12;
+  const wk=document.getElementById('week'); if(wk) wk.innerHTML=me.week.map(x=>`<i class="${x?'on':''}"></i>`).join('')+'<span>M T W T F S S</span>';
+  renderRadial(); renderVillage(); renderValues(); renderHistory(); renderMentors(); renderRank(); renderMyHouse(); document.getElementById('lv2').textContent=me.lv; (document.getElementById('todaySub2')||{}).textContent=document.getElementById('todaySub').textContent;
+}
+
+const districts=[
+  {k:'A',ic:'🏗',bg:'#EADFC9',n:'建島區',d:'創業者，自己經營事業',c:19},
+  {k:'B',ic:'✎',bg:'#DCE0DD',n:'接案區',d:'自由接案與創作者',c:5},
+  {k:'C',ic:'⛰',bg:'#E3E7E3',n:'高原區',d:'工作穩定收入不差，但找不到動力',c:16},
+  {k:'D',ic:'⛵',bg:'#D9E3E6',n:'渡口區',d:'轉職、待業、裸辭休息中',c:19},
+  {k:'E',ic:'🌱',bg:'#DFE7DD',n:'副業區',d:'有正職，想長出第二收入',c:13},
+  {k:'F',ic:'🏡',bg:'#F0E4DC',n:'家園區',d:'關係與家庭是主線',c:3},
+  {k:'G',ic:'⚒',bg:'#E9D9D5',n:'修復區',d:'財務重整、負債、詐騙後重來',c:4},
+  {k:'H',ic:'🌅',bg:'#F1E6C8',n:'起點區',d:'25 歲以下或剛起步',c:1},
+];
+
+function houseSVG(color,me){return `<svg viewBox="0 0 130 90" aria-hidden="true">
+  <rect x="0" y="70" width="130" height="20" fill="#B9C6C9" opacity=".5"/>
+  <path d="M20 46 L65 14 L110 46 Z" fill="#1F2430"/>
+  <rect x="28" y="46" width="74" height="28" fill="${color}"/>
+  <rect x="58" y="54" width="14" height="20" fill="#F3EEE3"/>
+  <rect x="36" y="52" width="12" height="10" fill="#F3EEE3"/><rect x="82" y="52" width="12" height="10" fill="#F3EEE3"/>
+  <rect x="88" y="22" width="8" height="16" fill="#1F2430"/>
+  <circle class="smoke" cx="92" cy="18" r="4" fill="#8A8F99"/>
+  <g class="busy"><circle cx="42" cy="57" r="2.6" fill="#B5382C"/></g>
+  <rect x="6" y="40" width="30" height="12" rx="2" fill="#F3EEE3" stroke="#1F2430" stroke-width="1"/>
+  <text x="21" y="49" text-anchor="middle" font-size="7" fill="#1F2430" font-family="Noto Serif TC,serif">${me?'我家':'招牌'}</text>
+</svg>`;}
+
+
+// ===== 世界資料（示範）=====
+const VILLAGES=[
+  {k:'A',name:'建島村',en:'FOUNDERS',x:520,y:520,prog:.62,desc:'自己經營事業的人住這裡。任務偏定價、放手、系統。'},
+  {k:'B',name:'接案村',en:'FREELANCE',x:1250,y:420,prog:.35,desc:'自由接案與創作者。任務偏把作品賣出去、設截止日。'},
+  {k:'C',name:'高原村',en:'PLATEAU',x:1900,y:560,prog:.48,desc:'工作穩定、收入不差，但找不到動力或興奮點。任務偏一件純粹為自己做的事。'},
+  {k:'D',name:'渡口村',en:'FERRY',x:600,y:1200,prog:.55,desc:'轉職、待業、裸辭休息中。任務偏下一步的最小動作、終點定義。'},
+  {k:'E',name:'副業村',en:'SIDE',x:1300,y:1150,prog:.7,desc:'有正職，想長出第二收入。任務偏第一個一萬從哪來、少接一件事。'},
+  {k:'F',name:'家園村',en:'HOME',x:2000,y:1250,prog:.3,desc:'關係與家庭是主線。任務偏開口、界線、選一個人說真話。'},
+  {k:'G',name:'修復村',en:'REPAIR',x:900,y:1800,prog:.4,desc:'財務重整、負債、詐騙後重來。任務偏把數字寫出來、還款與停損線。'},
+  {k:'H',name:'起點村',en:'ORIGIN',x:1700,y:1850,prog:.2,desc:'25 歲以下或剛起步。任務偏拆小、問三個真人。'},
+  {k:'M',name:'Mentor 村',en:'MENTORS',x:1300,y:790,prog:1,desc:'艾兒莎和她的朋友們住這裡。任務做到 LV.5 之後，可以敲門。',mentor:true}
+];
+const villagers=[
+  {name:'艾兒莎',v:'M',tags:['建島人','人生 Mentor','別處咖啡館'],sign:'我要更了解你，不是要解決你。',color:'#B5382C',murmur:['斷了不用重來','答案你早就寫好了'],mentor:'elsa'},
+  {name:'章潔',v:'M',tags:['藝術攝影','導演'],sign:'先看畫面，再看故事。',color:'#3A4150',murmur:['這張構圖不對','光從左邊來'],mentor:'章潔'},
+  {name:'何浩瑜',v:'M',tags:['投資','財務'],sign:'錢的事講到不可怕。',color:'#5C7A6E',murmur:['先問現金流','不要借錢投資'],mentor:'何浩瑜'},
+  {name:'Tilaine',v:'M',tags:['職涯','女性領導'],sign:'哪裡不用爬，我也知道。',color:'#C6A44E',murmur:['談判前先想退路','升遷不是唯一'],mentor:'Tilaine 王亭嵐'},
+  {name:'阿雯',v:'M',tags:['待補'],sign:'',color:'#8A8F99',murmur:['……'],mentor:'阿雯'},
+  {name:'鮪魚',v:'M',tags:['待補'],sign:'',color:'#B9C6C9',murmur:['……'],mentor:'鮪魚'},
+  {name:'艾兒莎孩子的爸',v:'M',tags:['待補'],sign:'',color:'#E9A3B3',murmur:['……'],mentor:'艾兒莎孩子的爸'},
+  {name:'我',v:'E',tags:['副業','護理師','黃金'],sign:'',me:true,color:'#B5382C',lvl:1,murmur:['今天先寫一行就好','入金規則貼在錢包了']},
+  {name:'貓舍的她',v:'G',tags:['貓舍','債務協商中','危機引擎'],sign:'今天把報價寄出去了，不完美的報價勝過完美的沉默。',color:'#5C7A6E',murmur:['報價寄了','客人回了嗎']},
+  {name:'橫濱的行銷人',v:'C',tags:['橫濱','FP 考試','整排 6 分'],sign:'FP3 級報名了，11 月考。',color:'#3A4150',murmur:['留在原地的年費是 500 萬日幣','今天不當老媽子']},
+  {name:'宜蘭的會計',v:'D',tags:['通勤 17.5h','想離職一年'],sign:'查了三個年薪 120 萬的職缺，先看，不投。',color:'#8A8F99',murmur:['火車上又睡著了','200 小時瘋狂的事']},
+  {name:'皮拉提斯教練',v:'A',tags:['創業','線上化','打工度假'],sign:'這週少接一個客戶，把時間鎖給線上課。',color:'#C6A44E',murmur:['第一個產品是什麼','少接一個']},
+  {name:'補習班的她',v:'A',tags:['補習班','線上教養課','同一天生日'],sign:'線上教養課第一期，8 個人，開了。',color:'#5C7A6E',murmur:['第一期收入專款還債','今天不代班']},
+  {name:'東莞的媽媽',v:'F',tags:['全職媽媽','小紅書','信仰'],sign:'今天有一個人回我訊息。一天一個。',color:'#B9C6C9',murmur:['一天一個','歐洲要多少錢']},
+  {name:'馬來西亞的研究生',v:'H',tags:['圖資碩士','25 歲','歐洲半年'],sign:'問了兩個學長姐，第一份工作沒有想像中可怕。',color:'#3A4150',murmur:['拆小一點','第三個學長姐']},
+  {name:'跟拍自己的人',v:'B',tags:['接案','影像','pitch 贏了'],sign:'恐懼從來沒猜對過一次。',color:'#E9A3B3',murmur:['今天說了一次不','案子推掉了']},
+  {name:'板橋的觀察者',v:'D',tags:['裸辭','手作','爸爸重訓'],sign:'捏了一個醜的，沒修。',color:'#C6A44E',murmur:['總資產版本的減脂','塞中很爽']},
+  {name:'高原上的 PM',v:'C',tags:['PM','斜槓','金錢 1'],sign:'PRD 寫了一頁：斜槓身份 v0.1。',color:'#5C7A6E',murmur:['開口比行動難','先寫規格']},
+  {name:'深夜寫字的人',v:'E',tags:['一週三篇','Vegan','澎湖一年'],sign:'第二篇，199 字，醜的也發。',color:'#8A8F99',murmur:['誰在等我','200 字以內']}
+];
+// ===== 世界＋村子場景引擎 =====
+(function(){
+  const cv=document.getElementById('scene'); if(!cv) return; const ctx=cv.getContext('2d');
+  const W=cv.width,H=cv.height; const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const WORLD={w:2600,h:2400};
+  let mode='world'; let cur=null; // current village
+  const cam={x:WORLD.w/2-W/2,y:WORLD.h/2-H/2,z:.55,tx:0,ty:0,tz:.55}; cam.tx=cam.x; cam.ty=cam.y;
+  let t=0; const clouds=Array.from({length:8},(_,i)=>({x:Math.random()*WORLD.w,y:120+Math.random()*300,s:.6+Math.random()*.9}));
+  const birds=Array.from({length:6},(_,i)=>({x:Math.random()*WORLD.w,y:200+Math.random()*200}));
+  // village people (built when entering)
+  let people=[], houses=[], bubbles=[]; let chan=null; const online={}; let lastTrack=0;
+  async function joinPresence(v){ if(!LIVE||!sb) return; leavePresence(); const mv=myV(); chan=sb.channel('pos:'+v.k,{config:{presence:{key:String(me.id||'me')}}});
+    chan.on('presence',{event:'sync'},()=>{ const st=chan.presenceState(); for(const k in online) delete online[k]; for(const k in st){ const last=st[k][st[k].length-1]; if(k!==String(me.id)) online[k]=last; } });
+    await chan.subscribe(async(status)=>{ if(status==='SUBSCRIBED'){ const meP=people.find(pn=>pn.p.me); await chan.track({x:meP?meP.x:0,y:meP?meP.y:0,name:mv.name,color:mv.color,lvl:me.lv,id:me.id}); } }); }
+  function leavePresence(){ if(chan){ try{ chan.untrack(); sb.removeChannel(chan); }catch(e){} chan=null; for(const k in online) delete online[k]; } }
+  let lastPos=0;
+  function trackMe(pn){ if(!chan) return; const now=performance.now(); if(now-lastPos>5000){ lastPos=now; if(LIVE&&cur) DB.event('position',{village:cur.k,x:Math.round(pn.x),y:Math.round(pn.y)}); } if(now-lastTrack<120) return; lastTrack=now; const mv=myV(); chan.track({x:Math.round(pn.x),y:Math.round(pn.y),name:mv.name,color:mv.color,lvl:me.lv,id:me.id}); }
+  function villagePeople(v){ return villagers.filter(p=>p.v===v.k); }
+  function claimed(p){ return !!(p.mentor || (p.name && p.name!=='我' && p.name!=='示範島民') || p.sign || p.about); }
+  const VW={w:1700,h:1500}; // 村子世界
+  let gate={x:850,y:1380};
+  function buildVillage(v){
+    const ps=villagePeople(v).filter(claimed); const mine=villagePeople(v).find(p=>p.me);
+    const list=ps.slice(); if(mine&&!claimed(mine)) list.push(mine); // 我沒認領也給一塊空地
+    houses=[]; const cols=4, lotW=340, lotH=330, x0=230, y0=420;
+    list.forEach((p,i)=>{ const cx=x0+(i%cols)*lotW, cy=y0+Math.floor(i/cols)*lotH; houses.push({id:i,x:cx,y:cy,w:96,c:p.color||'#5C7A6E',lvl:p.lvl??(p.me?me.lv:2+(i*3)%5),owner:p,empty:p.me&&!claimed(p)}); });
+    VW.h=Math.max(1500, y0+Math.ceil(list.length/cols)*lotH+420); gate={x:VW.w/2,y:VW.h-140};
+    people=list.map((p,i)=>{const h=houses[i]; const sx=p.me? gate.x : h.x+48, sy=p.me? gate.y-90 : h.y+120; return {p,h,x:sx,y:sy,tx:sx,ty:sy,t:Math.random()*100,speed:.3+Math.random()*.3,state:'idle',wait:Math.random()*3,say:'',sayT:0,next:2+Math.random()*6};});
+    if(!people.some(pn=>pn.p.me)){ const mv=myV(); people.push({p:mv,h:null,x:gate.x,y:gate.y-90,tx:gate.x,ty:gate.y-90,t:0,speed:.4,state:'idle',wait:99,say:'',sayT:0,next:99,visitor:true}); }
+  }
+  // ---- 基本繪圖 ----
+  function house(h,hl){
+    const x=h.x,y=h.y,w=h.w; ctx.lineWidth=3; ctx.strokeStyle='#1F2430';
+    ctx.fillStyle='rgba(31,36,48,.12)'; ctx.beginPath(); ctx.ellipse(x+w/2,y+w*.72,w*.62,w*.16,0,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle=h.c; ctx.fillRect(x,y,w,w*.55); ctx.strokeRect(x,y,w,w*.55);
+    ctx.fillStyle='#1F2430'; ctx.beginPath(); ctx.moveTo(x-10,y); ctx.lineTo(x+w/2,y-w*.5); ctx.lineTo(x+w+10,y); ctx.closePath(); ctx.fill();
+    ctx.fillStyle='#F3EEE3'; ctx.fillRect(x+w*.42,y+w*.22,w*.16,w*.33); ctx.strokeRect(x+w*.42,y+w*.22,w*.16,w*.33);
+    ctx.fillRect(x+w*.12,y+w*.14,w*.18,w*.15); ctx.strokeRect(x+w*.12,y+w*.14,w*.18,w*.15); ctx.fillRect(x+w*.70,y+w*.14,w*.18,w*.15); ctx.strokeRect(x+w*.70,y+w*.14,w*.18,w*.15);
+    ctx.fillStyle='rgba(246,214,107,'+(0.35+0.25*Math.sin(t*3+h.id))+')'; ctx.fillRect(x+w*.12+2,y+w*.14+2,w*.18-4,w*.15-4);
+    ctx.fillStyle='#1F2430'; ctx.fillRect(x+w*.72,y-w*.42,w*.1,w*.22);
+    for(let k=0;k<3;k++){ const ph=(t*.6+k*.9+h.id)%3; ctx.fillStyle='rgba(138,143,153,'+(0.7-ph*.23)+')'; ctx.beginPath(); ctx.arc(x+w*.77+Math.sin(ph*2)*6, y-w*.45-ph*22, 5+ph*3,0,Math.PI*2); ctx.fill(); }
+    ctx.fillStyle='#F3EEE3'; ctx.lineWidth=2; ctx.fillRect(x-34,y+w*.3,30,14); ctx.strokeRect(x-34,y+w*.3,30,14); ctx.fillRect(x-20,y+w*.3+14,2,w*.25);
+    if(hl){ ctx.strokeStyle='#B5382C'; ctx.lineWidth=4; ctx.strokeRect(x-14,y-w*.52,w+28,w*1.1); }
+    const lv=h.lvl||0;
+    if(lv>=2){ ctx.fillStyle='#1F2430'; ctx.beginPath(); ctx.moveTo(x+w+18,y+w*.55); ctx.lineTo(x+w+30,y+w*.15); ctx.lineTo(x+w+42,y+w*.55); ctx.closePath(); ctx.fill(); }
+    if(lv>=3){ ['#B5382C','#E9A3B3','#F6D66B','#B5382C'].forEach((c,i)=>{ ctx.fillStyle=c; ctx.beginPath(); ctx.arc(x+8+i*12,y+w*.62,4,0,Math.PI*2); ctx.fill(); ctx.strokeStyle='#5C7A6E'; ctx.lineWidth=1.5; ctx.beginPath(); ctx.moveTo(x+8+i*12,y+w*.66); ctx.lineTo(x+8+i*12,y+w*.74); ctx.stroke(); }); }
+    if(lv>=4){ ctx.strokeStyle='#1F2430'; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(x+w*.05,y-w*.3); ctx.lineTo(x+w*.05,y+w*.05); ctx.stroke(); ctx.fillStyle='#B5382C'; ctx.beginPath(); ctx.moveTo(x+w*.05,y-w*.3); ctx.lineTo(x+w*.05+22,y-w*.24); ctx.lineTo(x+w*.05,y-w*.18); ctx.closePath(); ctx.fill(); }
+    if(lv>=5){ ctx.fillStyle='rgba(246,214,107,'+(.7+.3*Math.sin(t*4))+')'; ctx.beginPath(); ctx.arc(x-6,y+w*.15,6,0,Math.PI*2); ctx.arc(x+w+6,y+w*.15,6,0,Math.PI*2); ctx.fill(); }
+  }
+  function person(pn){
+    const {x,y,p}=pn; const bob=Math.sin(t*6+pn.t)*1.5; ctx.lineWidth=2.5; ctx.strokeStyle='#1F2430';
+    ctx.fillStyle='rgba(31,36,48,.15)'; ctx.beginPath(); ctx.ellipse(x,y+22,10,4,0,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle=p.me?'#B5382C':'#F3EEE3'; ctx.beginPath(); ctx.roundRect(x-8,y+bob,16,20,4); ctx.fill(); ctx.stroke();
+    ctx.fillStyle='#F3EEE3'; ctx.beginPath(); ctx.arc(x,y-8+bob,8,0,Math.PI*2); ctx.fill(); ctx.stroke();
+    ctx.fillStyle='#1F2430'; ctx.beginPath(); ctx.arc(x,y-14+bob,5,0,Math.PI*2); ctx.fill();
+    if(pn.state==='walk'){ const sw=Math.sin(t*12+pn.t)*5; ctx.beginPath(); ctx.moveTo(x-4,y+20+bob); ctx.lineTo(x-4+sw,y+30+bob); ctx.moveTo(x+4,y+20+bob); ctx.lineTo(x+4-sw,y+30+bob); ctx.stroke(); }
+    ctx.fillStyle='#1F2430'; ctx.font='600 12px "Noto Sans TC",sans-serif'; ctx.textAlign='center'; ctx.fillText(p.me?((p.name&&p.name!=='我')?p.name+'（我）':'我'):p.name,x,y+44+bob);
+    if(p.online){ ctx.fillStyle='#4CAF50'; ctx.beginPath(); ctx.arc(x+12,y-16+bob,4,0,Math.PI*2); ctx.fill(); }
+    if(pn.say){ const a=Math.min(1,pn.sayT); ctx.globalAlpha=a; ctx.font='500 13px "Noto Serif TC",serif'; const w=ctx.measureText(pn.say).width+18; ctx.fillStyle='#FAF7F0'; ctx.strokeStyle='#1F2430'; ctx.lineWidth=1.5; ctx.beginPath(); ctx.roundRect(x-w/2,y-52+bob,w,24,8); ctx.fill(); ctx.stroke(); ctx.fillStyle='#1F2430'; ctx.fillText(pn.say,x,y-35+bob); ctx.globalAlpha=1; }
+  }
+  function islandShape(cx,cy,r){ ctx.beginPath(); ctx.moveTo(cx-r,cy); ctx.quadraticCurveTo(cx-r*.9,cy-r*.9,cx,cy-r*.8); ctx.quadraticCurveTo(cx+r*1.1,cy-r*.8,cx+r,cy+r*.1); ctx.quadraticCurveTo(cx+r*.8,cy+r,cx,cy+r*.9); ctx.quadraticCurveTo(cx-r*.9,cy+r*.9,cx-r,cy); ctx.closePath(); }
+  function drawVillageIcon(v){
+    const nC=villagePeople(v).filter(claimed).length; const r=170+v.prog*60+Math.min(80,nC*6); ctx.fillStyle='#5C7A6E'; ctx.strokeStyle='#1F2430'; ctx.lineWidth=3; islandShape(v.x,v.y,r); ctx.fill(); ctx.stroke();
+    ctx.save(); islandShape(v.x,v.y,r); ctx.clip(); ctx.strokeStyle='rgba(31,36,48,.14)'; ctx.lineWidth=1; for(let k=v.x-r*2;k<v.x+r*2;k+=14){ ctx.beginPath(); ctx.moveTo(k,v.y-r); ctx.lineTo(k+r*2,v.y+r); ctx.stroke(); } ctx.restore();
+    const n=Math.max(1,Math.min(12,nC)); for(let i=0;i<n;i++){ const a=i*2.4, rr=30+(i%3)*45; const hx=v.x+Math.cos(a)*rr-20, hy=v.y+Math.sin(a)*rr*.7-10; house({id:i,x:hx,y:hy,w:40,c:['#B5382C','#5C7A6E','#3A4150','#C6A44E','#8A8F99','#B9C6C9'][i%6]},false); }
+    if(v.prog>.5){ ctx.fillStyle='rgba(246,214,107,'+(.15+.1*Math.sin(t*2))+')'; ctx.beginPath(); ctx.arc(v.x,v.y,r*.9,0,Math.PI*2); ctx.fill(); }
+    if(v.mentor){ ctx.strokeStyle='#C6A44E'; ctx.lineWidth=4; ctx.setLineDash([6,8]); ctx.beginPath(); ctx.arc(v.x,v.y,r+18,0,Math.PI*2); ctx.stroke(); ctx.setLineDash([]); }
+    ctx.fillStyle='#F3EEE3'; ctx.strokeStyle='#1F2430'; ctx.lineWidth=2.5; ctx.fillRect(v.x-90,v.y-r-58,180,40); ctx.strokeRect(v.x-90,v.y-r-58,180,40); ctx.fillRect(v.x-4,v.y-r-18,8,26);
+    ctx.fillStyle='#1F2430'; ctx.textAlign='center'; ctx.font='700 24px "Noto Serif TC",serif'; ctx.fillText(v.name,v.x,v.y-r-25); if(v.count!=null){ ctx.font='500 12px "Noto Sans TC",sans-serif'; ctx.fillText(v.count+' 位島民',v.x,v.y-r-8); }
+    ctx.fillStyle='#F3EEE3'; ctx.fillRect(v.x-60,v.y+r+14,120,8); ctx.strokeRect(v.x-60,v.y+r+14,120,8); ctx.fillStyle='#B5382C'; ctx.fillRect(v.x-60,v.y+r+14,120*v.prog,8);
+  }
+  function drawWorld(){
+    const g=ctx.createLinearGradient(0,0,0,WORLD.h); g.addColorStop(0,'#F3EEE3'); g.addColorStop(.12,'#EDE4D3'); g.addColorStop(.13,'#DCE0DD'); g.addColorStop(1,'#B9C6C9'); ctx.fillStyle=g; ctx.fillRect(-2000,-2000,WORLD.w+4000,WORLD.h+4000);
+    ctx.fillStyle='#B5382C'; ctx.beginPath(); ctx.arc(WORLD.w-360,180,70,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='rgba(58,65,80,.85)'; ctx.beginPath(); ctx.moveTo(-200,340); for(let x=-200;x<WORLD.w+400;x+=260){ ctx.lineTo(x+130,200+((x/260)%3)*40); ctx.lineTo(x+260,340); } ctx.lineTo(WORLD.w+400,400); ctx.lineTo(-200,400); ctx.fill();
+    ctx.strokeStyle='rgba(138,143,153,.6)'; ctx.lineWidth=2; for(let r=0;r<26;r++){ const y=420+r*80; ctx.beginPath(); for(let x=-100;x<WORLD.w+100;x+=10){ ctx.lineTo(x, y+Math.sin((x/40)+t*1.4+r)*4); } ctx.stroke(); }
+    clouds.forEach(c=>{ c.x+= reduce?0:1.2*c.s*dtGlobal*60; if(c.x>WORLD.w+150)c.x=-150; ctx.fillStyle='rgba(250,247,240,.9)'; ctx.beginPath(); ctx.arc(c.x,c.y,26*c.s,0,Math.PI*2); ctx.arc(c.x+30*c.s,c.y-10*c.s,30*c.s,0,Math.PI*2); ctx.arc(c.x+62*c.s,c.y,24*c.s,0,Math.PI*2); ctx.fill(); });
+    ctx.setLineDash([10,14]); ctx.strokeStyle='rgba(31,36,48,.35)'; ctx.lineWidth=2; for(let i=0;i<VILLAGES.length-1;i++){ const a=VILLAGES[i],b=VILLAGES[i+1]; ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.quadraticCurveTo((a.x+b.x)/2,(a.y+b.y)/2-120,b.x,b.y); ctx.stroke(); } ctx.setLineDash([]);
+    VILLAGES.forEach(drawVillageIcon);
+    birds.forEach((b,i)=>{ b.x+= reduce?0:30*dtGlobal; if(b.x>WORLD.w+40)b.x=-40; const f=Math.sin(t*8+i)*4; ctx.strokeStyle='#1F2430'; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(b.x-8,b.y+f); ctx.lineTo(b.x,b.y-2); ctx.lineTo(b.x+8,b.y+f); ctx.stroke(); });
+  }
+  function yard(h){
+    const x=h.x,y=h.y,w=h.w,lv=h.lvl||0; // 庭院：圍籬＋依等級長東西
+    ctx.strokeStyle='#1F2430'; ctx.lineWidth=2; ctx.fillStyle='rgba(243,238,227,.35)';
+    ctx.beginPath(); ctx.roundRect(x-70,y-80,w+140,w*.55+150,14); ctx.fill(); ctx.stroke();
+    ctx.setLineDash([6,6]); ctx.strokeRect(x-60,y+w*.62,w+120,60); ctx.setLineDash([]);
+    if(lv>=1){ ctx.fillStyle='#5C7A6E'; ctx.beginPath(); ctx.arc(x+w+42,y+w*.66,14,0,Math.PI*2); ctx.fill(); ctx.fillStyle='#1F2430'; ctx.fillRect(x+w+40,y+w*.66,4,22); }
+    if(lv>=2){ ['#B5382C','#E9A3B3','#F6D66B','#B5382C','#E9A3B3'].forEach((c,i)=>{ ctx.fillStyle=c; ctx.beginPath(); ctx.arc(x-40+i*16,y+w*.72,4,0,Math.PI*2); ctx.fill(); }); }
+    if(lv>=3){ ctx.fillStyle='#8A8F99'; ctx.fillRect(x+w*.3,y+w*.78,44,10); ctx.fillRect(x+w*.3,y+w*.88,4,8); ctx.fillRect(x+w*.3+40,y+w*.88,4,8); } // 長椅
+    if(lv>=4){ ctx.fillStyle='#B9C6C9'; ctx.beginPath(); ctx.ellipse(x-30,y+w*.95,26,12,0,0,Math.PI*2); ctx.fill(); ctx.strokeStyle='#1F2430'; ctx.lineWidth=1.5; ctx.stroke(); } // 小池
+    if(lv>=5){ ctx.fillStyle='rgba(246,214,107,'+(.6+.4*Math.sin(t*4))+')'; [x-56,x+w+56].forEach(lx=>{ ctx.beginPath(); ctx.arc(lx,y-60,6,0,Math.PI*2); ctx.fill(); ctx.fillStyle='#1F2430'; ctx.fillRect(lx-2,y-54,4,30); ctx.fillStyle='rgba(246,214,107,.9)'; }); }
+  }
+  function emptyLot(h){ const x=h.x,y=h.y,w=h.w; ctx.setLineDash([8,8]); ctx.strokeStyle='#1F2430'; ctx.lineWidth=2; ctx.strokeRect(x-20,y-30,w+40,w*.9); ctx.setLineDash([]); ctx.fillStyle='#1F2430'; ctx.font='700 14px "Noto Serif TC",serif'; ctx.textAlign='center'; ctx.fillText('這是你的地',x+w/2,y+w*.3); ctx.font='500 11px "Noto Sans TC",sans-serif'; ctx.fillText('到「我的家」取名字，房子就會蓋起來',x+w/2,y+w*.5); }
+  function drawVillage(v){
+    const g=ctx.createLinearGradient(0,0,0,VW.h); g.addColorStop(0,'#F3EEE3'); g.addColorStop(.18,'#EDE4D3'); g.addColorStop(.19,'#DCE0DD'); g.addColorStop(1,'#B9C6C9'); ctx.fillStyle=g; ctx.fillRect(-2000,-2000,VW.w+4000,VW.h+4000);
+    ctx.fillStyle='#B5382C'; ctx.beginPath(); ctx.arc(VW.w-260,150,60,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='rgba(58,65,80,.85)'; ctx.beginPath(); ctx.moveTo(-200,320); for(let x=-200;x<VW.w+400;x+=300){ ctx.lineTo(x+150,180+((x/300)%3)*40); ctx.lineTo(x+300,320); } ctx.lineTo(VW.w+400,380); ctx.lineTo(-200,380); ctx.fill();
+    ctx.strokeStyle='rgba(138,143,153,.7)'; ctx.lineWidth=2; for(let r=0;r<Math.ceil(VW.h/80);r++){ const y=400+r*80; ctx.beginPath(); for(let x=-40;x<VW.w+40;x+=10){ ctx.lineTo(x, y+Math.sin((x/34)+t*1.6+r)*4); } ctx.stroke(); }
+    // 島：一個大圓角矩形
+    ctx.fillStyle='#5C7A6E'; ctx.strokeStyle='#1F2430'; ctx.lineWidth=3; ctx.beginPath(); ctx.roundRect(80,300,VW.w-160,VW.h-380,160); ctx.fill(); ctx.stroke();
+    ctx.save(); ctx.beginPath(); ctx.roundRect(80,300,VW.w-160,VW.h-380,160); ctx.clip(); ctx.strokeStyle='rgba(31,36,48,.14)'; ctx.lineWidth=1; for(let k=-2000;k<VW.w+2000;k+=14){ ctx.beginPath(); ctx.moveTo(k,0); ctx.lineTo(k+2000,2000); ctx.stroke(); } ctx.restore();
+    // 村招牌
+    ctx.fillStyle='#F3EEE3'; ctx.strokeStyle='#1F2430'; ctx.lineWidth=2.5; ctx.fillRect(VW.w/2-130,236,260,50); ctx.strokeRect(VW.w/2-130,236,260,50); ctx.fillStyle='#1F2430'; ctx.textAlign='center'; ctx.font='700 26px "Noto Serif TC",serif'; ctx.fillText(v.name,VW.w/2,270);
+    // 村口門牌（走到就離開）
+    ctx.fillStyle='#F3EEE3'; ctx.fillRect(gate.x-70,gate.y-28,140,40); ctx.strokeRect(gate.x-70,gate.y-28,140,40); ctx.fillRect(gate.x-3,gate.y+12,6,36); ctx.fillStyle='#1F2430'; ctx.font='700 16px "Noto Serif TC",serif'; ctx.fillText('⟵ 回本島',gate.x,gate.y);
+    ctx.setLineDash([6,8]); ctx.strokeStyle='#F3EEE3'; ctx.lineWidth=14; ctx.beginPath(); ctx.moveTo(gate.x,gate.y-40); ctx.lineTo(gate.x,420); ctx.stroke(); ctx.setLineDash([]);
+    // 房子＋庭院
+    houses.slice().sort((a,b)=>a.y-b.y).forEach(h=>{ if(h.empty){ emptyLot(h); return; } yard(h); house(h,false); ctx.fillStyle='#1F2430'; ctx.font='700 13px "Noto Serif TC",serif'; ctx.textAlign='center'; ctx.fillText(h.owner.name,h.x+h.w/2,h.y-h.w*.56); });
+    // 人：我用方向鍵，其他人閒晃
+    people.forEach(pn=>{
+      if(pn.p.me){
+        const sp=4.2*60*dtGlobal; let mx=0,my=0; if(keys.up)my-=1; if(keys.down)my+=1; if(keys.left)mx-=1; if(keys.right)mx+=1;
+        if(mx||my){ const l=Math.hypot(mx,my); pn.x=Math.max(120,Math.min(VW.w-120,pn.x+mx/l*sp)); pn.y=Math.max(330,Math.min(VW.h-60,pn.y+my/l*sp)); pn.state='walk'; trackMe(pn); if(Math.hypot(pn.x-gate.x,pn.y-gate.y)<46){ keys.up=keys.down=keys.left=keys.right=false; leaveVillage(); toast('回到本島了'); return; } } else pn.state='idle';
+        // 鏡頭跟著我
+        cam.tx=pn.x-W/2/cam.tz; cam.ty=pn.y-H/2/cam.tz;
+      } else if(LIVE){
+        const o=pn.p.id!=null?online[String(pn.p.id)]:null;
+        if(o){ const dx=o.x-pn.x, dy=o.y-pn.y; const d=Math.hypot(dx,dy); if(d>1){ const step=Math.min(d,6*60*dtGlobal); pn.x+=dx/d*step; pn.y+=dy/d*step; pn.state='walk'; } else pn.state='idle'; pn.p.online=true; }
+        else { pn.state='idle'; pn.p.online=false; }
+      } else if(!reduce){
+        if(pn.state==='idle'){ pn.wait-=dtGlobal; if(pn.wait<=0&&pn.h){ pn.state='walk'; const h=pn.h; pn.tx=h.x-60+Math.random()*(h.w+120); pn.ty=h.y+h.w*.6+Math.random()*70; } }
+        else { const dx=pn.tx-pn.x, dy=pn.ty-pn.y; const d=Math.hypot(dx,dy); if(d<2){ pn.state='idle'; pn.wait=1.5+Math.random()*3; } else { pn.x+=dx/d*pn.speed*60*dtGlobal; pn.y+=dy/d*pn.speed*60*dtGlobal; } }
+        pn.next-=dtGlobal; if(pn.next<=0){ pn.say=pn.p.murmur[Math.floor(Math.random()*pn.p.murmur.length)]; pn.sayT=0; pn.next=6+Math.random()*8; }
+        if(pn.say){ pn.sayT+=dtGlobal; if(pn.sayT>3.5){ pn.say=''; } }
+      }
+      person(pn);
+    });
+  }
+  const keys={up:false,down:false,left:false,right:false};
+  document.querySelectorAll('#dpad button').forEach(b=>{ const d=b.dataset.d; const on=e=>{e.preventDefault();keys[d]=true;}; const off=e=>{e.preventDefault();keys[d]=false;}; b.addEventListener('pointerdown',on); b.addEventListener('pointerup',off); b.addEventListener('pointercancel',off); b.addEventListener('pointerleave',off); });
+  window.addEventListener('keydown',e=>{ if(mode!=='village') return; const m={ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',w:'up',s:'down',a:'left',d:'right'}[e.key]; if(m){ keys[m]=true; e.preventDefault(); } });
+  window.addEventListener('keyup',e=>{ const m={ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',w:'up',s:'down',a:'left',d:'right'}[e.key]; if(m) keys[m]=false; });
+  let dtGlobal=0;
+  function frame(dt){
+    dtGlobal=dt; t+= reduce?0:dt;
+    cam.x+=(cam.tx-cam.x)*.1; cam.y+=(cam.ty-cam.y)*.1; cam.z+=(cam.tz-cam.z)*.1;
+    ctx.setTransform(1,0,0,1,0,0); ctx.clearRect(0,0,W,H); ctx.scale(cam.z,cam.z); ctx.translate(-cam.x,-cam.y);
+    if(mode==='world') drawWorld(); else drawVillage(cur);
+  }
+  let last=performance.now(); (function loop(now){ const dt=Math.min(.05,(now-last)/1000); last=now; frame(dt); requestAnimationFrame(loop); })(last);
+  function toWorld(ev){ const r=cv.getBoundingClientRect(); const sx=(ev.clientX-r.left)*W/r.width, sy=(ev.clientY-r.top)*H/r.height; return {x:sx/cam.z+cam.x, y:sy/cam.z+cam.y}; }
+  function clampWorld(){ if(mode!=='world') return; const vw=W/cam.tz, vh=H/cam.tz; cam.tx=Math.max(-200,Math.min(WORLD.w-vw+200,cam.tx)); cam.ty=Math.max(-100,Math.min(WORLD.h-vh+100,cam.ty)); }
+  let down=null;
+  cv.addEventListener('pointerdown',ev=>{ down={x:ev.clientX,y:ev.clientY,cx:cam.tx,cy:cam.ty,moved:false}; cv.setPointerCapture(ev.pointerId); });
+  cv.addEventListener('pointermove',ev=>{ if(!down) return; const dx=ev.clientX-down.x, dy=ev.clientY-down.y; if(Math.hypot(dx,dy)>6) down.moved=true; if(down.moved){ const r=cv.getBoundingClientRect(); cam.tx=down.cx-dx*W/r.width/cam.z; cam.ty=down.cy-dy*H/r.height/cam.z; clampWorld(); cam.x=cam.tx; cam.y=cam.ty; } });
+  cv.addEventListener('pointerup',ev=>{
+    if(!down) return; const moved=down.moved; down=null; if(moved) return; const w=toWorld(ev);
+    if(mode==='world'){ const v=VILLAGES.find(v=>Math.hypot(w.x-v.x,w.y-v.y)<230); if(v){ enterVillage(v); } }
+    else { const pn=people.find(pn=>Math.hypot(w.x-pn.x,w.y-pn.y)<34); if(pn){ openIslander(pn.p); return; } const h=houses.find(h=>w.x>h.x-20&&w.x<h.x+h.w+20&&w.y>h.y-h.w*.5&&w.y<h.y+h.w*.8); if(h){ const pn=people.find(p=>p.h===h); if(pn) openIslander(pn.p); } }
+  });
+  function enterVillage(v){ cur=v; buildVillage(v); mode='village'; const meP=people.find(pn=>pn.p.me); cam.tz=.9; cam.z=.9; cam.tx=meP.x-W/2/cam.tz; cam.ty=meP.y-H/2/cam.tz; cam.x=cam.tx; cam.y=cam.ty; document.getElementById('dpad').style.display='grid'; document.getElementById('walkhint').style.display='block'; joinPresence(v); if(LIVE) DB.event('enter_village',{village:v.k}); document.getElementById('sceneBack').style.display='inline-block'; document.getElementById('sceneTitle').textContent=v.name; document.getElementById('sceneHint').textContent=v.desc+' 點島民可以對話或看她的資料。'; openVillagePanel(v); }
+  function leaveVillage(){ mode='world'; leavePresence(); if(LIVE&&cur) DB.event('leave_village',{village:cur.k}); document.getElementById('dpad').style.display='none'; document.getElementById('walkhint').style.display='none'; cam.tx=cur.x-W/2/.55; cam.ty=cur.y-H/2/.55; cam.tz=.55; cam.x=cam.tx; cam.y=cam.ty; cam.z=.55; clampWorld(); cur=null; document.getElementById('sceneBack').style.display='none'; document.getElementById('sceneTitle').textContent='八個村子'; document.getElementById('sceneHint').textContent='拖曳看整座島，點一個村子進去，可以認識裡面的島民：）村子越是繁榮，代表這一區的村民們很認真的跟上任務喔！'; }
+  document.getElementById('sceneBack').addEventListener('click',leaveVillage);
+  // zoom: buttons, wheel, pinch
+  function zoomBy(f,cx,cy){ const nz=Math.max(.3,Math.min(2.5,cam.tz*f)); const r=cv.getBoundingClientRect(); const sx=(cx??r.width/2)*W/r.width, sy=(cy??r.height/2)*H/r.height; const wx=sx/cam.z+cam.x, wy=sy/cam.z+cam.y; cam.tz=nz; cam.tx=wx-sx/nz; cam.ty=wy-sy/nz; clampWorld(); }
+  document.getElementById('zin').addEventListener('click',()=>zoomBy(1.25));
+  document.getElementById('zout').addEventListener('click',()=>zoomBy(.8));
+  cv.addEventListener('wheel',ev=>{ ev.preventDefault(); const r=cv.getBoundingClientRect(); zoomBy(ev.deltaY<0?1.1:.9, ev.clientX-r.left, ev.clientY-r.top); },{passive:false});
+  const pts=new Map(); let pinch=null;
+  cv.addEventListener('pointerdown',ev=>{ pts.set(ev.pointerId,{x:ev.clientX,y:ev.clientY}); if(pts.size===2){ const [a,b]=[...pts.values()]; pinch={d:Math.hypot(a.x-b.x,a.y-b.y), z:cam.tz}; down=null; } });
+  cv.addEventListener('pointermove',ev=>{ if(!pts.has(ev.pointerId)) return; pts.set(ev.pointerId,{x:ev.clientX,y:ev.clientY}); if(pinch&&pts.size===2){ const [a,b]=[...pts.values()]; const d=Math.hypot(a.x-b.x,a.y-b.y); const r=cv.getBoundingClientRect(); const f=(d/pinch.d)*pinch.z/cam.tz; zoomBy(f,(a.x+b.x)/2-r.left,(a.y+b.y)/2-r.top); cam.z=cam.tz; cam.x=cam.tx; cam.y=cam.ty; } });
+  ['pointerup','pointercancel','pointerleave'].forEach(t=>cv.addEventListener(t,ev=>{ pts.delete(ev.pointerId); if(pts.size<2) pinch=null; }));
+  window.__enterVillage=enterVillage;
+})();
+function openVillagePanel(v){
+  const ps=villagers.filter(p=>p.v===v.k&&(p.mentor||p.sign||p.about||(p.name&&p.name!=='我'&&p.name!=='示範島民'))); const p=document.getElementById('panel');
+  p.innerHTML=`<div class="en">${v.en} VILLAGE</div><h4 class="serif">${v.name}</h4><p>${v.desc}</p>
+   <div class="line" style="font-size:12px;color:var(--stone)">繁華度 ${Math.round(v.prog*100)}%（這一區任務完成率）・島民 ${ps.length} 位</div>
+   <div style="margin-top:8px">${ps.map(x=>`<div class="islander"><span class="dot" style="background:${x.color}"></span><div><b>${x.name}</b><div>${x.tags.map(tg=>`<span class="tagchip">${tg}</span>`).join('')}</div></div></div>`).join('')||'<div class="sub">還沒有人搬進來。</div>'}</div>
+   <div class="rowb"><button class="btn ghost pill" onclick="closeSheet()">進村看看</button></div>`;
+  document.getElementById('sheet').classList.add('open');
+}
+function openIslander(x){
+  if(LIVE) DB.event('visit_house',{who:x.id||x.name});
+  if(x.mentor==='elsa'){ closeSheet(); go('mentor'); return; }
+  if(x.mentor){ const m=MENTORS.find(m=>m.n===x.mentor); if(m){ openMentor(m); return; } }
+  const p=document.getElementById('panel');
+  p.innerHTML=`<div class="en">ISLANDER</div><h4 class="serif">${x.name}</h4><div>${x.tags.map(tg=>`<span class="tagchip">${tg}</span>`).join('')}</div>
+   <div class="card" style="margin:12px 0 0"><div class="lbl serif" style="font-size:15px">門口的招牌</div><p class="serif" style="font-size:16px;margin:6px 0 0">${x.sign||'（還沒掛招牌）'}</p></div>${x.about?`<div class="card" style="margin:10px 0 0"><div class="lbl serif" style="font-size:15px">她要說的話</div><p style="font-size:14px;margin:6px 0 0">${x.about}</p></div>`:''}
+   <div class="rowb">${x.me?'':`<button class="btn pill" onclick="startThread('${x.name}')">跟她對話</button>`}<button class="btn ghost pill" onclick="showProfile('${x.name}')">看她想給大家看的資料</button><button class="btn ghost pill" onclick="closeSheet()">關閉</button></div>`;
+  document.getElementById('sheet').classList.add('open');
+}
+function showProfile(name){ const x=villagers.find(v=>v.name===name); const p=document.getElementById('panel'); p.innerHTML=`<div class="en">PUBLIC CARD</div><h4 class="serif">${x.name}</h4><p>${x.tags.map(tg=>`<span class="tagchip">${tg}</span>`).join('')}</p><p class="serif" style="font-size:16px">「${x.sign||'……'}」</p><p class="sub" style="color:var(--stone);font-size:12px">她選擇公開的只有這些。其他的都在她自己的紀錄裡。</p><div class="rowb"><button class="btn ghost pill" onclick="closeSheet()">關閉</button></div>`; }
+const WELCOME='Aloha！歡迎登島。第一次來，先做三件事就好：一、到「我的家」幫你的家取個名字、掛第一句招牌；二、去「任務」把秘密任務 1/50 看一遍，五天內交；三、到你住的村子逛一圈，看看鄰居門口寫了什麼。斷了不用重來，明天接著就好。有事在這裡留話給我。';
+const threads=[{who:'艾兒莎',last:WELCOME,elsa:true,welcome:true},{who:'我的村・全村對話',last:'全村都看得到，打 @ 可以點名。',group:true},
+  {who:'章潔',last:'藝術攝影／導演・LV.5 解鎖',lock:true},{who:'何浩瑜',last:'投資與財務・LV.5 解鎖',lock:true},{who:'Tilaine 王亭嵐',last:'職涯與女性領導・LV.5 解鎖',lock:true},{who:'阿雯',last:'LV.5 解鎖',lock:true},{who:'鮪魚',last:'LV.5 解鎖',lock:true},{who:'艾兒莎孩子的爸',last:'LV.5 解鎖',lock:true}];
+const groupMsgs=[{who:'深夜寫字的人',text:'第二篇，199 字，醜的也發。'},{who:'高原上的 PM',text:'@深夜寫字的人 我看了，第二段那句很好。'},{who:'艾兒莎',text:'這村這週交任務的比例 70%，是全島最高。'}];
+async function openGroup(){ if(LIVE) DB.event('open_village_chat',{}); const p=document.getElementById('panel'); if(LIVE){ const rows=await DB.villageChat(me.vkey); groupMsgs.length=0; rows.forEach(r=>groupMsgs.push({who:r.people?.nickname||r.people?.name||'島民',text:r.body})); } p.innerHTML=`<div class="en">VILLAGE CHAT</div><h4 class="serif">${(VILLAGES.find(v=>v.k===(me.vkey||myV().v))||{}).name||'我的村'}・全村對話</h4><div class="sub" style="color:var(--stone);font-size:12px">同村的人都看得到。打 @ 可以點名。</div><div class="log" id="glog" style="margin:10px 0 0">${groupMsgs.map(m=>`<div class="bub ${m.who==='艾兒莎'?'elsa':''}"><b style="font-size:12px;color:var(--red)">${m.who}</b><br>${m.text.replace(/@([^\s]+)/g,'<span style="color:var(--red);font-weight:700">@$1</span>')}</div>`).join('')}</div><form class="chatform" style="margin:10px 0 0" onsubmit="return sendGroup(event)"><input id="gmsg" placeholder="寫給全村，@ 可以點名"><button class="btn pill" type="submit">送出</button></form><div class="rowb"><button class="btn ghost pill" onclick="closeSheet()">關閉</button></div>`; document.getElementById('sheet').classList.add('open'); }
+async function sendGroup(e){ e.preventDefault(); const i=document.getElementById('gmsg'); const t=i.value.trim(); if(!t) return false; if(LIVE){ try{ await DB.sendVillage(me.vkey,t); DB.event('send_village',{}); }catch(err){ toast('送不出去：'+err.message); return false; } } groupMsgs.push({who:myV().name==='我'?'我':myV().name,text:t}); threads.find(x=>x.group).last=(myV().name==='我'?'我':myV().name)+'：'+t; openGroup(); renderThreads(); return false; }
+function openWelcome(){ const p=document.getElementById('panel'); p.innerHTML=`<div class="en">FROM ELSA</div><h4 class="serif">歡迎登島</h4><p class="serif" style="font-size:16px;line-height:1.8">${WELCOME}</p><div class="rowb"><button class="btn pill" onclick="closeSheet();go('mentor')">回她一句</button><button class="btn ghost pill" onclick="closeSheet()">關閉</button></div>`; document.getElementById('sheet').classList.add('open'); }
+function startThread(name){ if(!threads.find(t=>t.who===name)) threads.unshift({who:name,last:'（你們還沒講過話）'}); closeSheet(); go('msgs'); renderThreads(); toast('開了一個跟 '+name+' 的對話'); }
+function renderThreads(){ const el=document.getElementById('threads'); if(!el) return; el.innerHTML=''; threads.forEach(t=>{ const d=document.createElement('div'); d.className='thread'; const locked=t.lock&&me.lv<5; d.style.opacity=locked?'.6':'1'; d.style.cursor=locked?'default':'pointer';
+    d.innerHTML=`<div class="ic" style="width:40px;height:40px;border-radius:50%;background:${t.elsa?'#B5382C':t.group?'#5C7A6E':'#DCE0DD'};display:grid;place-items:center;color:#fff">${t.elsa?'✦':t.group?'⌂':t.lock?'🔒':'✉'}</div><div style="flex:1"><div class="who">${t.who}</div><div class="last">${t.last}</div></div>${locked?'<span style="font-size:11px;background:#1F2430;color:#fff;border-radius:999px;padding:2px 8px">🔑 LV.5</span>':''}`;
+    d.addEventListener('click',()=>{ if(t.welcome) openWelcome(); else if(t.group) openGroup(); else if(t.elsa) go('mentor'); else if(locked) toast('任務做到 LV.5 就能敲門'); else toast('島民之間的對話正式版開放'); }); el.appendChild(d); }); }
+
+function renderVillage(){
+  const st=document.getElementById('street'); if(st) st.innerHTML=''; renderThreads();
+  st.innerHTML='';
+  const ds=document.getElementById('districts'); ds.innerHTML='';
+  districts.forEach(d=>{ const el=document.createElement('div'); el.className='district'; el.innerHTML=`<div class="ic" style="background:${d.bg}">${d.ic}</div><div><div class="n">${d.n}</div><div class="d">${d.d}</div></div><div class="c">${d.c}</div>`; el.addEventListener('click',()=>openDistrict(d)); ds.appendChild(el); });
+}
+function openHouse(v){
+  const p=document.getElementById('panel');
+  p.innerHTML=`<div class="en">${v.me?'MY HOUSE':'VISITING'}</div><h4 class="serif">${v.name}</h4><div class="sub" style="color:var(--stone);font-size:12px">${v.dist}</div>
+    <div style="margin:12px 0">${houseSVG(v.color,v.me)}</div>
+    <div class="card" style="margin:0"><div class="lbl serif" style="font-size:15px">門口的招牌</div><p class="serif" style="font-size:16px;margin:6px 0 0">${v.sign||'（還沒掛招牌）'}</p></div>
+    <div class="rowb">${v.me?'':'<button class="btn pill" onclick="toast(\'留了一句話在他門口\')">留一句話</button>'}<button class="btn ghost pill" onclick="closeSheet()">回村裡</button></div>`;
+  document.getElementById('sheet').classList.add('open');
+}
+function openDistrict(d){ const v=VILLAGES.find(v=>v.k===d.k); if(v){ go('village'); window.__enterVillage(v); return; }
+  const p=document.getElementById('panel');
+  p.innerHTML=`<div class="en">DISTRICT</div><h4 class="serif">${d.n}</h4><p>${d.d}。目前 ${d.c} 位島民。</p><p class="sub" style="color:var(--stone);font-size:13px">正式版會列出這一區的島民、這一區共同的任務骨架，還有這一區蓋的奇觀。</p><div class="rowb"><button class="btn ghost pill" onclick="closeSheet()">關閉</button></div>`;
+  document.getElementById('sheet').classList.add('open');
+}
+function myV(){ return villagers.find(v=>v.me); }
+const COLORS=['#B5382C','#5C7A6E','#3A4150','#C6A44E','#8A8F99','#B9C6C9','#E9A3B3'];
+function esc(t){return (t||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function wrapLines(t,n,max){ const out=[]; let s=(t||''); while(s.length&&out.length<max){ out.push(s.slice(0,n)); s=s.slice(n);} if(s.length&&out.length===max){ out[max-1]=out[max-1].slice(0,n-1)+'…'; } return out; }
+function renderSwatches(){ const el=document.getElementById('swatches'); if(!el) return; const mv=myV(); el.innerHTML=''; COLORS.forEach(c=>{ const d=document.createElement('div'); d.className='sw'+(mv.color===c?' on':''); d.style.background=c; d.addEventListener('click',async()=>{ mv.color=c; renderSwatches(); renderMyHouse(); if(LIVE){ await DB.saveProfile({house_color:c}); DB.event('set_color',{c}); } }); el.appendChild(d); }); }
+function livePreview(){ const mv=myV(); const nm=(document.getElementById('myName')?.value||'').trim()||(mv.name!=='我'?mv.name:''); const sg=(document.getElementById('mySign')?.value||'').trim()||mv.sign||''; const ab=(document.getElementById('myAbout')?.value||'').trim()||mv.about||''; return {nm,sg,ab,color:mv.color}; }
+function renderMyHouse(){
+  const el=document.getElementById('myHouse'); if(!el) return; renderSwatches(); const {nm,sg,ab,color}=livePreview();
+  const signLines=wrapLines(sg,9,2); const aboutLines=wrapLines(ab,10,3);
+  el.innerHTML=`<svg viewBox="0 0 150 190" aria-label="我的家預覽">
+    <rect x="0" y="122" width="150" height="68" fill="#B9C6C9" opacity=".35"/>
+    <path d="M16 52 L60 18 L104 52 Z" fill="#1F2430"/>
+    <rect x="24" y="52" width="72" height="30" fill="${color}" stroke="#1F2430" stroke-width="2"/>
+    <rect x="52" y="60" width="14" height="22" fill="#F3EEE3" stroke="#1F2430" stroke-width="1.5"/>
+    <rect x="31" y="58" width="12" height="10" fill="#F6D66B" stroke="#1F2430" stroke-width="1.5"/><rect x="77" y="58" width="12" height="10" fill="#F6D66B" stroke="#1F2430" stroke-width="1.5"/>
+    <rect x="84" y="28" width="7" height="14" fill="#1F2430"/>
+    <ellipse cx="120" cy="96" rx="9" ry="3" fill="rgba(31,36,48,.15)"/>
+    <rect x="113" y="74" width="14" height="18" rx="4" fill="#B5382C" stroke="#1F2430" stroke-width="2"/>
+    <circle cx="120" cy="67" r="7" fill="#F3EEE3" stroke="#1F2430" stroke-width="2"/><circle cx="120" cy="61" r="4.5" fill="#1F2430"/>
+    <text x="120" y="108" text-anchor="middle" font-size="9" font-weight="700" fill="#1F2430" font-family="Noto Sans TC,sans-serif">${esc(nm||'我')}</text>
+    <rect x="4" y="88" width="98" height="${signLines.length?30:18}" rx="3" fill="#F3EEE3" stroke="#1F2430" stroke-width="1.2"/>
+    <rect x="50" y="${signLines.length?118:106}" width="2" height="12" fill="#1F2430"/>
+    ${signLines.length? signLines.map((l,i)=>`<text x="53" y="${100+i*12}" text-anchor="middle" font-size="8.5" fill="#1F2430" font-family="Noto Serif TC,serif">${esc(l)}</text>`).join('') : `<text x="53" y="100" text-anchor="middle" font-size="8" fill="#8A8F99" font-family="Noto Sans TC,sans-serif">（招牌還空著）</text>`}
+    <rect x="4" y="136" width="142" height="48" rx="6" fill="#FAF7F0" stroke="#1F2430" stroke-width="1.2"/>
+    <text x="10" y="148" font-size="7.5" fill="#8A8F99" font-family="Noto Sans TC,sans-serif">我要說的話</text>
+    ${aboutLines.length? aboutLines.map((l,i)=>`<text x="10" y="${160+i*10.5}" font-size="8" fill="#1F2430" font-family="Noto Sans TC,sans-serif">${esc(l)}</text>`).join('') : `<text x="10" y="162" font-size="8" fill="#8A8F99" font-family="Noto Sans TC,sans-serif">（還沒說）</text>`}
+  </svg>`;
+  const inp=document.getElementById('myName'); const mv=myV(); if(inp&&!inp.value&&mv.name!=='我') inp.value=mv.name;
+}
+['myName','mySign','myAbout'].forEach(id=>{ document.addEventListener('input',e=>{ if(e.target&&e.target.id===id) renderMyHouse(); }); });
+async function confirmSign(){ const mv=myV(); const n=document.getElementById('myName').value.trim(); const t=document.getElementById('mySign').value.trim(); if(n) mv.name=n; if(!t){toast('招牌先寫一句');return;} mv.sign=t; if(LIVE){ try{ await DB.saveProfile({nickname:mv.name,signboard:t,house_color:mv.color}); DB.event('set_signboard',{text:t}); }catch(e){ toast('存不進去：'+e.message); return; } } renderVillage(); renderMyHouse(); toast('掛上去了'); }
+async function confirmAbout(){ const mv=myV(); const n=document.getElementById('myName').value.trim(); const ab=document.getElementById('myAbout').value.trim(); if(n) mv.name=n; if(!ab){toast('先寫一段');return;} mv.about=ab; if(LIVE){ try{ await DB.saveProfile({nickname:mv.name,about:ab,house_color:mv.color}); DB.event('set_about',{}); }catch(e){ toast('存不進去：'+e.message); return; } } renderVillage(); renderMyHouse(); toast('說出去了'); }
+function goHome(){ const mv=myV(); const v=VILLAGES.find(v=>v.k===mv.v); go('village'); window.__enterVillage(v); }
+
+
+// 價值觀對齊（示範資料：問卷 11 題前三名 + 11-1 犧牲例子 → 對齊度）
+me.values=[
+  {rank:'I', name:'自由', now:'現況 6 / 10', evidence:'辭掉討厭的工作（有犧牲的證據）', align:72},
+  {rank:'II', name:'成長', now:'現況 3 / 10', evidence:'一年只做到一週三小時英文課；買了三堂課沒上完', align:38},
+  {rank:'III', name:'關係', now:'現況 8 / 10', evidence:'為了陪伴移掉安排好的行程', align:85}
+];
+function renderValues(){
+  const v=document.getElementById('vals'); v.innerHTML='';
+  me.values.forEach(x=>{ const el=document.createElement('div'); el.className='val'; el.innerHTML=`<div class="rank">${x.rank}</div><div class="vn">${x.name}</div><div class="line"><span>目前狀態</span><b>${x.now}</b></div><div class="line"><span>實踐與執行的對齊度</span><b>${x.align}%</b></div><div class="meter"><i style="width:${x.align}%"></i></div><div class="why">依據：${x.evidence}</div>`; v.appendChild(el); });
+
+}
+
+
+
+// ====== 資料層（LIVE 時才用）======
+const DB={
+  async signIn(email){ const {error}=await sb.auth.signInWithOtp({email, options:{emailRedirectTo: location.origin+location.pathname}}); if(error) throw error; },
+  async session(){ const {data}=await sb.auth.getSession(); return data.session; },
+  async loadMe(){ const ses=await this.session(); if(!ses) return null; const {data,error}=await sb.from('people').select('*').eq('email',ses.user.email.toLowerCase()).maybeSingle(); if(error) throw error; return data; },
+  async saveProfile(fields){ const {error}=await sb.from('people').update(fields).eq('id',me.id); if(error) throw error; },
+  async villagers(vkey){ const {data}=await sb.from('people').select('id,nickname,name,house_color,signboard,about,village_key,role').eq('village_key',vkey); return data||[]; },
+  async villages(){ const {data}=await sb.from('villages').select('*'); return data||[]; },
+  async villageCounts(){ const {data}=await sb.from('people').select('village_key'); const c={}; (data||[]).forEach(r=>{c[r.village_key]=(c[r.village_key]||0)+1}); return c; },
+  async assignments(){ const {data}=await sb.from('assignments').select('*, tasks(*)').eq('person_id',me.id).order('sent_at'); return data||[]; },
+  async submitReply(id,text){ const {error}=await sb.from('assignments').update({reply_text:text,replied_at:new Date().toISOString(),status:'replied'}).eq('id',id); if(error) throw error; },
+  async qa(){ const {data}=await sb.from('questionnaire_answers').select('question,answer,is_holdout,submitted_at').eq('person_id',me.id); return data||[]; },
+  async notes(){ const {data}=await sb.from('notes').select('*').eq('person_id',me.id).order('published_at',{ascending:false}); return data||[]; },
+  async villageChat(vkey){ const {data}=await sb.from('messages').select('id,body,created_at,from_person,people:from_person(nickname,name)').eq('thread_key','village:'+vkey).order('created_at'); return data||[]; },
+  async sendVillage(vkey,text){ const {error}=await sb.from('messages').insert({thread_type:'village',thread_key:'village:'+vkey,from_person:me.id,body:text,state:'visible'}); if(error) throw error; },
+  async sendMentor(to,text){ const {error}=await sb.from('messages').insert({thread_type:'mentor',thread_key:'mentor:'+to,from_person:me.id,body:text,state:'pending'}); if(error) throw error; },
+  async myMentorThread(to){ const {data}=await sb.from('messages').select('*').eq('thread_key','mentor:'+to).eq('from_person',me.id).order('created_at'); return data||[]; },
+  async pending(){ const {data}=await sb.from('messages').select('*, people:from_person(nickname,name,email)').eq('thread_type','mentor').order('created_at',{ascending:false}).limit(100); return data||[]; },
+  async approve(id,body){ const {error}=await sb.from('messages').update({state:'approved',approved_body:body,approved_at:new Date().toISOString(),approved_by:me.id}).eq('id',id); if(error) throw error; },
+  async broadcast(){ const {data}=await sb.from('broadcasts').select('*').eq('active',true).order('created_at',{ascending:false}).limit(10); return data||[]; },
+  async postBroadcast(text){ const {error}=await sb.from('broadcasts').insert({body:text}); if(error) throw error; },
+  async event(kind,value){ try{ await sb.from('events').insert({person_id:me.id,kind,value}); }catch(e){} }
+};
+async function bootLive(){
+  const row=await DB.loadMe();
+  if(!row){ document.getElementById('gateMsg').textContent='這個 email 不在島民名單裡。請用你報名時的 email。'; return false; }
+  me.id=row.id; me.role=row.role; me.admin=row.role==='admin'; me.vkey=row.village_key; const mv0=villagers.find(v=>v.me); mv0.id=row.id;
+  const mv=villagers.find(v=>v.me); mv.name=row.nickname||row.name; mv.color=row.house_color||mv.color; mv.sign=row.signboard||''; mv.about=row.about||''; mv.v=row.village_key||mv.v;
+  // 村子人數與繁華度
+  const vs=await DB.villages(); const counts=await DB.villageCounts();
+  vs.forEach(v=>{ const t=VILLAGES.find(x=>x.k===v.key); if(t){ t.prog=Number(v.prosperity||0); t.desc=v.description||t.desc; t.greeting=v.greeting; t.count=counts[v.key]||0; } });
+  // 同村島民換成真人
+  const same=await DB.villagers(me.vkey); const keep=villagers.filter(v=>v.me||v.mentor); villagers.length=0; keep.forEach(v=>villagers.push(v));
+  same.filter(r=>r.id!==me.id).forEach(r=>villagers.push({name:r.nickname||r.name,v:r.village_key,tags:[],sign:r.signboard||'',about:r.about||'',color:r.house_color||'#5C7A6E',murmur:[r.signboard||'……'],id:r.id}));
+  // 任務
+  const as=await DB.assignments(); me.live_assignments=as;
+  const t1=as.find(a=>a.task_code==='T1'); if(t1){ me.task.done=t1.status!=='sent'; me.history=me.history.filter(h=>!h.live); as.forEach(a=>{ if(a.reply_text) me.history.push({live:true,n:'秘密任務 '+(a.tasks?.no||'')+'・'+(a.tasks?.title||''),when:(a.replied_at||'').slice(0,16).replace('T',' '),snip:a.reply_text.slice(0,60),full:a.reply_text,reply:a.next_step||'',st:a.next_step?'done':'wait'}); }); }
+  // 小語
+  const ns=await DB.notes(); if(ns.length){ me.note=ns[0].body; }
+  // 廣播
+  await refreshBroadcast();
+  if(me.admin){ document.getElementById('reviewTab').style.display='grid'; renderReviewLive(); }
+  DB.event('login',{});
+  return true;
+}
+async function refreshBroadcast(){ if(!LIVE) return; const bs=await DB.broadcast(); me.broadcasts=bs; const el=document.getElementById('bcastText'); if(el) el.textContent= bs.length? bs[0].body : '建島人還沒廣播。'; }
+function openBroadcasts(){ if(LIVE) DB.event('view_broadcast',{}); const p=document.getElementById('panel'); const list=(me.broadcasts||[]).map(b=>`<div class="hrec" style="cursor:default"><div class="when">${(b.created_at||'').slice(0,16).replace('T',' ')}</div><div style="font-size:15px;margin-top:2px">${esc(b.body)}</div></div>`).join('')||'<div class="sub">還沒有廣播。</div>';
+  p.innerHTML=`<div class="en">ISLAND BROADCAST</div><h4 class="serif">島上廣播</h4><div style="margin-top:8px">${list}</div>${me.admin?`<div class="lbl serif" style="font-size:14px;margin-top:10px">發一則廣播</div><textarea id="bcNew" placeholder="例如：9/28 教師節派對在浪漫屋，18:30 開門。"></textarea><div class="rowb"><button class="btn pill" onclick="postBroadcast()">廣播出去</button><button class="btn ghost pill" onclick="closeSheet()">關閉</button></div>`:`<div class="rowb"><button class="btn ghost pill" onclick="closeSheet()">關閉</button></div>`}`;
+  document.getElementById('sheet').classList.add('open'); }
+async function postBroadcast(){ const t=document.getElementById('bcNew').value.trim(); if(!t){toast('先寫一句');return;} if(LIVE){ await DB.postBroadcast(t); await refreshBroadcast(); } else { me.broadcasts=[{body:t,created_at:new Date().toISOString()},...(me.broadcasts||[])]; document.getElementById('bcastText').textContent=t; } closeSheet(); toast('廣播出去了'); }
+async function renderReviewLive(){ if(!LIVE) return; const el=document.getElementById('reviewList'); if(!el) return; const rows=await DB.pending(); el.innerHTML=''; if(!rows.length){ el.innerHTML='<div class="card"><div class="sub">目前沒有待審的對話。</div></div>'; return; }
+  rows.forEach(it=>{ const d=document.createElement('div'); d.className='card'; d.style.margin='0 0 10px'; const who=it.people?.nickname||it.people?.name||it.people?.email||'島民';
+    d.innerHTML=`<div class="sub" style="color:var(--stone);font-size:12px">${(it.created_at||'').slice(0,16).replace('T',' ')}・${esc(who)} → ${esc(it.thread_key.replace('mentor:',''))}${it.state==='approved'?'・已放行':'・待審'}</div><p style="margin:6px 0 8px;font-size:15px"><b>她寫：</b>${esc(it.body)}</p>${it.state==='approved'?`<div class="hrec" style="cursor:default"><div class="n" style="font-size:13px">你回的</div><div style="font-size:14px;margin-top:2px">${esc(it.approved_body||'')}</div></div>`:`<div class="lbl serif" style="font-size:14px">你的回覆</div><textarea id="lv-${it.id}" style="width:100%;min-height:96px;border:1px solid var(--line);border-radius:12px;padding:10px;font-family:inherit;font-size:14px;background:#fff;margin-top:6px">${esc(it.ai_draft||'')}</textarea><div class="rowb"><button class="btn pill" onclick="approveLive('${it.id}')">放行送出</button></div>`}`; el.appendChild(d); });
+  const b=document.getElementById('reviewBadge'); const n=rows.filter(r=>r.state==='pending').length; if(b){ b.textContent=n; b.style.display=n?'inline-block':'none'; } }
+async function approveLive(id){ const t=document.getElementById('lv-'+id).value.trim(); if(!t){toast('先寫回覆');return;} await DB.approve(id,t); toast('已送出'); renderReviewLive(); }
+
+// 過往任務（示範）
+me.history=[
+  {n:'首談前問卷', when:'2026-08-31 22:14', snip:'25 題全部完成，四項同意全勾。', reply:'', st:'done'},
+  {n:'首談 30 分鐘', when:'2026-09-05 14:00', snip:'艾兒莎的假說：不是懶，是把產能都給了別人。', reply:'', st:'done'}
+];
+function renderHistory(){
+  const el=document.getElementById('histList'); if(!el) return; el.innerHTML='';
+  me.history.slice().reverse().forEach(h=>{ const d=document.createElement('div'); d.className='hrec'; d.innerHTML=`<div class="top"><div class="n">${h.n}</div><div class="when">${h.when}</div></div><div class="snip">${h.snip}</div><span class="st ${h.st==='wait'?'wait':''}">${h.st==='wait'?'等艾兒莎回':'完成'}</span>`; d.addEventListener('click',()=>openHistory(h)); el.appendChild(d); });
+}
+function openHistory(h){ const p=document.getElementById('panel'); p.innerHTML=`<div class="en">RECORD</div><h4 class="serif">${h.n}</h4><div class="sub" style="color:var(--stone);font-size:12px">繳交時間 ${h.when}</div><p style="margin-top:10px">${h.full||h.snip}</p>${h.reply?`<div class="card" style="margin:12px 0 0"><div class="lbl serif" style="font-size:15px">艾兒莎的下一步</div><p class="serif" style="font-size:15px;margin:6px 0 0">${h.reply}</p></div>`:''}<div class="rowb"><button class="btn ghost pill" onclick="closeSheet()">關閉</button></div>`; document.getElementById('sheet').classList.add('open'); }
+// 其他 Mentor（簡介待艾兒莎補的先標註）
+const MENTORS=[
+  {n:'阿雯',r:'待補簡介',bio:'（簡介待艾兒莎補）',ask:['待艾兒莎補']},
+  {n:'章潔',r:'藝術攝影／導演',bio:'艾兒莎的摯友，藝術攝影師與導演，Anca Jaier 共同創辦人。看人的方式是先看畫面，再看故事。',ask:['把自己的故事變成作品','視覺與品牌的美感判斷','創作者怎麼活下來']},
+  {n:'何浩瑜',r:'投資與財務',bio:'艾兒莎朋友圈的投資理財課共同講師。擅長把錢的事講到不可怕。',ask:['第一筆錢怎麼配置','負債與現金流','投資前該問自己的三個問題']},
+  {n:'鮪魚',r:'待補簡介',bio:'（簡介待艾兒莎補）',ask:['待艾兒莎補']},
+  {n:'艾兒莎孩子的爸',r:'待補簡介',bio:'（簡介待艾兒莎補）',ask:['待艾兒莎補']},
+  {n:'Tilaine 王亭嵐',r:'職涯與女性領導',bio:'GWImpact 女性職涯論壇講者。從企業內部往上爬的路她走過，也知道哪裡不用爬。',ask:['升遷與談判','在公司裡建立自己的位置','什麼時候該走']}
+];
+function renderMentors(){ const g=document.getElementById('mgrid'); if(!g) return; g.innerHTML=''; MENTORS.forEach(m=>{ const d=document.createElement('div'); d.className='mcard'+(me.lv<5?' locked':''); d.innerHTML=`<div class="av">${m.n.slice(0,1)}</div><div class="mn">${m.n}</div><div class="mr">${m.r}</div>`; if(me.lv>=5) d.addEventListener('click',()=>openMentor(m)); else d.style.cursor='default'; g.appendChild(d); }); }
+function openMentor(m){ if(LIVE) DB.event('view_mentor',{who:m.n}); const p=document.getElementById('panel'); const locked=me.lv<5; p.innerHTML=`<div class="en">MENTOR</div><h4 class="serif">${m.n}</h4><div class="sub" style="color:var(--stone);font-size:12px">${m.r}</div><p style="margin-top:10px">${m.bio}</p><div class="lbl serif" style="font-size:15px;margin-top:8px">可以問她的方向</div><ul style="margin:6px 0 0 18px;padding:0;font-size:14px">${m.ask.map(a=>`<li>${a}</li>`).join('')}</ul>${locked?'<p class="sub" style="color:var(--red);font-size:13px;margin-top:10px">任務做到 LV.5 之後就可以跟她對話。現在 LV.'+me.lv+'。</p>':''}<div class="rowb">${locked?'':`<button class="btn pill" onclick="startThread('${m.n}')">開始對話</button>`}<button class="btn ghost pill" onclick="closeSheet()">關閉</button></div>`; document.getElementById('sheet').classList.add('open'); }
+function renderRank(){ const el=document.getElementById('rank'); if(!el) return; el.innerHTML=''; VILLAGES.filter(v=>!v.mentor).slice().sort((a,b)=>b.prog-a.prog).forEach((v,i)=>{ const d=document.createElement('div'); d.className='rrow'; d.innerHTML=`<div class="pos">${i+1}</div><div class="rb"><div class="rn">${v.name} <span class="en">${v.en}</span></div><div class="meter"><i style="width:${Math.round(v.prog*100)}%"></i></div></div><div class="pct">${Math.round(v.prog*100)}%</div>`; d.addEventListener('click',()=>{ go('village'); window.__enterVillage(v); }); el.appendChild(d); }); }
+// 地圖併入成長
+(function mergeMap(){ const art=document.getElementById('mapArt'); const growth=document.getElementById('v-growth'); if(art&&growth){ const head=growth.querySelector('.subhead'); const wrap=document.createElement('div'); wrap.style.margin='0 0 6px'; wrap.appendChild(art); head.insertAdjacentElement('afterend',wrap); const mapSec=document.getElementById('v-map'); if(mapSec) mapSec.remove(); } })();
+
+function renderRadial(){
+  const svg=document.getElementById('radial'); svg.innerHTML='';
+  const cx=215,cy=205,R=140;
+  svg.appendChild(mk('circle',{cx,cy,r:R,fill:'none',stroke:'#C6A44E','stroke-width':1,'stroke-dasharray':'3 4'}));
+  svg.appendChild(mk('circle',{cx,cy,r:R*.55,fill:'none',stroke:'#C6A44E','stroke-width':1,'stroke-dasharray':'3 4'}));
+  svg.appendChild(mk('path',{d:`M${cx} ${cy-26} L${cx+8} ${cy} L${cx} ${cy+26} L${cx-8} ${cy}Z`,fill:'#B5382C'}));
+  svg.appendChild(mk('path',{d:`M${cx-26} ${cy} L${cx} ${cy-8} L${cx+26} ${cy} L${cx} ${cy+8}Z`,fill:'#1F2430'}));
+  const scenes={aware:'#8A8F99',action:'#5C7A6E',review:'#B9C6C9',future:'#C6A44E'};
+  me.milestones.forEach((m,i)=>{
+    const a=-Math.PI/2+i*(2*Math.PI/me.milestones.length); const x=cx+R*Math.cos(a), y=cy+R*Math.sin(a);
+    const g=mk('g',{class:'pin'});
+    g.appendChild(mk('circle',{cx:x,cy:y,r:38,fill:scenes[m.id],stroke:'#1F2430','stroke-width':1.5}));
+    g.appendChild(mk('path',{d:`M${x-30} ${y+14} L${x-12} ${y-6} L${x} ${y+8} L${x+14} ${y-10} L${x+30} ${y+14}Z`,fill:'#1F2430',opacity:.8}));
+    g.appendChild(mk('circle',{cx:x+14,cy:y-16,r:6,fill:'#B5382C'}));
+    if(m.done) g.appendChild(mk('circle',{cx:x+28,cy:y-28,r:8,fill:'#B5382C'}));
+    const w=m.zh.length*15+22;
+    g.appendChild(mk('rect',{x:x-w/2,y:y+44,width:w,height:24,rx:4,fill:'#F3EEE3',stroke:'#1F2430','stroke-width':1.2}));
+    const z=mk('text',{x,y:y+61,'text-anchor':'middle','font-size':'13','font-weight':'700'}); z.textContent=m.zh; g.appendChild(z);
+    g.addEventListener('click',()=>openMilestone(m)); svg.appendChild(g);
+  });
+}
+const QA=[
+  ['1. 最矛盾的三個行為','想早睡但每晚追劇到兩點；想接副業但看到訊息就躲；說要存錢但每月買課'],
+  ['2. 2027/9/2 三件可以被證明的事','副業第一筆收入、存款餘額 30 萬、一個作品'],
+  ['5. 反覆發生的循環','看勵志內容→受啟發→隔幾天又滑手機'],
+  ['6. 拖超過一年的事','把副業做起來；理由：等我準備好'],
+  ['11. 七項價值觀排序','自由、成長、關係、意義、金錢、健康、名聲'],
+  ['14. 哪條規則以前救過你、現在限制你','不能讓別人失望'],
+  ['18. 最怕艾兒莎下的結論','你就是懶惰'],
+  ['22. 直接度','5'],
+  ['同意','四項全勾']
+];
+function openMilestone(m){
+  if(LIVE) DB.event('view_milestone',{id:m.id});
+  const p=document.getElementById('panel');
+  if(m.id==='aware'){
+    if(LIVE){ DB.qa().then(rows=>{ const list=rows.filter(r=>!r.is_holdout).map(r=>`<div class="hrec" style="cursor:default"><div class="n" style="font-size:14px">${esc(r.question)}</div><div style="font-size:14px;color:var(--ink-2);margin-top:2px">${esc(r.answer||'')}</div></div>`).join(''); p.innerHTML=`<h4 class="serif">自我覺察</h4><div class="sub" style="color:var(--stone);font-size:12px">首談前問卷・你自己寫的每一個字</div><div style="margin-top:10px">${list||'<div class="sub">還沒有問卷。</div>'}</div><div class="rowb"><button class="btn ghost pill" onclick="closeSheet()">關閉</button></div>`; }); document.getElementById('sheet').classList.add('open'); return; }
+    p.innerHTML=`<h4 class="serif">自我覺察</h4><div class="sub" style="color:var(--stone);font-size:12px">首談前問卷・2026-08-31 交・你自己寫的每一個字</div>
+      <div style="margin-top:10px">${QA.map(q=>`<div class="hrec" style="cursor:default"><div class="n" style="font-size:14px">${q[0]}</div><div style="font-size:14px;color:var(--ink-2);margin-top:2px">${q[1]}</div></div>`).join('')}</div>
+      <div class="rowb"><button class="btn ghost pill" onclick="closeSheet()">關閉</button></div>`;
+  } else {
+    const body={action:'秘密任務 1/50 進行中。每完成一件事，路就往前一段。',review:'每個月月底開一次門：被推翻的一個信念、四個任務的實況、下個月只解一件事。復盤過的月份會在這裡留下一扇門。',future:'年底的結局章節：一年的決定、理由、變化。'}[m.id];
+    p.innerHTML=`<h4 class="serif">${m.zh}</h4><p>${body}</p><div class="rowb"><button class="btn ghost pill" onclick="closeSheet()">關閉</button></div>`;
+  }
+  document.getElementById('sheet').classList.add('open');
+}
+function openNote(){
+  if(LIVE) DB.event('read_note',{});
+  const p=document.getElementById('panel');
+  p.innerHTML=`<div class="en">FROM ELSA</div><h4 class="serif">首談之後</h4><p class="serif" style="font-size:17px;line-height:1.8">${me.note}</p><div class="sub" style="text-align:right;color:var(--stone);font-size:12px">9/5・Elsa</div><div class="rowb"><button class="btn ghost" onclick="closeSheet()">關閉</button></div>`;
+  document.getElementById('sheet').classList.add('open');
+}
+function openTask(){
+  if(LIVE) DB.event('open_task',{task:'T1'});
+  if(me.task.done){toast('已經交了，等艾兒莎回你');return;}
+  const p=document.getElementById('panel');
+  const f=['我的觀察是','總觀察時間','整體觀察完成後的感受','觀察紀錄（文字、照片或錄音）'];
+  p.innerHTML=`<div class="en">SECRET MISSION 1/50</div><h4>觀察一個會呼吸的生物</h4><p>不用工整，不要用 AI 幫你寫。寫真的。</p>${f.map(x=>`<label>${x}</label><textarea placeholder="寫這裡"></textarea>`).join('')}
+  <div class="rowb"><button class="btn" onclick="submitTask()">交出去</button><button class="btn ghost" onclick="closeSheet()">先關掉</button></div>`;
+  document.getElementById('sheet').classList.add('open');
+}
+async function submitTask(){
+  const v=[...document.querySelectorAll('#panel textarea')].map(t=>t.value.trim());
+  if(!v[0]){toast('第一格先寫一句就好');return;}
+  if(LIVE){ const a=(me.live_assignments||[]).find(x=>x.task_code==='T1'); if(!a){toast('這個任務還沒指派給你');return;} try{ await DB.submitReply(a.id, ['我的觀察是','總觀察時間','整體觀察完成後的感受','觀察紀錄'].map((k,i)=>k+'：'+(v[i]||'')).join('\n')); DB.event('submit_task',{task:'T1'}); }catch(e){ toast('交不出去：'+e.message); return; } }
+  me.task.done=true; me.xp+=80; me.flags+=1; me.week[4]=1; me.streak+=1; me.milestones[2].done=true; me.milestones[2].now=false; me.milestones[3].now=true;
+  me.history.push({n:'秘密任務 1/50・觀察一個會呼吸的生物', when:new Date().toLocaleString('zh-TW',{hour12:false}).slice(0,16), snip:v[0], full:v.filter(Boolean).join('\n'), st:'wait'});
+  closeSheet(); render(); toast('交出去了，路往前一段 +80 XP'); go('task');
+}
+function closeSheet(){document.getElementById('sheet').classList.remove('open'); if(window.__resetCam) window.__resetCam();}
+
+let sampleFn=null; (async()=>{try{sampleFn=await window.claude?.use?.('sample');}catch(e){sampleFn=null;}})();
+const history=[];
+function addBub(t,who){const log=document.getElementById('log');const b=document.createElement('div');b.className='bub '+who;b.textContent=t;log.appendChild(b);b.scrollIntoView({block:'nearest'});return b;}
+async function pick(text){ document.getElementById('choices').style.display='none'; await ask(text); }
+document.getElementById('chatForm').addEventListener('submit',async e=>{e.preventDefault();const i=document.getElementById('msg');const t=i.value.trim();if(!t)return;i.value='';document.getElementById('choices').style.display='none';await ask(t);});
+const pending=[]; // 待艾兒莎審核的對話
+function notifyElsa(){ const b=document.getElementById('reviewBadge'); if(b){ b.textContent=pending.filter(x=>x.state==='pending').length; b.style.display=pending.some(x=>x.state==='pending')?'inline-block':'none'; } }
+async function draftReply(text){
+  if(sampleFn){ try{ const turns=[{role:'user',content:mentorPersona+'\n\n（以下是對話）'},{role:'assistant',content:'好，我在。'},...history]; const r=await sampleFn(turns,{cache:false}); return r.text; }catch(e){} }
+  const canned={'我怕失敗。':'怕失敗很正常。那我問你：你上一次真的失敗，是哪一件事？失敗之後，第二天早上你在做什麼？我猜你比你以為的撐得住。','我想試試看！':'好，那就把它切到小到不好意思拒絕：今天做的第一步是什麼，十分鐘以內能做完的那種？','我需要更多時間思考。':'可以。但我想知道，你需要的是「時間」，還是需要有人告訴你「可以了」？這兩個的解法不一樣。'};
+  return canned[text]||'我聽到了。這件事，你上一次真的動手做，是哪一天？';
+}
+async function ask(text, to){
+  to=to||'艾兒莎';
+  addBub(text,'me'); history.push({role:'user',content:text});
+  if(LIVE){ try{ await DB.sendMentor('elsa',text); DB.event('send_message',{to:'elsa'}); }catch(e){ toast('送不出去：'+e.message); return; } const hold=addBub('已送出。艾兒莎看過之後會回你，通常在一天內。','elsa'); hold.style.opacity='.7'; hold.style.fontFamily='"Noto Sans TC",sans-serif'; hold.style.fontSize='13px'; return; }
+  const hold=addBub('已送出。艾兒莎看過之後會回你，通常在一天內。','elsa'); hold.style.opacity='.7'; hold.style.fontFamily='"Noto Sans TC",sans-serif'; hold.style.fontSize='13px';
+  const item={id:Date.now(),from:myV().name==='我'?'示範島民':myV().name,to,text,draft:'（草稿產生中…）',state:'pending',holdEl:hold,when:new Date().toLocaleString('zh-TW',{hour12:false}).slice(0,16)};
+  pending.push(item); notifyElsa(); renderReview();
+  item.draft=await draftReply(text); renderReview();
+}
+function approve(id, custom){
+  const it=pending.find(x=>x.id===id); if(!it) return; const reply=(custom&&custom.trim())||it.draft; it.state='approved'; it.final=reply;
+  if(it.holdEl){ it.holdEl.style.opacity='1'; it.holdEl.style.fontFamily='"Noto Serif TC",serif'; it.holdEl.style.fontSize='15px'; it.holdEl.textContent=reply; }
+  history.push({role:'assistant',content:reply}); notifyElsa(); renderReview(); toast('已送給 '+it.from);
+}
+function renderReview(){
+  if(LIVE){ renderReviewLive(); return; }
+  const el=document.getElementById('reviewList'); if(!el) return; el.innerHTML='';
+  const items=pending.slice().reverse(); if(!items.length){ el.innerHTML='<div class="card"><div class="sub">目前沒有待審的對話。</div></div>'; return; }
+  items.forEach(it=>{ const d=document.createElement('div'); d.className='card'; d.style.margin='0 0 10px';
+    d.innerHTML=`<div class="sub" style="color:var(--stone);font-size:12px">${it.when}・${it.from} → ${it.to}${it.state==='approved'?'・已放行':'・待審'}</div>
+      <p style="margin:6px 0 8px;font-size:15px"><b>她寫：</b>${esc(it.text)}</p>
+      ${it.state==='approved'?`<div class="hrec" style="cursor:default"><div class="n" style="font-size:13px">你回的</div><div style="font-size:14px;margin-top:2px">${esc(it.final)}</div></div>`:
+      `<div class="lbl serif" style="font-size:14px">AI 幫你擬的回覆（可以直接改）</div><textarea id="d-${it.id}" style="width:100%;min-height:96px;border:1px solid var(--line);border-radius:12px;padding:10px;font-family:inherit;font-size:14px;background:#fff;margin-top:6px">${esc(it.draft)}</textarea>
+      <div class="rowb"><button class="btn pill" onclick="approve(${it.id}, document.getElementById('d-${it.id}').value)">放行送出</button><button class="btn ghost pill" onclick="document.getElementById('d-${it.id}').value=''">清掉改自己寫</button></div>`}`;
+    el.appendChild(d); });
+}
+document.getElementById('mic').addEventListener('click',()=>toast('語音在正式版開放'));
+</script>
+</body>
+</html>
