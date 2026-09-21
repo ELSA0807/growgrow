@@ -603,7 +603,12 @@ const villagers=[
     if(pn.state==='walk'){ const sw=Math.sin(t*12+pn.t)*5; ctx.beginPath(); ctx.moveTo(x-4,y+20+bob); ctx.lineTo(x-4+sw,y+30+bob); ctx.moveTo(x+4,y+20+bob); ctx.lineTo(x+4-sw,y+30+bob); ctx.stroke(); }
     ctx.fillStyle='#1F2430'; ctx.font='600 12px "Noto Sans TC",sans-serif'; ctx.textAlign='center'; ctx.fillText(p.me?((p.name&&p.name!=='我')?p.name+'（我）':'我'):p.name,x,y+44+bob);
     if(p.online){ ctx.fillStyle='#4CAF50'; ctx.beginPath(); ctx.arc(x+12,y-16+bob,4,0,Math.PI*2); ctx.fill(); }
-    if(pn.say){ const a=Math.min(1,pn.sayT); ctx.globalAlpha=a; ctx.font='500 13px "Noto Serif TC",serif'; const w=ctx.measureText(pn.say).width+18; ctx.fillStyle='#FAF7F0'; ctx.strokeStyle='#1F2430'; ctx.lineWidth=1.5; ctx.beginPath(); ctx.roundRect(x-w/2,y-52+bob,w,24,8); ctx.fill(); ctx.stroke(); ctx.fillStyle='#1F2430'; ctx.fillText(pn.say,x,y-35+bob); ctx.globalAlpha=1; }
+    const ab=(p.about||'').trim();
+    if(ab){ const ls=wrapLines(ab,14,2); ctx.font='500 13px "Noto Serif TC",serif'; ctx.textAlign='center'; const bw=Math.max(...ls.map(l=>ctx.measureText(l).width))+20, bh=10+ls.length*17; const by=y-30+bob-bh;
+      ctx.fillStyle='#FAF7F0'; ctx.strokeStyle=p.me?'#B5382C':'#1F2430'; ctx.lineWidth=1.5; ctx.beginPath(); ctx.roundRect(x-bw/2,by,bw,bh,9); ctx.fill(); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(x-5,by+bh-1); ctx.lineTo(x,by+bh+7); ctx.lineTo(x+5,by+bh-1); ctx.closePath(); ctx.fill(); ctx.beginPath(); ctx.moveTo(x-5,by+bh); ctx.lineTo(x,by+bh+7); ctx.lineTo(x+5,by+bh); ctx.stroke();
+      ctx.fillStyle='#1F2430'; ls.forEach((l,i)=>ctx.fillText(l,x,by+18+i*17)); }
+    else if(pn.say){ const a=Math.min(1,pn.sayT); ctx.globalAlpha=a; ctx.font='500 13px "Noto Serif TC",serif'; const w=ctx.measureText(pn.say).width+18; ctx.fillStyle='#FAF7F0'; ctx.strokeStyle='#1F2430'; ctx.lineWidth=1.5; ctx.beginPath(); ctx.roundRect(x-w/2,y-52+bob,w,24,8); ctx.fill(); ctx.stroke(); ctx.fillStyle='#1F2430'; ctx.fillText(pn.say,x,y-35+bob); ctx.globalAlpha=1; }
   }
   function campfire(x,y,k){ ctx.lineWidth=3*k; ctx.strokeStyle='#1F2430'; ctx.beginPath(); ctx.moveTo(x-22*k,y+10*k); ctx.lineTo(x+22*k,y-2*k); ctx.moveTo(x-22*k,y-2*k); ctx.lineTo(x+22*k,y+10*k); ctx.stroke();
     const f=reduce?0:Math.sin(t*9)*3*k; ctx.fillStyle='#B5382C'; ctx.beginPath(); ctx.moveTo(x-13*k,y+2*k); ctx.quadraticCurveTo(x-10*k,y-22*k,x+f*.4,y-38*k-f); ctx.quadraticCurveTo(x+12*k,y-20*k,x+13*k,y+2*k); ctx.closePath(); ctx.fill(); ctx.stroke();
@@ -669,6 +674,14 @@ const villagers=[
       else if(k==='well'){ ctx.fillStyle='#8A8F99'; ctx.beginPath(); ctx.ellipse(px,py-2,12,6,0,0,Math.PI*2); ctx.fill(); ctx.stroke(); ctx.fillStyle='#1F2430'; ctx.fillRect(px-12,py-22,3,20); ctx.fillRect(px+9,py-22,3,20); ctx.fillRect(px-14,py-24,28,3); }
     });
   }
+  function houseLabel(h){ const o=h.owner||{}; const nm=(o.name&&o.name!=='我')?o.name:'我'; const txt=nm+'的家'; ctx.font='700 14px "Noto Serif TC",serif'; ctx.textAlign='center'; const tw=ctx.measureText(txt).width+20; const cx=h.x+h.w/2, cy=h.y-h.w*.5-22;
+    ctx.fillStyle=o.me?'#B5382C':'#1F2430'; ctx.beginPath(); ctx.roundRect(cx-tw/2,cy-15,tw,22,11); ctx.fill(); ctx.fillStyle='#F3EEE3'; ctx.fillText(txt,cx,cy+1); }
+  function signboard(h){ const o=h.owner||{}; const sg=(o.sign||'').trim(); if(!sg) return; const lines=wrapLines(sg,10,3); const bw=156, bh=16+lines.length*18; const bx=h.x+h.w+84, by=h.y-6;
+    ctx.fillStyle='#1F2430'; ctx.fillRect(bx+bw/2-3,by+bh,6,h.w*.8-bh+6);
+    ctx.fillStyle='rgba(31,36,48,.15)'; ctx.beginPath(); ctx.roundRect(bx+3,by+4,bw,bh,6); ctx.fill();
+    ctx.fillStyle='#FAF7F0'; ctx.strokeStyle='#1F2430'; ctx.lineWidth=2.5; ctx.beginPath(); ctx.roundRect(bx,by,bw,bh,6); ctx.fill(); ctx.stroke();
+    ctx.fillStyle='#B5382C'; ctx.beginPath(); ctx.arc(bx+10,by+10,2.5,0,Math.PI*2); ctx.arc(bx+bw-10,by+10,2.5,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#1F2430'; ctx.font='600 13px "Noto Serif TC",serif'; ctx.textAlign='center'; lines.forEach((ln,i)=>ctx.fillText(ln,bx+bw/2,by+22+i*18)); }
   function emptyLot(h){ const x=h.x,y=h.y,w=h.w; ctx.setLineDash([8,8]); ctx.strokeStyle='#1F2430'; ctx.lineWidth=2; ctx.strokeRect(x-20,y-30,w+40,w*.9); ctx.setLineDash([]); ctx.fillStyle='#1F2430'; ctx.font='700 14px "Noto Serif TC",serif'; ctx.textAlign='center'; ctx.fillText('這是你的地',x+w/2,y+w*.3); ctx.font='500 11px "Noto Sans TC",sans-serif'; ctx.fillText('到「我的家」取名字，房子就會蓋起來',x+w/2,y+w*.5); }
   function drawVillage(v){
     const g=ctx.createLinearGradient(0,0,0,VW.h); g.addColorStop(0,'#F3EEE3'); g.addColorStop(.18,'#EDE4D3'); g.addColorStop(.19,'#DCE0DD'); g.addColorStop(1,'#B9C6C9'); ctx.fillStyle=g; ctx.fillRect(-2000,-2000,VW.w+4000,VW.h+4000);
@@ -685,7 +698,7 @@ const villagers=[
     ctx.setLineDash([6,8]); ctx.strokeStyle='#F3EEE3'; ctx.lineWidth=14; ctx.beginPath(); ctx.moveTo(gate.x,gate.y-40); ctx.lineTo(gate.x,420); ctx.stroke(); ctx.setLineDash([]);
     if(v.wander){ campfire(VW.w/2,760,2.2); ctx.fillStyle='#F3EEE3'; ctx.strokeStyle='#1F2430'; ctx.lineWidth=2; ctx.beginPath(); ctx.roundRect(VW.w/2-290,872,580,42,21); ctx.fill(); ctx.stroke(); ctx.fillStyle='#1F2430'; ctx.textAlign='center'; ctx.font='600 20px "Noto Serif TC",serif'; ctx.fillText('這裡還沒有房子。來談過第一次，就會搬進自己的村子。',VW.w/2,900); }
     // 房子＋庭院
-    houses.slice().sort((a,b)=>a.y-b.y).forEach(h=>{ if(h.empty){ emptyLot(h); return; } yard(h); house(h,false); ctx.fillStyle='#1F2430'; ctx.font='700 13px "Noto Serif TC",serif'; ctx.textAlign='center'; ctx.fillText(h.owner.name,h.x+h.w/2,h.y-h.w*.56); });
+    houses.slice().sort((a,b)=>a.y-b.y).forEach(h=>{ if(h.empty){ emptyLot(h); return; } yard(h); house(h,false); houseLabel(h); signboard(h); });
     // 人：我用方向鍵，其他人閒晃
     people.forEach(pn=>{
       if(pn.p.me){
@@ -742,6 +755,7 @@ const villagers=[
   cv.addEventListener('pointermove',ev=>{ if(!pts.has(ev.pointerId)) return; pts.set(ev.pointerId,{x:ev.clientX,y:ev.clientY}); if(pinch&&pts.size===2){ const [a,b]=[...pts.values()]; const d=Math.hypot(a.x-b.x,a.y-b.y); const r=cv.getBoundingClientRect(); const f=(d/pinch.d)*pinch.z/cam.tz; zoomBy(f,(a.x+b.x)/2-r.left,(a.y+b.y)/2-r.top); cam.z=cam.tz; cam.x=cam.tx; cam.y=cam.ty; } });
   ['pointerup','pointercancel','pointerleave'].forEach(t=>cv.addEventListener(t,ev=>{ pts.delete(ev.pointerId); if(pts.size<2) pinch=null; }));
   window.__enterVillage=enterVillage;
+  window.__refreshVillage=()=>{ if(mode!=='village'||!cur) return; const meP=people.find(pn=>pn.p.me); const pos=meP?{x:meP.x,y:meP.y}:null; buildVillage(cur); const me2=people.find(pn=>pn.p.me); if(me2&&pos){ me2.x=pos.x; me2.y=pos.y; me2.tx=pos.x; me2.ty=pos.y; } if(typeof showVillageChip==='function') showVillageChip(cur); };
 })();
 async function knock(x){
   const online=!!x.online; const p=document.getElementById('panel'); const nm=x.name;
@@ -851,9 +865,10 @@ function renderMyHouse(){
   </svg>`;
   const inp=document.getElementById('myName'); const mv=myV(); if(inp&&!inp.value&&mv.name!=='我') inp.value=mv.name;
 }
+document.addEventListener('change',async e=>{ if(!e.target||e.target.id!=='myName') return; const n=e.target.value.trim(); if(!n) return; const mv=myV(); if(mv.name===n) return; mv.name=n; if(LIVE){ try{ await DB.saveProfile({nickname:n}); DB.event('set_nickname',{name:n}); }catch(err){ toast('存不進去：'+err.message); return; } } renderMyHouse(); window.__refreshVillage&&window.__refreshVillage(); toast('你的家現在叫「'+n+'的家」'); });
 ['myName','mySign','myAbout'].forEach(id=>{ document.addEventListener('input',e=>{ if(e.target&&e.target.id===id) renderMyHouse(); }); });
-async function confirmSign(){ const mv=myV(); const n=document.getElementById('myName').value.trim(); const t=document.getElementById('mySign').value.trim(); if(n) mv.name=n; if(!t){toast('招牌先寫一句');return;} mv.sign=t; if(LIVE){ try{ await DB.saveProfile({nickname:mv.name,signboard:t,house_color:mv.color}); DB.event('set_signboard',{text:t}); }catch(e){ toast('存不進去：'+e.message); return; } } renderVillage(); renderMyHouse(); toast('掛上去了'); }
-async function confirmAbout(){ const mv=myV(); const n=document.getElementById('myName').value.trim(); const ab=document.getElementById('myAbout').value.trim(); if(n) mv.name=n; if(!ab){toast('先寫一段');return;} mv.about=ab; if(LIVE){ try{ await DB.saveProfile({nickname:mv.name,about:ab,house_color:mv.color}); DB.event('set_about',{}); }catch(e){ toast('存不進去：'+e.message); return; } } renderVillage(); renderMyHouse(); toast('說出去了'); }
+async function confirmSign(){ const mv=myV(); const n=document.getElementById('myName').value.trim(); const t=document.getElementById('mySign').value.trim(); if(n) mv.name=n; if(!t){toast('招牌先寫一句');return;} mv.sign=t; if(LIVE){ try{ await DB.saveProfile({nickname:mv.name,signboard:t,house_color:mv.color}); DB.event('set_signboard',{text:t}); }catch(e){ toast('存不進去：'+e.message); return; } } renderVillage(); renderMyHouse(); window.__refreshVillage&&window.__refreshVillage(); toast('掛上去了，房子旁邊的招牌已經換好'); }
+async function confirmAbout(){ const mv=myV(); const n=document.getElementById('myName').value.trim(); const ab=document.getElementById('myAbout').value.trim(); if(n) mv.name=n; if(!ab){toast('先寫一段');return;} mv.about=ab; if(LIVE){ try{ await DB.saveProfile({nickname:mv.name,about:ab,house_color:mv.color}); DB.event('set_about',{}); }catch(e){ toast('存不進去：'+e.message); return; } } renderVillage(); renderMyHouse(); window.__refreshVillage&&window.__refreshVillage(); toast('說出去了，會一直跟著你'); }
 function goHome(){ const mv=myV(); const v=VILLAGES.find(v=>v.k===mv.v); go('village'); window.__enterVillage(v); }
 
 
