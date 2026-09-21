@@ -64,6 +64,7 @@ svg.art{width:100%;height:auto;display:block}
 .choice.c2 i{background:var(--teal);border-radius:3px;transform:rotate(45deg) scale(.8)}
 .choice.c3 i{background:var(--ink-2);border-radius:4px}
 .choice b{flex:1;font-weight:500}
+.mic.rec{background:#1F2430;animation:pulse 1.2s ease-in-out infinite}
 .mic{margin:22px auto 6px;width:78px;height:78px;border-radius:50%;background:var(--red);display:grid;place-items:center;color:#fff;font-size:30px;box-shadow:0 0 0 10px rgba(181,56,44,.12),0 0 0 20px rgba(181,56,44,.06);border:0;cursor:pointer}
 .log{margin:12px 20px 0;display:grid;gap:8px}
 .bub{max-width:88%;padding:9px 12px;border-radius:12px;font-size:14px;line-height:1.6;border:1px solid var(--line);background:var(--paper)}
@@ -249,10 +250,10 @@ svg.art{width:100%;height:auto;display:block}
     <div class="logoin"><div class="zh">跳級之島</div><div class="en"><span>G</span><span>R</span><span>O</span><span>W</span><span class="sp"></span><span>G</span><span>R</span><span>O</span><span>W</span><span class="sp"></span><span>I</span><span>S</span><span>L</span><span>A</span><span>N</span><span>D</span></div></div>
     <form id="gateForm">
       <input id="gateEmail" type="email" placeholder="你報名時的 email" autocomplete="username" style="letter-spacing:0;font-size:16px;margin-bottom:0">
-      <input id="code" type="password" inputmode="numeric" maxlength="5" placeholder="手機號碼後五碼" autocomplete="current-password" style="letter-spacing:2px;font-size:16px;margin-top:10px">
+      <input id="code" type="password" inputmode="numeric" maxlength="5" placeholder="手機後五碼" autocomplete="current-password" style="letter-spacing:2px;font-size:16px;margin-top:10px">
       <button class="btn" type="submit" style="width:100%" id="gateBtn">上島</button>
     </form>
-    <p id="gateMsg">請輸入你報名時的 email；密碼是你報名時填的手機號碼後五碼。</p>
+    <p id="gateMsg">請輸入報名時的 email；密碼是手機後五碼</p>
   </div>
 </div>
 
@@ -359,22 +360,19 @@ svg.art{width:100%;height:auto;display:block}
 </section>
 
 <section class="view" id="v-mentor">
-  <div class="subhead"><button class="back" onclick="go('growth')">‹</button><div class="t serif">AI Mentor</div><span style="width:28px"></span></div>
+  <div class="subhead"><button class="back" onclick="go('growth')">‹</button><div class="t serif">Mentor 悄悄話</div><span style="width:28px"></span></div>
   <svg class="art" viewBox="0 0 430 170" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
     <rect width="430" height="170" fill="#F3EEE3"/><circle cx="110" cy="70" r="46" fill="#B5382C"/>
     <path d="M0 140 L90 100 L160 130 L260 90 L340 130 L430 110 L430 170 L0 170Z" fill="#3A4150"/>
     <path d="M300 150 l18 -46 l18 46z M340 146 l14 -36 l14 36z" fill="#1F2430"/>
   </svg>
-  <div class="bubble" id="mentorQ">你最近有一件想嘗試，但一直有點猶豫的事嗎？</div>
-  <div class="choices" id="choices">
-    <button class="choice c1" onclick="pick('我怕失敗。')"><i></i><b>我怕失敗。</b><span class="chev">›</span></button>
-    <button class="choice c2" onclick="pick('我想試試看！')"><i></i><b>我想試試看！</b><span class="chev">›</span></button>
-    <button class="choice c3" onclick="pick('我需要更多時間思考。')"><i></i><b>我需要更多時間思考。</b><span class="chev">›</span></button>
-  </div>
+  <div class="bubble" id="mentorQ">……</div>
+  <div class="choices" id="choices"></div>
+  <div id="whisperMeta" style="margin:8px 20px 0;font-size:12px;color:var(--stone)">選一個最接近你的，沒有標準答案。你選完，我會再悄悄問你下一題。</div>
   <div class="log" id="log"></div>
   <form class="chatform" id="chatForm"><input id="msg" placeholder="或者直接寫給艾兒莎"><button class="btn pill" type="submit">送出</button></form>
-  <button class="mic" id="mic" title="用說的">🎙</button>
-  <div style="text-align:center;font-size:12px;color:var(--stone);margin-bottom:10px">按住用說的（正式版開放）</div>
+  <button class="mic" id="mic" title="用說的" type="button">🎙</button>
+  <div id="micHint" style="text-align:center;font-size:12px;color:var(--stone);margin-bottom:10px">點一下開始用說的，再點一下送出（最長兩分鐘）</div>
   <div class="mentors"><div class="h">島上的其他 Mentor</div><div class="k">任務做到 LV.5 之後就可以敲門。先讓你看看有誰。</div><div class="mgrid" id="mgrid"></div></div>
 </section>
 
@@ -402,7 +400,7 @@ svg.art{width:100%;height:auto;display:block}
 <section class="view" id="v-msgs">
   <div class="subhead"><button class="back" onclick="go('village')">‹</button><div class="t serif">對話</div><span style="width:28px"></span></div>
   <div class="districts" id="threads"></div>
-  <div class="card"><div class="lbl serif" style="font-size:15px">誰可以跟誰講話</div><div class="sub">島民之間可以互相留話與對話；艾兒莎的對話在 Mentor 分頁。正式版的對話都會存在你自己的紀錄裡。</div></div>
+  <div class="card"><div class="lbl serif" style="font-size:15px">誰可以跟誰講話</div><div class="sub">島民之間可以互相留話與對話；艾兒莎的對話在 Mentor 分頁。</div></div>
 </section>
 <section class="view" id="v-review">
   <div class="subhead"><button class="back" onclick="go('village')">‹</button><div class="t serif">審核對話</div><span style="width:28px"></span></div>
@@ -451,9 +449,9 @@ const mentorPersona=`你是艾兒莎（Elsa），台灣的人生 mentor，也是
 
 document.getElementById('gateForm').addEventListener('submit',async e=>{e.preventDefault();
   if(LIVE){ const em=document.getElementById('gateEmail').value.trim().toLowerCase(); const pw=document.getElementById('code').value.trim(); const msg=document.getElementById('gateMsg'); const btn=document.getElementById('gateBtn');
-    if(!em){toast('先填 email');return;} if(!/^\d{5}$/.test(pw)){toast('密碼是手機號碼後五碼，五個數字');return;}
+    if(!em){toast('先填 email');return;} if(!/^\d{5}$/.test(pw)){toast('密碼是手機後五碼');return;}
     btn.disabled=true; btn.textContent='上島中…';
-    try{ await DB.signIn(em,pw); }catch(err){ msg.textContent= /invalid/i.test(err.message)? 'email 或後五碼對不上。請用報名時的 email 和報名時填的手機號碼後五碼；還是進不來就直接回信給艾兒莎。' : '現在連不上：'+err.message; }
+    try{ await DB.signIn(em,pw); }catch(err){ msg.textContent= /invalid/i.test(err.message)? 'email 或後五碼對不上。請用報名時的 email 和手機後五碼；還是進不來就直接回信給艾兒莎。' : '現在連不上：'+err.message; }
     btn.disabled=false; btn.textContent='上島'; return; }
   const c=document.getElementById('code').value.trim(); if(c==='00000'){ me.admin=true; document.getElementById('reviewTab').style.display='grid'; } document.getElementById('gate').style.display='none';render(); renderReview&&renderReview();});
 window.addEventListener('load',async()=>{ if(!LIVE) return;
@@ -461,7 +459,7 @@ window.addEventListener('load',async()=>{ if(!LIVE) return;
   sb.auth.onAuthStateChange(async(ev,session)=>{ if(ev==='SIGNED_IN'&&session&&!me.id){ const ok=await bootLive(); if(ok){ document.getElementById('gate').style.display='none'; render(); } } });
 });
 function toast(t){const el=document.getElementById('toast');el.textContent=t;el.style.display='block';setTimeout(()=>el.style.display='none',2200);}
-function go(v){ if(typeof LIVE!=='undefined'&&LIVE&&me.id) DB.event('view',{tab:v}); document.querySelectorAll('.view').forEach(x=>x.classList.toggle('on',x.id==='v-'+v));document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));window.scrollTo(0,0);}
+function go(v){ if(typeof LIVE!=='undefined'&&LIVE&&me.id) DB.event('view',{tab:v}); if(typeof LIVE!=='undefined'&&LIVE&&me.id){ if(v==='mentor'&&typeof loadMentorLog==='function') loadMentorLog(); if(v==='review'&&me.admin&&typeof renderReviewLive==='function') renderReviewLive(); } document.querySelectorAll('.view').forEach(x=>x.classList.toggle('on',x.id==='v-'+v));document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));window.scrollTo(0,0);}
 const ns='http://www.w3.org/2000/svg'; const mk=(t,a)=>{const e=document.createElementNS(ns,t);for(const k in a)e.setAttribute(k,a[k]);return e;};
 
 function render(){
@@ -600,20 +598,27 @@ const villagers=[
     if(lv>=5){ ctx.fillStyle='rgba(246,214,107,'+(.7+.3*Math.sin(t*4))+')'; ctx.beginPath(); ctx.arc(x-6,y+w*.15,6,0,Math.PI*2); ctx.arc(x+w+6,y+w*.15,6,0,Math.PI*2); ctx.fill(); }
   }
   function person(pn){
-    const {x,y,p}=pn; const bob=Math.sin(t*6+pn.t)*1.5; ctx.lineWidth=2.5; ctx.strokeStyle='#1F2430';
+    const {x,y,p}=pn; const bob=Math.sin(t*6+pn.t)*1.5; const K=2; // 虛擬人放大一倍
+    ctx.save(); ctx.translate(x,y); ctx.scale(K,K); ctx.translate(-x,-y);
+    ctx.lineWidth=2.5; ctx.strokeStyle='#1F2430';
     ctx.fillStyle='rgba(31,36,48,.15)'; ctx.beginPath(); ctx.ellipse(x,y+22,10,4,0,0,Math.PI*2); ctx.fill();
     ctx.fillStyle=p.me?'#B5382C':'#F3EEE3'; ctx.beginPath(); ctx.roundRect(x-8,y+bob,16,20,4); ctx.fill(); ctx.stroke();
     ctx.fillStyle='#F3EEE3'; ctx.beginPath(); ctx.arc(x,y-8+bob,8,0,Math.PI*2); ctx.fill(); ctx.stroke();
     ctx.fillStyle='#1F2430'; ctx.beginPath(); ctx.arc(x,y-14+bob,5,0,Math.PI*2); ctx.fill();
     if(pn.state==='walk'){ const sw=Math.sin(t*12+pn.t)*5; ctx.beginPath(); ctx.moveTo(x-4,y+20+bob); ctx.lineTo(x-4+sw,y+30+bob); ctx.moveTo(x+4,y+20+bob); ctx.lineTo(x+4-sw,y+30+bob); ctx.stroke(); }
-    ctx.fillStyle='#1F2430'; ctx.font='600 12px "Noto Sans TC",sans-serif'; ctx.textAlign='center'; ctx.fillText(p.me?((p.name&&p.name!=='我')?p.name+'（我）':'我'):p.name,x,y+44+bob);
     if(p.online){ ctx.fillStyle='#4CAF50'; ctx.beginPath(); ctx.arc(x+12,y-16+bob,4,0,Math.PI*2); ctx.fill(); }
-    const ab=(p.about||'').trim();
-    if(ab){ const ls=wrapLines(ab,14,2); ctx.font='500 13px "Noto Serif TC",serif'; ctx.textAlign='center'; const bw=Math.max(...ls.map(l=>ctx.measureText(l).width))+20, bh=10+ls.length*17; const by=y-30+bob-bh;
-      ctx.fillStyle='#FAF7F0'; ctx.strokeStyle=p.me?'#B5382C':'#1F2430'; ctx.lineWidth=1.5; ctx.beginPath(); ctx.roundRect(x-bw/2,by,bw,bh,9); ctx.fill(); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(x-5,by+bh-1); ctx.lineTo(x,by+bh+7); ctx.lineTo(x+5,by+bh-1); ctx.closePath(); ctx.fill(); ctx.beginPath(); ctx.moveTo(x-5,by+bh); ctx.lineTo(x,by+bh+7); ctx.lineTo(x+5,by+bh); ctx.stroke();
-      ctx.fillStyle='#1F2430'; ls.forEach((l,i)=>ctx.fillText(l,x,by+18+i*17)); }
-    else if(pn.say){ const a=Math.min(1,pn.sayT); ctx.globalAlpha=a; ctx.font='500 13px "Noto Serif TC",serif'; const w=ctx.measureText(pn.say).width+18; ctx.fillStyle='#FAF7F0'; ctx.strokeStyle='#1F2430'; ctx.lineWidth=1.5; ctx.beginPath(); ctx.roundRect(x-w/2,y-52+bob,w,24,8); ctx.fill(); ctx.stroke(); ctx.fillStyle='#1F2430'; ctx.fillText(pn.say,x,y-35+bob); ctx.globalAlpha=1; }
+    ctx.restore();
+    // 暱稱：兩倍大，加底色讓它在草地上看得清楚
+    const label=p.me?((p.name&&p.name!=='我')?p.name+'（我）':'我'):p.name; ctx.font='700 24px "Noto Sans TC",sans-serif'; ctx.textAlign='center'; const lw=ctx.measureText(label).width+22; const ly=y+30*K+20+bob;
+    ctx.fillStyle='rgba(250,247,240,.92)'; ctx.beginPath(); ctx.roundRect(x-lw/2,ly-24,lw,32,16); ctx.fill(); ctx.fillStyle=p.me?'#B5382C':'#1F2430'; ctx.fillText(label,x,ly);
+    // 說話泡泡：三倍大
+    const top=y-22*K+bob-10; const ab=(p.about||'').trim(); const txt=ab||pn.say||''; if(!txt) return;
+    const F=39, LH=50; const ls=wrapLines(txt,9,ab?3:2); if(!ab) ctx.globalAlpha=Math.min(1,pn.sayT);
+    ctx.font='600 '+F+'px "Noto Serif TC",serif'; const bw=Math.max(...ls.map(l=>ctx.measureText(l).width))+52, bh=34+ls.length*LH; const by=top-22-bh;
+    ctx.fillStyle='rgba(31,36,48,.14)'; ctx.beginPath(); ctx.roundRect(x-bw/2+5,by+6,bw,bh,26); ctx.fill();
+    ctx.fillStyle='#FAF7F0'; ctx.strokeStyle=p.me?'#B5382C':'#1F2430'; ctx.lineWidth=4; ctx.beginPath(); ctx.roundRect(x-bw/2,by,bw,bh,26); ctx.fill(); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(x-16,by+bh-2); ctx.lineTo(x,by+bh+22); ctx.lineTo(x+16,by+bh-2); ctx.closePath(); ctx.fill(); ctx.beginPath(); ctx.moveTo(x-16,by+bh); ctx.lineTo(x,by+bh+22); ctx.lineTo(x+16,by+bh); ctx.stroke();
+    ctx.fillStyle='#1F2430'; ls.forEach((l,k)=>ctx.fillText(l,x,by+54+k*LH)); ctx.globalAlpha=1;
   }
   function campfire(x,y,k){ ctx.lineWidth=3*k; ctx.strokeStyle='#1F2430'; ctx.beginPath(); ctx.moveTo(x-22*k,y+10*k); ctx.lineTo(x+22*k,y-2*k); ctx.moveTo(x-22*k,y-2*k); ctx.lineTo(x+22*k,y+10*k); ctx.stroke();
     const f=reduce?0:Math.sin(t*9)*3*k; ctx.fillStyle='#B5382C'; ctx.beginPath(); ctx.moveTo(x-13*k,y+2*k); ctx.quadraticCurveTo(x-10*k,y-22*k,x+f*.4,y-38*k-f); ctx.quadraticCurveTo(x+12*k,y-20*k,x+13*k,y+2*k); ctx.closePath(); ctx.fill(); ctx.stroke();
@@ -679,14 +684,14 @@ const villagers=[
       else if(k==='well'){ ctx.fillStyle='#8A8F99'; ctx.beginPath(); ctx.ellipse(px,py-2,12,6,0,0,Math.PI*2); ctx.fill(); ctx.stroke(); ctx.fillStyle='#1F2430'; ctx.fillRect(px-12,py-22,3,20); ctx.fillRect(px+9,py-22,3,20); ctx.fillRect(px-14,py-24,28,3); }
     });
   }
-  function houseLabel(h){ const o=h.owner||{}; const nm=(o.name&&o.name!=='我')?o.name:'我'; const txt=nm+'的家'; ctx.font='700 14px "Noto Serif TC",serif'; ctx.textAlign='center'; const tw=ctx.measureText(txt).width+20; const cx=h.x+h.w/2, cy=h.y-h.w*.5-22;
-    ctx.fillStyle=o.me?'#B5382C':'#1F2430'; ctx.beginPath(); ctx.roundRect(cx-tw/2,cy-15,tw,22,11); ctx.fill(); ctx.fillStyle='#F3EEE3'; ctx.fillText(txt,cx,cy+1); }
-  function signboard(h){ const o=h.owner||{}; const sg=(o.sign||'').trim(); if(!sg) return; const lines=wrapLines(sg,10,3); const bw=156, bh=16+lines.length*18; const bx=h.x+h.w+84, by=h.y-6;
+  function houseLabel(h){ const o=h.owner||{}; const nm=(o.name&&o.name!=='我')?o.name:'我'; const txt=nm+'的家'; ctx.font='700 24px "Noto Serif TC",serif'; ctx.textAlign='center'; const tw=ctx.measureText(txt).width+30; const cx=h.x+h.w/2, cy=h.y-h.w*.5-34;
+    ctx.fillStyle=o.me?'#B5382C':'#1F2430'; ctx.beginPath(); ctx.roundRect(cx-tw/2,cy-26,tw,38,19); ctx.fill(); ctx.fillStyle='#F3EEE3'; ctx.fillText(txt,cx,cy+2); }
+  function signboard(h){ const o=h.owner||{}; const sg=(o.sign||'').trim(); if(!sg) return; const lines=wrapLines(sg,9,3); const bw=226, bh=26+lines.length*28; const bx=h.x+h.w+80, by=h.y-30;
     ctx.fillStyle='#1F2430'; ctx.fillRect(bx+bw/2-3,by+bh,6,h.w*.8-bh+6);
     ctx.fillStyle='rgba(31,36,48,.15)'; ctx.beginPath(); ctx.roundRect(bx+3,by+4,bw,bh,6); ctx.fill();
     ctx.fillStyle='#FAF7F0'; ctx.strokeStyle='#1F2430'; ctx.lineWidth=2.5; ctx.beginPath(); ctx.roundRect(bx,by,bw,bh,6); ctx.fill(); ctx.stroke();
     ctx.fillStyle='#B5382C'; ctx.beginPath(); ctx.arc(bx+10,by+10,2.5,0,Math.PI*2); ctx.arc(bx+bw-10,by+10,2.5,0,Math.PI*2); ctx.fill();
-    ctx.fillStyle='#1F2430'; ctx.font='600 13px "Noto Serif TC",serif'; ctx.textAlign='center'; lines.forEach((ln,i)=>ctx.fillText(ln,bx+bw/2,by+22+i*18)); }
+    ctx.fillStyle='#1F2430'; ctx.font='600 22px "Noto Serif TC",serif'; ctx.textAlign='center'; lines.forEach((ln,i)=>ctx.fillText(ln,bx+bw/2,by+36+i*28)); }
   function emptyLot(h){ const x=h.x,y=h.y,w=h.w; ctx.setLineDash([8,8]); ctx.strokeStyle='#1F2430'; ctx.lineWidth=2; ctx.strokeRect(x-20,y-30,w+40,w*.9); ctx.setLineDash([]); ctx.fillStyle='#1F2430'; ctx.font='700 14px "Noto Serif TC",serif'; ctx.textAlign='center'; ctx.fillText('這是你的地',x+w/2,y+w*.3); ctx.font='500 11px "Noto Sans TC",sans-serif'; ctx.fillText('到「我的家」取名字，房子就會蓋起來',x+w/2,y+w*.5); }
   function drawVillage(v){
     const g=ctx.createLinearGradient(0,0,0,VW.h); g.addColorStop(0,'#F3EEE3'); g.addColorStop(.18,'#EDE4D3'); g.addColorStop(.19,'#DCE0DD'); g.addColorStop(1,'#B9C6C9'); ctx.fillStyle=g; ctx.fillRect(-2000,-2000,VW.w+4000,VW.h+4000);
@@ -746,7 +751,7 @@ const villagers=[
   cv.addEventListener('pointerup',ev=>{
     if(!down) return; const moved=down.moved; down=null; if(moved) return; const w=toWorld(ev);
     if(mode==='world'){ const v=VILLAGES.find(v=>Math.hypot(w.x-v.x,w.y-v.y)<230); if(v){ enterVillage(v); } }
-    else { const pn=people.find(pn=>Math.hypot(w.x-pn.x,w.y-pn.y)<34); if(pn){ openIslander(pn.p); return; } const h=houses.find(h=>w.x>h.x-20&&w.x<h.x+h.w+20&&w.y>h.y-h.w*.5&&w.y<h.y+h.w*.8); if(h){ const pn=people.find(p=>p.h===h); if(pn) openIslander(pn.p); } }
+    else { const pn=people.find(pn=>Math.hypot(w.x-pn.x,w.y-(pn.y+10))<64); if(pn){ openIslander(pn.p); return; } const h=houses.find(h=>w.x>h.x-20&&w.x<h.x+h.w+20&&w.y>h.y-h.w*.5&&w.y<h.y+h.w*.8); if(h){ const pn=people.find(p=>p.h===h); if(pn) openIslander(pn.p); } }
   });
   function enterVillage(v){ cur=v; buildVillage(v); mode='village'; const meP=people.find(pn=>pn.p.me); cam.tz=.9; cam.z=.9; cam.tx=meP.x-W/2/cam.tz; cam.ty=meP.y-H/2/cam.tz; cam.x=cam.tx; cam.y=cam.ty; document.getElementById('dpad').style.display='grid'; document.getElementById('walkhint').style.display='block'; document.getElementById('walkhint').textContent='方向鍵走路；走到村口「回本島」就離開；靠近別人的家會出現敲門'; joinPresence(v); if(LIVE) DB.event('enter_village',{village:v.k}); document.getElementById('sceneBack').style.display='inline-block'; document.getElementById('sceneTitle').textContent=v.name; document.getElementById('sceneHint').textContent=v.desc+' 點島民可以對話或看她的資料。'; showVillageChip(v); if(LIVE&&v.wander&&!v._loaded){ DB.villagers(v.k).then(rows=>{ v._loaded=true; rows.forEach(r=>{ if(r.id===me.id||villagers.some(x=>x.id===r.id)) return; villagers.push({name:r.nickname||'還沒出發的島民',v:r.village_key,tags:['已報名','還沒來一對一'],sign:r.signboard||'',about:r.about||'',color:'#8A8F99',murmur:['……'],id:r.id,decor:[]}); }); if(cur===v){ buildVillage(v); showVillageChip(v); } }); } }
   function leaveVillage(){ mode='world'; hideVillageChip(); leavePresence(); if(LIVE&&cur) DB.event('leave_village',{village:cur.k}); document.getElementById('dpad').style.display='grid'; document.getElementById('walkhint').style.display='block'; document.getElementById('walkhint').textContent='用方向鍵走到村名招牌就進村'; cam.tx=cur.x-W/2/.55; cam.ty=cur.y-H/2/.55; cam.tz=.55; cam.x=cam.tx; cam.y=cam.ty; cam.z=.55; clampWorld(); cur=null; document.getElementById('sceneBack').style.display='none'; document.getElementById('sceneTitle').textContent='跳級之島'; document.getElementById('sceneHint').textContent='拖曳看整座島，點一個村子進去，可以認識裡面的島民：）村子越是繁榮，代表這一區的村民們很認真的跟上任務喔！'; }
@@ -913,6 +918,14 @@ const DB={
   async approve(id,body){ const {error}=await sb.from('messages').update({state:'approved',approved_body:body,approved_at:new Date().toISOString(),approved_by:me.id}).eq('id',id); if(error) throw error; },
   async broadcast(){ const {data}=await sb.from('broadcasts').select('*').eq('active',true).order('created_at',{ascending:false}).limit(10); return data||[]; },
   async postBroadcast(text){ const {error}=await sb.from('broadcasts').insert({body:text}); if(error) throw error; },
+  async whisperQuestions(){ const {data}=await sb.from('whisper_questions').select('id,body,options,sort,active').order('sort'); return data||[]; },
+  async whisperMine(){ const {data}=await sb.from('whisper_answers').select('question,created_at').eq('person_id',me.id).order('created_at'); return data||[]; },
+  async whisperSave(q,answer){ const {error}=await sb.from('whisper_answers').insert({person_id:me.id,question_id:q.id||null,question:q.body,answer}); if(error) throw error; },
+  async whisperAll(){ const {data}=await sb.from('whisper_answers').select('id,question,answer,created_at,people:person_id(nickname,name)').order('created_at',{ascending:false}).limit(120); return data||[]; },
+  async allChats(){ const {data}=await sb.from('messages').select('id,thread_type,thread_key,body,created_at,fp:from_person(nickname,name),tp:to_person(nickname,name)').in('thread_type',['dm','village']).order('created_at',{ascending:false}).limit(120); return data||[]; },
+  async uploadVoice(blob,ext,seconds){ const path=me.id+'/'+Date.now()+'.'+ext; const up=await sb.storage.from('voice').upload(path,blob,{contentType:blob.type||('audio/'+ext),upsert:false}); if(up.error) throw up.error; const {error}=await sb.from('messages').insert({thread_type:'mentor',thread_key:'mentor:elsa',from_person:me.id,body:'（語音訊息 '+seconds+' 秒）',state:'pending',audio_path:path,audio_seconds:seconds}); if(error) throw error; return path; },
+  async voiceUrl(path){ const {data,error}=await sb.storage.from('voice').createSignedUrl(path,3600); if(error) throw error; return data.signedUrl; },
+  async aiDraft(id){ const {data,error}=await sb.functions.invoke('draft-reply',{body:{message_id:id}}); if(error) throw error; if(data&&data.error) throw new Error(data.error); return (data&&data.draft)||''; },
   async notifs(){ const {data}=await sb.from('notifications').select('id,kind,title,body,created_at,read_at').eq('person_id',me.id).order('created_at',{ascending:false}).limit(40); return data||[]; },
   async markNotifsRead(){ const {error}=await sb.from('notifications').update({read_at:new Date().toISOString()}).eq('person_id',me.id).is('read_at',null); if(error) throw error; },
   async event(kind,value){ try{ await sb.from('events').insert({person_id:me.id,kind,value}); }catch(e){} }
@@ -935,7 +948,7 @@ async function bootLive(){
   // 小語
   const ns=await DB.notes(); if(ns.length){ me.note=ns[0].body; }
   // 廣播
-  await refreshBroadcast(); refreshNotifs();
+  await refreshBroadcast(); refreshNotifs(); if(typeof initWhisper==='function'){ initWhisper(); loadMentorLog(); }
   if(me.admin){ document.getElementById('reviewTab').style.display='grid'; renderReviewLive(); }
   DB.event('login',{});
   return true;
@@ -950,11 +963,24 @@ function openBroadcasts(){ if(LIVE) DB.event('view_broadcast',{}); const p=docum
   p.innerHTML=`<div class="en">ISLAND BROADCAST</div><h4 class="serif">島上廣播</h4><div style="margin-top:8px">${list}</div>${me.admin?`<div class="lbl serif" style="font-size:14px;margin-top:10px">發一則廣播</div><textarea id="bcNew" placeholder="例如：9/28 教師節派對在浪漫屋，18:30 開門。"></textarea><div class="rowb"><button class="btn pill" onclick="postBroadcast()">廣播出去</button><button class="btn ghost pill" onclick="closeSheet()">關閉</button></div>`:`<div class="rowb"><button class="btn ghost pill" onclick="closeSheet()">關閉</button></div>`}`;
   document.getElementById('sheet').classList.add('open'); }
 async function postBroadcast(){ const t=document.getElementById('bcNew').value.trim(); if(!t){toast('先寫一句');return;} if(LIVE){ await DB.postBroadcast(t); await refreshBroadcast(); } else { me.broadcasts=[{body:t,created_at:new Date().toISOString()},...(me.broadcasts||[])]; document.getElementById('bcastText').textContent=t; } closeSheet(); toast('廣播出去了'); }
-async function renderReviewLive(){ if(!LIVE) return; const el=document.getElementById('reviewList'); if(!el) return; const rows=await DB.pending(); el.innerHTML=''; if(!rows.length){ el.innerHTML='<div class="card"><div class="sub">目前沒有待審的對話。</div></div>'; return; }
-  rows.forEach(it=>{ const d=document.createElement('div'); d.className='card'; d.style.margin='0 0 10px'; const who=it.people?.nickname||it.people?.name||it.people?.email||'島民';
-    d.innerHTML=`<div class="sub" style="color:var(--stone);font-size:12px">${(it.created_at||'').slice(0,16).replace('T',' ')}・${esc(who)} → ${esc(it.thread_key.replace('mentor:',''))}${it.state==='approved'?'・已放行':'・待審'}</div><p style="margin:6px 0 8px;font-size:15px"><b>她寫：</b>${esc(it.body)}</p>${it.state==='approved'?`<div class="hrec" style="cursor:default"><div class="n" style="font-size:13px">你回的</div><div style="font-size:14px;margin-top:2px">${esc(it.approved_body||'')}</div></div>`:`<div class="lbl serif" style="font-size:14px">你的回覆</div><textarea id="lv-${it.id}" style="width:100%;min-height:96px;border:1px solid var(--line);border-radius:12px;padding:10px;font-family:inherit;font-size:14px;background:#fff;margin-top:6px">${esc(it.ai_draft||'')}</textarea><div class="rowb"><button class="btn pill" onclick="approveLive('${it.id}')">放行送出</button></div>`}`; el.appendChild(d); });
-  const b=document.getElementById('reviewBadge'); const n=rows.filter(r=>r.state==='pending').length; if(b){ b.textContent=n; b.style.display=n?'inline-block':'none'; } }
-async function approveLive(id){ const t=document.getElementById('lv-'+id).value.trim(); if(!t){toast('先寫回覆');return;} await DB.approve(id,t); toast('已送出'); renderReviewLive(); }
+let reviewFilter='pending';
+async function renderReviewLive(){ if(!LIVE) return; const el=document.getElementById('reviewList'); if(!el) return; let rows=[]; try{ rows=await DB.pending(); }catch(e){ el.innerHTML='<div class="card"><div class="sub">讀不到對話：'+esc(e.message)+'</div></div>'; return; }
+  const nP=rows.filter(r=>r.state==='pending').length; const b=document.getElementById('reviewBadge'); if(b){ b.textContent=nP; b.style.display=nP?'inline-block':'none'; }
+  const tabBtn=(k,t)=>`<button class="btn pill ${reviewFilter===k?'':'ghost'}" style="padding:8px 16px;font-size:14px" onclick="reviewFilter='${k}';renderReviewLive()">${t}</button>`;
+  el.innerHTML=`<div class="rowb" style="margin:0 0 12px;flex-wrap:wrap">${tabBtn('pending','待回覆 '+nP)}${tabBtn('approved','已回覆')}${tabBtn('whisper','悄悄話答案')}${tabBtn('chats','島民之間的對話')}</div><div id="reviewBody"></div>`;
+  const body=document.getElementById('reviewBody');
+  if(reviewFilter==='whisper'){ const ws=await DB.whisperAll(); body.innerHTML=ws.map(w=>`<div class="hrec" style="cursor:default"><div class="when">${(w.created_at||'').slice(0,16).replace('T',' ')}・${esc(w.people?.nickname||w.people?.name||'島民')}</div><div style="font-size:13px;color:var(--ink-2);margin-top:2px">${esc(w.question)}</div><div style="font-size:15px;margin-top:2px"><b>${esc(w.answer)}</b></div></div>`).join('')||'<div class="card" style="margin:0"><div class="sub">還沒有人回答悄悄話。</div></div>'; return; }
+  if(reviewFilter==='chats'){ const cs=await DB.allChats(); body.innerHTML=cs.map(c=>`<div class="hrec" style="cursor:default"><div class="when">${(c.created_at||'').slice(0,16).replace('T',' ')}・${esc(c.fp?.nickname||c.fp?.name||'島民')} → ${c.thread_type==='village'?esc(c.thread_key.replace('village:','')+' 村全村對話'):esc(c.tp?.nickname||c.tp?.name||'島民')}</div><div style="font-size:15px;margin-top:2px">${esc(c.body)}</div></div>`).join('')||'<div class="card" style="margin:0"><div class="sub">島民之間還沒有對話。</div></div>'; return; }
+  const list=rows.filter(r=>reviewFilter==='pending'?r.state==='pending':r.state==='approved'); if(!list.length){ body.innerHTML='<div class="card" style="margin:0"><div class="sub">'+(reviewFilter==='pending'?'目前沒有等你回的話。':'還沒有回覆過的對話。')+'</div></div>'; return; }
+  list.forEach(it=>{ const d=document.createElement('div'); d.className='card'; d.style.margin='0 0 10px'; const who=it.people?.nickname||it.people?.name||'島民'; const done=it.state==='approved';
+    d.innerHTML=`<div class="sub" style="color:var(--stone);font-size:12px">${(it.created_at||'').slice(0,16).replace('T',' ')}・${esc(who)} → ${esc(it.thread_key.replace('mentor:',''))}${done?'・已回覆':'・待回覆'}</div>
+      <p style="margin:6px 0 8px;font-size:15px"><b>她${it.audio_path?'說':'寫'}：</b>${esc(it.body)}</p>${it.audio_path?`<div id="au-${it.id}" style="margin:0 0 8px"><button class="btn ghost pill" style="padding:6px 14px;font-size:13px" onclick="playVoice('${it.id}','${it.audio_path}')">▶ 聽她的語音</button></div>`:''}
+      <div class="lbl serif" style="font-size:14px">${done?'你回的（可以再改）':'你的回覆'}</div>
+      <textarea id="lv-${it.id}" placeholder="直接寫，或按「AI 幫我擬」先出一版再改" style="width:100%;min-height:120px;border:1px solid var(--line);border-radius:12px;padding:10px;font-family:inherit;font-size:16px;line-height:1.7;background:#fff;margin-top:6px">${esc(done?(it.approved_body||''):(it.ai_draft||''))}</textarea>
+      <div class="rowb" style="flex-wrap:wrap"><button class="btn pill" id="ok-${it.id}" onclick="approveLive('${it.id}')">${done?'更新回覆':'確認回覆'}</button><button class="btn ghost pill" id="ai-${it.id}" onclick="aiDraftLive('${it.id}')">AI 幫我擬</button></div>`; body.appendChild(d); }); }
+async function approveLive(id){ const ta=document.getElementById('lv-'+id); const t=(ta.value||'').trim(); if(!t){toast('先寫回覆');return;} const btn=document.getElementById('ok-'+id); btn.disabled=true; btn.textContent='送出中…'; try{ await DB.approve(id,t); DB.event('approve_reply',{id}); toast('已經回給她了'); renderReviewLive(); }catch(e){ btn.disabled=false; btn.textContent='確認回覆'; toast('送不出去：'+e.message); } }
+async function aiDraftLive(id){ const btn=document.getElementById('ai-'+id); const ta=document.getElementById('lv-'+id); btn.disabled=true; btn.textContent='AI 正在讀她的資料…'; try{ const d=await DB.aiDraft(id); if(d){ ta.value=d; toast('擬好了，你改完再按確認回覆'); } else toast('AI 沒有回東西，再按一次'); }catch(e){ toast('AI 擬稿還沒接好：'+e.message); } btn.disabled=false; btn.textContent='AI 幫我擬'; }
+async function playVoice(id,path){ const box=document.getElementById('au-'+id); try{ const u=await DB.voiceUrl(path); box.innerHTML='<audio controls autoplay style="width:100%" src="'+u+'"></audio>'; }catch(e){ toast('語音讀不到：'+e.message); } }
 
 // 過往任務（示範）
 me.history=[
@@ -1055,8 +1081,64 @@ function closeSheet(){document.getElementById('sheet').classList.remove('open');
 let sampleFn=null; (async()=>{try{sampleFn=await window.claude?.use?.('sample');}catch(e){sampleFn=null;}})();
 const history=[];
 function addBub(t,who){const log=document.getElementById('log');const b=document.createElement('div');b.className='bub '+who;b.textContent=t;log.appendChild(b);b.scrollIntoView({block:'nearest'});return b;}
-async function pick(text){ document.getElementById('choices').style.display='none'; await ask(text); }
-document.getElementById('chatForm').addEventListener('submit',async e=>{e.preventDefault();const i=document.getElementById('msg');const t=i.value.trim();if(!t)return;i.value='';document.getElementById('choices').style.display='none';await ask(t);});
+const WHISPER_BANK=[
+ ['你最近有一件想嘗試，但一直有點猶豫的事嗎？',['有，我怕失敗。','有，我其實想試試看！','有，但我需要更多時間想。']],
+ ['如果明天突然多出完整的一天，沒有人找你，你第一個想做的是？',['睡覺，什麼都不做','做那件一直沒時間做的事','還是會拿去處理別人的事']],
+ ['別人請你幫忙、但你其實不想的時候，你通常？',['還是答應，事後自己悶','找個理由拖過去','直接說這次沒辦法']],
+ ['一筆意外的五萬塊進來，你的第一個念頭是？',['先存起來','拿去還掉或補某個洞','花在自己身上','投資或拿去學東西']],
+ ['你做重大決定的時候，最後通常是聽誰的？',['自己的直覺','家人或伴侶','會問很多人再綜合','拖到時間替我決定']],
+ ['哪一句話最像你最近的狀態？',['我知道要做什麼，只是沒做','我不知道我要什麼','我很忙，但不確定在忙什麼','我其實還不錯，只是想更好']],
+ ['事情沒做完的時候，你心裡比較常出現的聲音是？',['我就是不夠自律','是事情太多不是我的問題','沒關係明天再說','我是不是根本不想做這件事']],
+ ['你最近一次真的為自己花錢，是花在什麼？',['吃的或喝的','課程或書','身體：運動、按摩、看醫生','想不起來了']],
+ ['被稱讚的時候，你的第一反應通常是？',['沒有啦','謝謝，我也覺得不錯','懷疑對方是不是客氣','很開心但不太會表現']],
+ ['如果一年後的你回頭看現在，她最想跟你說的是？',['不要再等了','你已經做得夠多了，休息一下','那個人／那件事可以放掉了','你比你以為的有本事']],
+ ['你現在最大的消耗來自哪裡？',['工作','家人','錢','我自己腦袋裡的聲音']],
+ ['遇到不確定的事，你比較傾向？',['先查資料，查到安心為止','先做一點點看看','問一個我信任的人','先放著，等它自己明朗']],
+ ['你上一次跟人說真話、說完有點害怕，是多久以前？',['這一週','這個月','很久了','我不太確定我有過']],
+ ['關於錢，你最不想被別人知道的是？',['我賺多少','我存多少','我欠多少','我其實不太會管錢']],
+ ['哪一件事做起來，你會忘記時間？',['跟人聊天','一個人動手做東西','學新的東西','我很久沒有這種感覺了']],
+ ['你答應自己的事和答應別人的事，哪個比較容易做到？',['答應別人的','答應自己的','都會做到','最近兩種都在掉']],
+ ['現在的工作（或主要在做的事），你還想做多久？',['越久越好','再一兩年','其實現在就想走','我沒有想過這個問題']],
+ ['壓力很大的那幾天，你的身體最先出狀況的是？',['睡不好','吃太多或吃不下','肩頸或頭痛','我不太會注意到身體']],
+ ['你比較怕哪一種後悔？',['做了之後發現是錯的','沒做，一直想如果當初','讓重要的人失望','我不太會後悔']],
+ ['有人做得比你好的時候，你心裡比較像？',['想去問她怎麼做到的','有點酸，但不會講','覺得自己更沒資格了','跟我沒關係，我做我的']],
+ ['這個月，你有沒有一段完全屬於自己的時間？',['有，而且是固定的','有，但是用搶的','幾乎沒有','有，但我不知道拿來幹嘛']],
+ ['你現在最想被誰看見？',['家人','同業或同事','一個特定的人','我自己']],
+ ['一件事要做到幾分，你才願意讓別人看？',['六分就可以丟出去','八分','要到九分以上','我通常做完也不給人看']],
+ ['如果可以請艾兒莎直接替你決定一件事，你會交出哪一件？',['要不要離開現在的工作','要不要開始那個計畫','一段關係要怎麼辦','我的錢要怎麼安排']],
+ ['最近一次哭，是因為？',['累','委屈','感動','我想不起來上次哭是什麼時候']],
+ ['你覺得自己現在比較缺的是？',['方向','勇氣','時間','一個會盯我的人']],
+ ['別人對你最大的誤解是什麼？',['以為我很強、不需要幫忙','以為我很好說話','以為我不在乎','以為我過得很好']],
+ ['這週的任務，你心裡真正的狀態是？',['做了，而且有感覺','做了，但只是交差','還沒做，但我想做','還沒做，而且有點抗拒']],
+ ['你最近一次拒絕別人，感覺是？',['鬆一口氣','內疚了很久','沒什麼感覺','我最近沒有拒絕過誰']],
+ ['三年後，哪一種生活最讓你心動？',['收入翻倍，但一樣忙','收入差不多，但時間是自己的','換一個城市或國家重新開始','跟現在差不多，但心裡比較定']],
+ ['當計畫被打亂，你通常？',['很快重排，繼續走','會煩躁一陣子才回來','乾脆整個放掉','怪自己沒有安排好']],
+ ['你比較相信哪一句？',['努力就會有結果','選擇比努力重要','運氣佔很大一部分','我現在什麼都不太確定']],
+ ['你有沒有一件事，連最親近的人都不知道你在想？',['有，跟錢有關','有，跟感情或家庭有關','有，跟我想變成什麼樣的人有關','沒有，我都會講']],
+ ['上島到現在，你最想要島上多一點什麼？',['艾兒莎直接跟我說話','跟其他島民認識','更明確的任務和進度','我也還在摸索']],
+ ['如果只能留下一個身分，你會留哪一個？',['工作上的我','某個人的家人或伴侶','正在學東西的我','還沒被命名的那個我']],
+ ['今天的你，幾分？',['八分以上，狀態不錯','六七分，還過得去','五分以下，有點撐','我不想打分數']]
+].map((x,i)=>({id:null,body:x[0],options:x[1],sort:i}));
+let whisperQs=WHISPER_BANK, whisperDone={}, whisperCur=null;
+async function initWhisper(){ whisperDone={}; if(LIVE&&me.id){ try{ const qs=await DB.whisperQuestions(); const off=new Set(qs.filter(q=>q.active===false).map(q=>q.body)); const extra=qs.filter(q=>q.active!==false&&Array.isArray(q.options)&&q.options.length>1&&!WHISPER_BANK.some(b=>b.body===q.body)).map(q=>({id:q.id,body:q.body,options:q.options,sort:q.sort})); whisperQs=extra.concat(WHISPER_BANK.filter(b=>!off.has(b.body))); const mine=await DB.whisperMine(); mine.forEach(m=>{ whisperDone[m.question]=m.created_at; }); }catch(e){} } nextWhisper(); }
+function nextWhisper(){ const left=whisperQs.filter(q=>!whisperDone[q.body]); let q=left[0]; if(!q){ q=whisperQs.slice().sort((a,b)=>String(whisperDone[a.body]).localeCompare(String(whisperDone[b.body])))[0]; } whisperCur=q; const qEl=document.getElementById('mentorQ'), cEl=document.getElementById('choices'); if(!q||!qEl||!cEl) return; qEl.textContent=q.body; cEl.style.display='grid'; cEl.innerHTML=''; q.options.forEach((o,i)=>{ const b=document.createElement('button'); b.type='button'; b.className='choice c'+((i%3)+1); b.innerHTML='<i></i><b></b><span class="chev">›</span>'; b.querySelector('b').textContent=o; b.addEventListener('click',()=>pick(o)); cEl.appendChild(b); }); const n=Object.keys(whisperDone).length; const meta=document.getElementById('whisperMeta'); if(meta) meta.textContent= n? '你已經悄悄告訴我 '+n+' 件事了。選一個最接近你的，沒有標準答案。' : '選一個最接近你的，沒有標準答案。你選完，我會再悄悄問你下一題。'; }
+async function pick(text){ const q=whisperCur; if(!q) return; const cEl=document.getElementById('choices'); [...cEl.querySelectorAll('button')].forEach(b=>b.disabled=true); if(LIVE&&me.id){ try{ await DB.whisperSave(q,text); DB.event('whisper_answer',{question:q.body,answer:text}); }catch(e){ toast('沒有記到：'+e.message); [...cEl.querySelectorAll('button')].forEach(b=>b.disabled=false); return; } } whisperDone[q.body]=new Date().toISOString(); toast('收到，悄悄記下了'); nextWhisper(); }
+async function loadMentorLog(){ if(!LIVE||!me.id) return; const log=document.getElementById('log'); if(!log) return; let rows=[]; try{ rows=await DB.myMentorThread('elsa'); }catch(e){ return; } log.innerHTML=''; rows.forEach(r=>{ addBub(r.body,'me'); if(r.state==='approved'&&r.approved_body){ const b=addBub(r.approved_body,'elsa'); b.style.fontFamily='"Noto Serif TC",serif'; b.style.fontSize='15px'; } else { const h=addBub('已送出。艾兒莎看過之後會回你，通常在一天內。','elsa'); h.style.opacity='.7'; h.style.fontSize='13px'; } }); }
+// 語音：點一下開始、再點一下送出；錄音檔存進後台，艾兒莎在審核頁可以直接聽
+let recState=null;
+async function toggleRec(){ const mic=document.getElementById('mic'), hint=document.getElementById('micHint');
+  if(recState){ recState.rec.stop(); return; }
+  if(!navigator.mediaDevices||!window.MediaRecorder){ toast('這個瀏覽器不支援錄音，請改用打字'); return; }
+  let stream; try{ stream=await navigator.mediaDevices.getUserMedia({audio:true}); }catch(e){ toast('需要允許使用麥克風才能用說的'); return; }
+  const mime=['audio/mp4','audio/webm;codecs=opus','audio/webm'].find(m=>MediaRecorder.isTypeSupported(m))||''; const rec=new MediaRecorder(stream, mime?{mimeType:mime}:undefined); const chunks=[]; const t0=Date.now();
+  rec.ondataavailable=e=>{ if(e.data&&e.data.size) chunks.push(e.data); };
+  rec.onstop=async()=>{ clearInterval(recState.tick); clearTimeout(recState.max); stream.getTracks().forEach(t=>t.stop()); recState=null; mic.classList.remove('rec'); mic.textContent='🎙'; const secs=Math.max(1,Math.round((Date.now()-t0)/1000)); const type=(rec.mimeType||mime||'audio/webm').split(';')[0]; const blob=new Blob(chunks,{type}); const ext=type.includes('mp4')?'m4a':'webm';
+    if(secs<2){ hint.textContent='太短了，再說一次'; return; } hint.textContent='語音送出中…';
+    if(LIVE&&me.id){ try{ await DB.uploadVoice(blob,ext,secs); DB.event('send_voice',{seconds:secs}); }catch(e){ hint.textContent='點一下開始用說的，再點一下送出（最長兩分鐘）'; toast('語音送不出去：'+e.message); return; } }
+    addBub('🎙 語音訊息（'+secs+' 秒）','me'); const h=addBub('已送出。艾兒莎聽過之後會回你，通常在一天內。','elsa'); h.style.opacity='.7'; h.style.fontSize='13px'; hint.textContent='點一下開始用說的，再點一下送出（最長兩分鐘）'; };
+  rec.start(); mic.classList.add('rec'); mic.textContent='■'; recState={rec, tick:setInterval(()=>{ hint.textContent='錄音中 '+Math.round((Date.now()-t0)/1000)+' 秒，說完再點一下送出'; },500), max:setTimeout(()=>{ if(recState) recState.rec.stop(); },120000)}; }
+
+document.getElementById('chatForm').addEventListener('submit',async e=>{e.preventDefault();const i=document.getElementById('msg');const t=i.value.trim();if(!t)return;i.value='';await ask(t);});
 const pending=[]; // 待艾兒莎審核的對話
 function notifyElsa(){ const b=document.getElementById('reviewBadge'); if(b){ b.textContent=pending.filter(x=>x.state==='pending').length; b.style.display=pending.some(x=>x.state==='pending')?'inline-block':'none'; } }
 async function draftReply(text){
@@ -1090,7 +1172,8 @@ function renderReview(){
       <div class="rowb"><button class="btn pill" onclick="approve(${it.id}, document.getElementById('d-${it.id}').value)">放行送出</button><button class="btn ghost pill" onclick="document.getElementById('d-${it.id}').value=''">清掉改自己寫</button></div>`}`;
     el.appendChild(d); });
 }
-document.getElementById('mic').addEventListener('click',()=>toast('語音在正式版開放'));
+document.getElementById('mic').addEventListener('click',toggleRec);
+initWhisper();
 </script>
 </body>
 </html>
