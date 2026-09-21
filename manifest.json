@@ -1,0 +1,2 @@
+{ "name": "跳級之島 GROW GROW ISLAND", "short_name": "跳級之島", "start_url": "/", "display": "standalone", "background_color": "#F3EEE3", "theme_color": "#1F2430",
+  "icons": [ { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml" } ] }
