@@ -456,12 +456,12 @@ function render(){
     grp.addEventListener('click',()=>openMilestone(m)); g.appendChild(grp);
   });
   const st=document.getElementById('steps'); st.innerHTML=''; me.task.steps.forEach((s,i)=>{const d=document.createElement('div');d.className='step';d.innerHTML=`<div class="n">${i+1}</div><div class="txt">${s}</div>`;st.appendChild(d);});
-  document.getElementById('todayProg').style.width= me.task.done?'100%':'0%';
-  document.getElementById('todaySub').textContent= me.task.done?'秘密任務 1/50・已交，等艾兒莎回':'秘密任務 1/50・還有 3 天';
-  document.getElementById('startBtn').textContent= me.task.done?'已交出去':'開始任務';
+  const tp=document.getElementById('todayProg'); if(tp) tp.style.width= me.task.done?'100%':'0%';
+  const ts=document.getElementById('todaySub'); if(ts) ts.textContent= me.task.done?'秘密任務 1/50・已交，等艾兒莎回':'秘密任務 1/50・還有 3 天';
+  const sbn=document.getElementById('startBtn'); if(sbn) sbn.textContent= me.task.done?'已交出去':'開始任務';
   document.getElementById('lv').textContent=me.lv; document.getElementById('xp').textContent=me.xp.toLocaleString(); document.getElementById('days').textContent=Math.max(1,Math.round((Date.now()-new Date('2026-09-05'))/86400000)); document.getElementById('rankMe').textContent=me.rank||12;
   const wk=document.getElementById('week'); if(wk) wk.innerHTML=me.week.map(x=>`<i class="${x?'on':''}"></i>`).join('')+'<span>M T W T F S S</span>';
-  renderRadial(); renderVillage(); renderValues(); renderHistory(); renderMentors(); renderRank(); renderMyHouse(); document.getElementById('lv2').textContent=me.lv; (document.getElementById('todaySub2')||{}).textContent=document.getElementById('todaySub').textContent;
+  renderRadial(); renderVillage(); renderValues(); renderHistory(); renderMentors(); renderRank(); renderMyHouse(); document.getElementById('lv2').textContent=me.lv; (document.getElementById('todaySub2')||{}).textContent=(document.getElementById('todaySub')||{}).textContent||'';
 }
 
 const districts=[
