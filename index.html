@@ -144,8 +144,9 @@ svg.art{width:100%;height:auto;display:block}
 .boardin{background:#F3EEE3;border:1px solid #1F2430;border-radius:6px;padding:12px}
 .vals{display:grid;gap:10px}
 .val{background:#FAF7F0;border:1px solid #1F2430;border-radius:6px;padding:10px 12px;position:relative}
-.val .rank{position:absolute;left:-6px;top:-8px;background:#F6D66B;border:1px solid #1F2430;border-radius:3px;font-family:"Cormorant Garamond",serif;font-weight:600;font-size:12px;padding:1px 6px;letter-spacing:.1em}
-.val .vn{font-family:"Noto Serif TC",serif;font-weight:700;font-size:17px;margin-left:8px}
+.val .vhead{display:flex;align-items:center;gap:10px}
+.val .vrank{flex:none;min-width:30px;text-align:center;background:#F6D66B;border:1px solid #1F2430;border-radius:3px;font-family:"Cormorant Garamond",serif;font-weight:600;font-size:13px;line-height:1;padding:5px 6px;letter-spacing:.1em}
+.val .vn{font-family:"Noto Serif TC",serif;font-weight:700;font-size:17px}
 .val .line{display:flex;justify-content:space-between;font-size:12px;color:var(--ink-2);margin-top:6px;gap:8px}
 .val .line b{font-weight:500;color:var(--ink)}
 .val .meter{height:8px;border:1px solid #1F2430;border-radius:4px;background:#fff;margin-top:6px;overflow:hidden}
@@ -163,6 +164,7 @@ svg.art{width:100%;height:auto;display:block}
 
 .scene-back{position:absolute;left:10px;top:10px;z-index:2}
 .zoomctl{position:absolute;right:10px;top:10px;z-index:2;display:grid;gap:6px}
+.vchip{position:absolute;left:10px;top:56px;z-index:2;display:none;align-items:center;gap:6px;max-width:calc(100% - 80px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:inherit;font-size:12px;color:#1F2430;background:rgba(250,247,240,.94);border:1px solid #1F2430;border-radius:999px;padding:6px 12px;cursor:pointer}
 .zoomctl button{width:36px;height:36px;border-radius:50%;border:1px solid #1F2430;background:#FAF7F0;font-size:20px;line-height:1;cursor:pointer;font-family:inherit}
 .hist{margin:16px 20px 0}
 .hist .h{font-family:"Noto Serif TC",serif;font-weight:700;font-size:18px;margin-bottom:8px}
@@ -224,6 +226,8 @@ svg.art{width:100%;height:auto;display:block}
 
 .bcast{margin:10px 20px 0;display:flex;align-items:center;gap:10px;background:#1F2430;color:#F3EEE3;border-radius:14px;padding:10px 14px;cursor:pointer}
 .bcast .bc-ic{font-size:18px}.bcast .bc-t{flex:1;font-size:13px;line-height:1.5}.bcast .bc-t b{display:block;font-family:"Noto Serif TC",serif;font-size:14px;color:#F6D66B}.bcast .chev{color:#F3EEE3}
+.nbar{margin:8px 20px 0;display:none;align-items:center;gap:10px;background:#FAF7F0;color:#1F2430;border:1.5px solid #B5382C;border-radius:14px;padding:9px 14px;cursor:pointer;font-size:13px}
+.nbar b{font-family:"Noto Serif TC",serif;font-size:14px;color:#B5382C}.nbar .nt{flex:1}
 .dpad{position:absolute;left:10px;bottom:12px;z-index:2;display:grid;justify-items:center;gap:4px;user-select:none}
 .dpad button{width:44px;height:44px;border-radius:12px;border:1px solid #1F2430;background:rgba(250,247,240,.92);font-size:16px;cursor:pointer;touch-action:none}
 .dpad .mid{display:flex;gap:44px}
@@ -239,11 +243,11 @@ svg.art{width:100%;height:auto;display:block}
     <svg viewBox="0 0 200 90" width="200" height="90" aria-hidden="true"><circle cx="150" cy="30" r="18" fill="#B5382C"/><path d="M0 80 L40 40 L70 66 L100 30 L135 62 L160 50 L200 80 Z" fill="#1F2430"/><path d="M0 84 Q100 74 200 84 L200 90 L0 90Z" fill="#B9C6C9"/></svg>
     <div class="logoin"><div class="zh">跳級之島</div><div class="en"><span>G</span><span>R</span><span>O</span><span>W</span><span class="sp"></span><span>G</span><span>R</span><span>O</span><span>W</span><span class="sp"></span><span>I</span><span>S</span><span>L</span><span>A</span><span>N</span><span>D</span></div></div>
     <form id="gateForm">
-      <input id="code" inputmode="numeric" maxlength="5" placeholder="•••••" autocomplete="off">
-      <input id="gateEmail" type="email" placeholder="你報名時的 email" style="display:none;letter-spacing:0;font-size:16px">
+      <input id="gateEmail" type="email" placeholder="你報名時的 email" autocomplete="username" style="letter-spacing:0;font-size:16px;margin-bottom:0">
+      <input id="code" type="password" inputmode="numeric" maxlength="5" placeholder="手機號碼後五碼" autocomplete="current-password" style="letter-spacing:2px;font-size:16px;margin-top:10px">
       <button class="btn" type="submit" style="width:100%" id="gateBtn">上島</button>
     </form>
-    <p id="gateMsg">初代島民請輸入報名時的轉帳五碼（示範版：任何五碼都可以；輸入 00000 進建島人模式）</p>
+    <p id="gateMsg">請輸入你報名時的 email；密碼是你報名時填的手機號碼後五碼。</p>
   </div>
 </div>
 
@@ -255,9 +259,11 @@ svg.art{width:100%;height:auto;display:block}
   </div>
   <div class="village">
     <div class="bcast" id="bcast" onclick="openBroadcasts()"><span class="bc-ic">📣</span><div class="bc-t"><b>島上廣播</b><span id="bcastText">建島人還沒廣播。</span></div><span class="chev">›</span></div>
-    <div class="sky" id="sceneHead"><div class="t" id="sceneTitle">八個村子</div><div class="k" id="sceneHint">拖曳看整座島，點一個村子進去，可以認識裡面的島民：）村子越是繁榮，代表這一區的村民們很認真的跟上任務喔！</div></div>
+    <div class="nbar" id="notifBar" onclick="openNotifs()"><span>🔔</span><div class="nt"><b id="notifCount"></b></div><span>›</span></div>
+    <div class="sky" id="sceneHead"><div class="t" id="sceneTitle">跳級之島</div><div class="k" id="sceneHint">拖曳看整座島，點一個村子進去，可以認識裡面的島民：）村子越是繁榮，代表這一區的村民們很認真的跟上任務喔！</div></div>
     <div class="scenewrap"><canvas id="scene" width="860" height="1180" aria-label="跳級之島世界"></canvas>
       <button class="btn ghost pill scene-back" id="sceneBack" style="display:none">‹ 回到島</button>
+      <button class="vchip" id="vchip" type="button"></button>
       <div class="zoomctl"><button id="zin" aria-label="放大">＋</button><button id="zout" aria-label="縮小">－</button></div>
       <div class="dpad" id="dpad"><button data-d="up">▲</button><div class="mid"><button data-d="left">◀</button><button data-d="right">▶</button></div><button data-d="down">▼</button></div>
       <button class="btn pill" id="knock" style="position:absolute;left:50%;transform:translateX(-50%);bottom:14px;z-index:3;display:none">敲門</button>
@@ -439,9 +445,13 @@ const me={
 const mentorPersona=`你是艾兒莎（Elsa），台灣的人生 mentor，也是《跳級之島》的建島人。語氣：完整、有溫度、直接但不說教的句子；不要條列、不要分析腔；繁體中文；一次回三到五句。原則：把對方自己說過的話當材料反問；任務永遠小到不好意思拒絕；收尾是「我要更了解你」不是「我要解決你」。這位島民的背景：首談時艾兒莎的觀察是「不是懶，是把產能都給了別人」；目前任務是觀察一個會呼吸的生物。`;
 
 document.getElementById('gateForm').addEventListener('submit',async e=>{e.preventDefault();
-  if(LIVE){ const em=document.getElementById('gateEmail').value.trim().toLowerCase(); if(!em){toast('先填 email');return;} try{ await DB.signIn(em); document.getElementById('gateMsg').textContent='連結寄到 '+em+' 了，打開信點一下就進來。'; document.getElementById('gateBtn').textContent='再寄一次'; }catch(err){ document.getElementById('gateMsg').textContent='寄不出去：'+err.message; } return; }
+  if(LIVE){ const em=document.getElementById('gateEmail').value.trim().toLowerCase(); const pw=document.getElementById('code').value.trim(); const msg=document.getElementById('gateMsg'); const btn=document.getElementById('gateBtn');
+    if(!em){toast('先填 email');return;} if(!/^\d{5}$/.test(pw)){toast('密碼是手機號碼後五碼，五個數字');return;}
+    btn.disabled=true; btn.textContent='上島中…';
+    try{ await DB.signIn(em,pw); }catch(err){ msg.textContent= /invalid/i.test(err.message)? 'email 或後五碼對不上。請用報名時的 email 和報名時填的手機號碼後五碼；還是進不來就直接回信給艾兒莎。' : '現在連不上：'+err.message; }
+    btn.disabled=false; btn.textContent='上島'; return; }
   const c=document.getElementById('code').value.trim(); if(c==='00000'){ me.admin=true; document.getElementById('reviewTab').style.display='grid'; } document.getElementById('gate').style.display='none';render(); renderReview&&renderReview();});
-window.addEventListener('load',async()=>{ if(!LIVE) return; document.getElementById('code').style.display='none'; document.getElementById('gateEmail').style.display='block'; document.getElementById('gateMsg').textContent='輸入你報名時的 email，我們寄一個連結給你，點一下就進來，不用密碼。'; document.getElementById('gateBtn').textContent='寄連結給我';
+window.addEventListener('load',async()=>{ if(!LIVE) return;
   const ses=await DB.session(); if(ses){ const ok=await bootLive(); if(ok){ document.getElementById('gate').style.display='none'; render(); } }
   sb.auth.onAuthStateChange(async(ev,session)=>{ if(ev==='SIGNED_IN'&&session&&!me.id){ const ok=await bootLive(); if(ok){ document.getElementById('gate').style.display='none'; render(); } } });
 });
@@ -503,7 +513,8 @@ const VILLAGES=[
   {k:'F',name:'家園村',en:'HOME',x:2000,y:1250,prog:.3,desc:'關係與家庭是主線。任務偏開口、界線、選一個人說真話。'},
   {k:'G',name:'修復村',en:'REPAIR',x:900,y:1800,prog:.4,desc:'財務重整、負債、詐騙後重來。任務偏把數字寫出來、還款與停損線。'},
   {k:'H',name:'起點村',en:'ORIGIN',x:1700,y:1850,prog:.2,desc:'25 歲以下或剛起步。任務偏拆小、問三個真人。'},
-  {k:'M',name:'Mentor 村',en:'MENTORS',x:1300,y:790,prog:1,desc:'艾兒莎和她的朋友們住這裡。任務做到 LV.5 之後，可以敲門。',mentor:true}
+  {k:'M',name:'Mentor 村',en:'MENTORS',x:2720,y:1000,prog:1,desc:'艾兒莎和她的朋友們住這裡。任務做到 LV.5 之後，可以敲門。',mentor:true},
+  {k:'W',name:'流浪村',en:'WANDERERS',x:320,y:2120,prog:0,desc:'報了名、但還沒來第一次一對一的人先待在這裡。這裡沒有房子，來談過一次，就會搬進自己的村子、蓋自己的家。',wander:true}
 ];
 const villagers=[
   {name:'艾兒莎',v:'M',tags:['建島人','人生 Mentor','別處咖啡館'],sign:'我要更了解你，不是要解決你。',color:'#B5382C',murmur:['斷了不用重來','答案你早就寫好了'],mentor:'elsa'},
@@ -513,6 +524,8 @@ const villagers=[
   {name:'阿雯',v:'M',tags:['待補'],sign:'',color:'#8A8F99',murmur:['……'],mentor:'阿雯'},
   {name:'鮪魚',v:'M',tags:['待補'],sign:'',color:'#B9C6C9',murmur:['……'],mentor:'鮪魚'},
   {name:'艾兒莎孩子的爸',v:'M',tags:['待補'],sign:'',color:'#E9A3B3',murmur:['……'],mentor:'艾兒莎孩子的爸'},
+  {name:'還沒出發的島民',v:'W',tags:['已報名','還沒來一對一'],sign:'',color:'#8A8F99',murmur:['再等我一下','我還在路上']},
+  {name:'還沒出發的島民',v:'W',tags:['已報名','還沒來一對一'],sign:'',color:'#8A8F99',murmur:['哪天約好呢','……']},
   {name:'我',v:'E',tags:['副業','護理師','黃金'],sign:'',me:true,color:'#B5382C',lvl:1,murmur:['今天先寫一行就好','入金規則貼在錢包了']},
   {name:'貓舍的她',v:'G',tags:['貓舍','債務協商中','危機引擎'],sign:'今天把報價寄出去了，不完美的報價勝過完美的沉默。',color:'#5C7A6E',murmur:['報價寄了','客人回了嗎']},
   {name:'橫濱的行銷人',v:'C',tags:['橫濱','FP 考試','整排 6 分'],sign:'FP3 級報名了，11 月考。',color:'#3A4150',murmur:['留在原地的年費是 500 萬日幣','今天不當老媽子']},
@@ -532,7 +545,7 @@ const villagers=[
   let W=cv.width,H=cv.height; const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
   function fit(){ const r=cv.getBoundingClientRect(); if(r.width<50) return; const wide=window.innerWidth>=768; const targetH= wide? Math.min(window.innerHeight*0.72, 900) : r.width*1180/860; cv.style.height=targetH+'px'; const nw=Math.round(r.width*1.4), nh=Math.round(targetH*1.4); if(nw!==cv.width||nh!==cv.height){ cv.width=nw; cv.height=nh; W=nw; H=nh; } }
   fit(); window.addEventListener('resize',fit);
-  const WORLD={w:2600,h:2400};
+  const WORLD={w:3100,h:2450};
   let mode='world'; let cur=null; // current village
   const cam={x:WORLD.w/2-W/2,y:WORLD.h/2-H/2,z:.55,tx:0,ty:0,tz:.55}; cam.tx=cam.x; cam.ty=cam.y;
   let t=0; const clouds=Array.from({length:8},(_,i)=>({x:Math.random()*WORLD.w,y:120+Math.random()*300,s:.6+Math.random()*.9}));
@@ -550,6 +563,10 @@ const villagers=[
   const VW={w:1800,h:1500}; // 村子世界
   let gate={x:850,y:1380};
   function buildVillage(v){
+    if(v.wander){ houses=[]; VW.h=1500; gate={x:VW.w/2,y:VW.h-200}; const fx=VW.w/2, fy=760; const list=villagePeople(v);
+      people=list.map((p,i)=>{ const a=i/Math.max(1,list.length)*Math.PI*2, d=150+(i%3)*70; const sx=p.me?gate.x:fx+Math.cos(a)*d*1.5, sy=p.me?gate.y-90:fy+Math.sin(a)*d; return {p,h:null,roam:{x:fx,y:fy},x:sx,y:sy,tx:sx,ty:sy,t:Math.random()*100,speed:.25+Math.random()*.25,state:'idle',wait:Math.random()*3,say:'',sayT:0,next:2+Math.random()*6}; });
+      if(!people.some(pn=>pn.p.me)){ const mv=myV(); people.push({p:mv,h:null,x:gate.x,y:gate.y-90,tx:gate.x,ty:gate.y-90,t:0,speed:.4,state:'idle',wait:99,say:'',sayT:0,next:99,visitor:true}); }
+      return; }
     const ps=villagePeople(v).filter(claimed); const mine=villagePeople(v).find(p=>p.me);
     const list=ps.slice(); if(mine&&!claimed(mine)) list.push(mine); // 我沒認領也給一塊空地
     houses=[]; const cols=3, lotW=480, lotH=470, x0=300, y0=460;
@@ -588,16 +605,19 @@ const villagers=[
     if(p.online){ ctx.fillStyle='#4CAF50'; ctx.beginPath(); ctx.arc(x+12,y-16+bob,4,0,Math.PI*2); ctx.fill(); }
     if(pn.say){ const a=Math.min(1,pn.sayT); ctx.globalAlpha=a; ctx.font='500 13px "Noto Serif TC",serif'; const w=ctx.measureText(pn.say).width+18; ctx.fillStyle='#FAF7F0'; ctx.strokeStyle='#1F2430'; ctx.lineWidth=1.5; ctx.beginPath(); ctx.roundRect(x-w/2,y-52+bob,w,24,8); ctx.fill(); ctx.stroke(); ctx.fillStyle='#1F2430'; ctx.fillText(pn.say,x,y-35+bob); ctx.globalAlpha=1; }
   }
+  function campfire(x,y,k){ ctx.lineWidth=3*k; ctx.strokeStyle='#1F2430'; ctx.beginPath(); ctx.moveTo(x-22*k,y+10*k); ctx.lineTo(x+22*k,y-2*k); ctx.moveTo(x-22*k,y-2*k); ctx.lineTo(x+22*k,y+10*k); ctx.stroke();
+    const f=reduce?0:Math.sin(t*9)*3*k; ctx.fillStyle='#B5382C'; ctx.beginPath(); ctx.moveTo(x-13*k,y+2*k); ctx.quadraticCurveTo(x-10*k,y-22*k,x+f*.4,y-38*k-f); ctx.quadraticCurveTo(x+12*k,y-20*k,x+13*k,y+2*k); ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.fillStyle='#F6D66B'; ctx.beginPath(); ctx.moveTo(x-6*k,y+1*k); ctx.quadraticCurveTo(x-3*k,y-12*k,x,y-20*k-f*.5); ctx.quadraticCurveTo(x+5*k,y-10*k,x+6*k,y+1*k); ctx.closePath(); ctx.fill(); }
   function islandShape(cx,cy,r){ ctx.beginPath(); ctx.moveTo(cx-r,cy); ctx.quadraticCurveTo(cx-r*.9,cy-r*.9,cx,cy-r*.8); ctx.quadraticCurveTo(cx+r*1.1,cy-r*.8,cx+r,cy+r*.1); ctx.quadraticCurveTo(cx+r*.8,cy+r,cx,cy+r*.9); ctx.quadraticCurveTo(cx-r*.9,cy+r*.9,cx-r,cy); ctx.closePath(); }
   function drawVillageIcon(v){
-    const nC=villagePeople(v).filter(claimed).length; const r=170+v.prog*60+Math.min(80,nC*6); ctx.fillStyle='#5C7A6E'; ctx.strokeStyle='#1F2430'; ctx.lineWidth=3; islandShape(v.x,v.y,r); ctx.fill(); ctx.stroke();
+    const nC=v.wander?0:villagePeople(v).filter(claimed).length; const r=v.wander?190:170+v.prog*60+Math.min(80,nC*6); ctx.fillStyle=v.wander?'#A9A595':'#5C7A6E'; ctx.strokeStyle='#1F2430'; ctx.lineWidth=3; islandShape(v.x,v.y,r); ctx.fill(); ctx.stroke();
     ctx.save(); islandShape(v.x,v.y,r); ctx.clip(); ctx.strokeStyle='rgba(31,36,48,.14)'; ctx.lineWidth=1; for(let k=v.x-r*2;k<v.x+r*2;k+=14){ ctx.beginPath(); ctx.moveTo(k,v.y-r); ctx.lineTo(k+r*2,v.y+r); ctx.stroke(); } ctx.restore();
-    const n=Math.max(1,Math.min(9,nC)); const cols=3, gw=62, gh=64; const x0=v.x-((Math.min(n,cols)-1)*gw)/2-20, y0=v.y-Math.floor((n-1)/cols)*gh/2-10; for(let i=0;i<n;i++){ const hx=x0+(i%cols)*gw, hy=y0+Math.floor(i/cols)*gh; house({id:i,x:hx,y:hy,w:40,c:['#B5382C','#5C7A6E','#3A4150','#C6A44E','#8A8F99','#B9C6C9'][i%6]},false); }
+    if(v.wander){ campfire(v.x,v.y+10,1); } const n=v.wander?0:Math.max(1,Math.min(9,nC)); const cols=3, gw=62, gh=64; const x0=v.x-((Math.min(n,cols)-1)*gw)/2-20, y0=v.y-Math.floor((n-1)/cols)*gh/2-10; for(let i=0;i<n;i++){ const hx=x0+(i%cols)*gw, hy=y0+Math.floor(i/cols)*gh; house({id:i,x:hx,y:hy,w:40,c:['#B5382C','#5C7A6E','#3A4150','#C6A44E','#8A8F99','#B9C6C9'][i%6]},false); }
     if(v.prog>.5){ ctx.fillStyle='rgba(246,214,107,'+(.15+.1*Math.sin(t*2))+')'; ctx.beginPath(); ctx.arc(v.x,v.y,r*.9,0,Math.PI*2); ctx.fill(); }
     if(v.mentor){ ctx.strokeStyle='#C6A44E'; ctx.lineWidth=4; ctx.setLineDash([6,8]); ctx.beginPath(); ctx.arc(v.x,v.y,r+18,0,Math.PI*2); ctx.stroke(); ctx.setLineDash([]); }
     // 村名招牌：像一顆按鈕，離島面有距離，不壓到房子
     const pw=230, ph=54, py=v.y-r-96; ctx.fillStyle='rgba(31,36,48,.18)'; ctx.beginPath(); ctx.roundRect(v.x-pw/2+4,py+5,pw,ph,14); ctx.fill();
-    ctx.fillStyle=v.mentor?'#C6A44E':'#1F2430'; ctx.strokeStyle='#F3EEE3'; ctx.lineWidth=3; ctx.beginPath(); ctx.roundRect(v.x-pw/2,py,pw,ph,14); ctx.fill(); ctx.stroke();
+    ctx.fillStyle=v.mentor?'#C6A44E':(v.wander?'#8A8F99':'#1F2430'); ctx.strokeStyle='#F3EEE3'; ctx.lineWidth=3; ctx.beginPath(); ctx.roundRect(v.x-pw/2,py,pw,ph,14); ctx.fill(); ctx.stroke();
     ctx.fillStyle='#1F2430'; ctx.fillRect(v.x-4,py+ph,8,r-ph+96-r+6); ctx.fillRect(v.x-4,py+ph,8,36);
     ctx.fillStyle=v.mentor?'#1F2430':'#F3EEE3'; ctx.textAlign='center'; ctx.font='700 26px "Noto Serif TC",serif'; ctx.fillText(v.name,v.x-(v.count!=null?22:0),py+36);
     if(v.count!=null){ ctx.fillStyle='#B5382C'; ctx.beginPath(); ctx.roundRect(v.x+pw/2-70,py+14,58,26,13); ctx.fill(); ctx.fillStyle='#fff'; ctx.font='700 13px "Noto Sans TC",sans-serif'; ctx.fillText(v.count+' 人',v.x+pw/2-41,py+32); }
@@ -610,7 +630,7 @@ const villagers=[
     ctx.fillStyle='rgba(58,65,80,.85)'; ctx.beginPath(); ctx.moveTo(-200,340); for(let x=-200;x<WORLD.w+400;x+=260){ ctx.lineTo(x+130,200+((x/260)%3)*40); ctx.lineTo(x+260,340); } ctx.lineTo(WORLD.w+400,400); ctx.lineTo(-200,400); ctx.fill();
     ctx.strokeStyle='rgba(138,143,153,.6)'; ctx.lineWidth=2; for(let r=0;r<26;r++){ const y=420+r*80; ctx.beginPath(); for(let x=-100;x<WORLD.w+100;x+=10){ ctx.lineTo(x, y+Math.sin((x/40)+t*1.4+r)*4); } ctx.stroke(); }
     clouds.forEach(c=>{ c.x+= reduce?0:1.2*c.s*dtGlobal*60; if(c.x>WORLD.w+150)c.x=-150; ctx.fillStyle='rgba(250,247,240,.9)'; ctx.beginPath(); ctx.arc(c.x,c.y,26*c.s,0,Math.PI*2); ctx.arc(c.x+30*c.s,c.y-10*c.s,30*c.s,0,Math.PI*2); ctx.arc(c.x+62*c.s,c.y,24*c.s,0,Math.PI*2); ctx.fill(); });
-    ctx.setLineDash([10,14]); ctx.strokeStyle='rgba(31,36,48,.35)'; ctx.lineWidth=2; for(let i=0;i<VILLAGES.length-1;i++){ const a=VILLAGES[i],b=VILLAGES[i+1]; ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.quadraticCurveTo((a.x+b.x)/2,(a.y+b.y)/2-120,b.x,b.y); ctx.stroke(); } ctx.setLineDash([]);
+    ctx.setLineDash([10,14]); ctx.strokeStyle='rgba(31,36,48,.35)'; ctx.lineWidth=2; const RV=VILLAGES.filter(v=>!v.mentor&&!v.wander); for(let i=0;i<RV.length-1;i++){ const a=RV[i],b=RV[i+1]; ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.quadraticCurveTo((a.x+b.x)/2,(a.y+b.y)/2-120,b.x,b.y); ctx.stroke(); } ctx.setLineDash([]);
     VILLAGES.forEach(drawVillageIcon);
     // 我在本島上也可以走：走到村名招牌就進村
     if(!worldMe){ worldMe={p:myV(),x:WORLD.w/2,y:WORLD.h/2+120,t:0,state:'idle'}; }
@@ -656,13 +676,14 @@ const villagers=[
     ctx.fillStyle='rgba(58,65,80,.85)'; ctx.beginPath(); ctx.moveTo(-200,320); for(let x=-200;x<VW.w+400;x+=300){ ctx.lineTo(x+150,180+((x/300)%3)*40); ctx.lineTo(x+300,320); } ctx.lineTo(VW.w+400,380); ctx.lineTo(-200,380); ctx.fill();
     ctx.strokeStyle='rgba(138,143,153,.7)'; ctx.lineWidth=2; for(let r=0;r<Math.ceil(VW.h/80);r++){ const y=400+r*80; ctx.beginPath(); for(let x=-40;x<VW.w+40;x+=10){ ctx.lineTo(x, y+Math.sin((x/34)+t*1.6+r)*4); } ctx.stroke(); }
     // 島：一個大圓角矩形
-    ctx.fillStyle='#5C7A6E'; ctx.strokeStyle='#1F2430'; ctx.lineWidth=3; ctx.beginPath(); ctx.roundRect(80,300,VW.w-160,VW.h-380,160); ctx.fill(); ctx.stroke();
+    ctx.fillStyle=v.wander?'#A9A595':'#5C7A6E'; ctx.strokeStyle='#1F2430'; ctx.lineWidth=3; ctx.beginPath(); ctx.roundRect(80,300,VW.w-160,VW.h-380,160); ctx.fill(); ctx.stroke();
     ctx.save(); ctx.beginPath(); ctx.roundRect(80,300,VW.w-160,VW.h-380,160); ctx.clip(); ctx.strokeStyle='rgba(31,36,48,.14)'; ctx.lineWidth=1; for(let k=-2000;k<VW.w+2000;k+=14){ ctx.beginPath(); ctx.moveTo(k,0); ctx.lineTo(k+2000,2000); ctx.stroke(); } ctx.restore();
     // 村招牌
     ctx.fillStyle='#F3EEE3'; ctx.strokeStyle='#1F2430'; ctx.lineWidth=2.5; ctx.fillRect(VW.w/2-130,236,260,50); ctx.strokeRect(VW.w/2-130,236,260,50); ctx.fillStyle='#1F2430'; ctx.textAlign='center'; ctx.font='700 26px "Noto Serif TC",serif'; ctx.fillText(v.name,VW.w/2,270);
     // 村口門牌（走到就離開）
     ctx.fillStyle='#F3EEE3'; ctx.fillRect(gate.x-70,gate.y-28,140,40); ctx.strokeRect(gate.x-70,gate.y-28,140,40); ctx.fillRect(gate.x-3,gate.y+12,6,36); ctx.fillStyle='#1F2430'; ctx.font='700 16px "Noto Serif TC",serif'; ctx.fillText('⟵ 回本島',gate.x,gate.y);
     ctx.setLineDash([6,8]); ctx.strokeStyle='#F3EEE3'; ctx.lineWidth=14; ctx.beginPath(); ctx.moveTo(gate.x,gate.y-40); ctx.lineTo(gate.x,420); ctx.stroke(); ctx.setLineDash([]);
+    if(v.wander){ campfire(VW.w/2,760,2.2); ctx.fillStyle='#F3EEE3'; ctx.strokeStyle='#1F2430'; ctx.lineWidth=2; ctx.beginPath(); ctx.roundRect(VW.w/2-290,872,580,42,21); ctx.fill(); ctx.stroke(); ctx.fillStyle='#1F2430'; ctx.textAlign='center'; ctx.font='600 20px "Noto Serif TC",serif'; ctx.fillText('這裡還沒有房子。來談過第一次，就會搬進自己的村子。',VW.w/2,900); }
     // 房子＋庭院
     houses.slice().sort((a,b)=>a.y-b.y).forEach(h=>{ if(h.empty){ emptyLot(h); return; } yard(h); house(h,false); ctx.fillStyle='#1F2430'; ctx.font='700 13px "Noto Serif TC",serif'; ctx.textAlign='center'; ctx.fillText(h.owner.name,h.x+h.w/2,h.y-h.w*.56); });
     // 人：我用方向鍵，其他人閒晃
@@ -678,7 +699,7 @@ const villagers=[
         if(o){ const dx=o.x-pn.x, dy=o.y-pn.y; const d=Math.hypot(dx,dy); if(d>1){ const step=Math.min(d,6*60*dtGlobal); pn.x+=dx/d*step; pn.y+=dy/d*step; pn.state='walk'; } else pn.state='idle'; pn.p.online=true; }
         else { pn.state='idle'; pn.p.online=false; }
       } else if(!reduce){
-        if(pn.state==='idle'){ pn.wait-=dtGlobal; if(pn.wait<=0&&pn.h){ pn.state='walk'; const h=pn.h; pn.tx=h.x-60+Math.random()*(h.w+120); pn.ty=h.y+h.w*.6+Math.random()*70; } }
+        if(pn.state==='idle'){ pn.wait-=dtGlobal; if(pn.wait<=0&&pn.h){ pn.state='walk'; const h=pn.h; pn.tx=h.x-60+Math.random()*(h.w+120); pn.ty=h.y+h.w*.6+Math.random()*70; } else if(pn.wait<=0&&pn.roam){ pn.state='walk'; const a=Math.random()*Math.PI*2, d=120+Math.random()*260; pn.tx=pn.roam.x+Math.cos(a)*d*1.5; pn.ty=pn.roam.y+Math.sin(a)*d; } }
         else { const dx=pn.tx-pn.x, dy=pn.ty-pn.y; const d=Math.hypot(dx,dy); if(d<2){ pn.state='idle'; pn.wait=1.5+Math.random()*3; } else { pn.x+=dx/d*pn.speed*60*dtGlobal; pn.y+=dy/d*pn.speed*60*dtGlobal; } }
         pn.next-=dtGlobal; if(pn.next<=0){ pn.say=pn.p.murmur[Math.floor(Math.random()*pn.p.murmur.length)]; pn.sayT=0; pn.next=6+Math.random()*8; }
         if(pn.say){ pn.sayT+=dtGlobal; if(pn.sayT>3.5){ pn.say=''; } }
@@ -708,8 +729,8 @@ const villagers=[
     if(mode==='world'){ const v=VILLAGES.find(v=>Math.hypot(w.x-v.x,w.y-v.y)<230); if(v){ enterVillage(v); } }
     else { const pn=people.find(pn=>Math.hypot(w.x-pn.x,w.y-pn.y)<34); if(pn){ openIslander(pn.p); return; } const h=houses.find(h=>w.x>h.x-20&&w.x<h.x+h.w+20&&w.y>h.y-h.w*.5&&w.y<h.y+h.w*.8); if(h){ const pn=people.find(p=>p.h===h); if(pn) openIslander(pn.p); } }
   });
-  function enterVillage(v){ cur=v; buildVillage(v); mode='village'; const meP=people.find(pn=>pn.p.me); cam.tz=.9; cam.z=.9; cam.tx=meP.x-W/2/cam.tz; cam.ty=meP.y-H/2/cam.tz; cam.x=cam.tx; cam.y=cam.ty; document.getElementById('dpad').style.display='grid'; document.getElementById('walkhint').style.display='block'; document.getElementById('walkhint').textContent='方向鍵走路；走到村口「回本島」就離開；靠近別人的家會出現敲門'; joinPresence(v); if(LIVE) DB.event('enter_village',{village:v.k}); document.getElementById('sceneBack').style.display='inline-block'; document.getElementById('sceneTitle').textContent=v.name; document.getElementById('sceneHint').textContent=v.desc+' 點島民可以對話或看她的資料。'; openVillagePanel(v); }
-  function leaveVillage(){ mode='world'; leavePresence(); if(LIVE&&cur) DB.event('leave_village',{village:cur.k}); document.getElementById('dpad').style.display='grid'; document.getElementById('walkhint').style.display='block'; document.getElementById('walkhint').textContent='用方向鍵走到村名招牌就進村'; cam.tx=cur.x-W/2/.55; cam.ty=cur.y-H/2/.55; cam.tz=.55; cam.x=cam.tx; cam.y=cam.ty; cam.z=.55; clampWorld(); cur=null; document.getElementById('sceneBack').style.display='none'; document.getElementById('sceneTitle').textContent='八個村子'; document.getElementById('sceneHint').textContent='拖曳看整座島，點一個村子進去，可以認識裡面的島民：）村子越是繁榮，代表這一區的村民們很認真的跟上任務喔！'; }
+  function enterVillage(v){ cur=v; buildVillage(v); mode='village'; const meP=people.find(pn=>pn.p.me); cam.tz=.9; cam.z=.9; cam.tx=meP.x-W/2/cam.tz; cam.ty=meP.y-H/2/cam.tz; cam.x=cam.tx; cam.y=cam.ty; document.getElementById('dpad').style.display='grid'; document.getElementById('walkhint').style.display='block'; document.getElementById('walkhint').textContent='方向鍵走路；走到村口「回本島」就離開；靠近別人的家會出現敲門'; joinPresence(v); if(LIVE) DB.event('enter_village',{village:v.k}); document.getElementById('sceneBack').style.display='inline-block'; document.getElementById('sceneTitle').textContent=v.name; document.getElementById('sceneHint').textContent=v.desc+' 點島民可以對話或看她的資料。'; showVillageChip(v); if(LIVE&&v.wander&&!v._loaded){ DB.villagers(v.k).then(rows=>{ v._loaded=true; rows.forEach(r=>{ if(r.id===me.id||villagers.some(x=>x.id===r.id)) return; villagers.push({name:r.nickname||'還沒出發的島民',v:r.village_key,tags:['已報名','還沒來一對一'],sign:r.signboard||'',about:r.about||'',color:'#8A8F99',murmur:['……'],id:r.id,decor:[]}); }); if(cur===v){ buildVillage(v); showVillageChip(v); } }); } }
+  function leaveVillage(){ mode='world'; hideVillageChip(); leavePresence(); if(LIVE&&cur) DB.event('leave_village',{village:cur.k}); document.getElementById('dpad').style.display='grid'; document.getElementById('walkhint').style.display='block'; document.getElementById('walkhint').textContent='用方向鍵走到村名招牌就進村'; cam.tx=cur.x-W/2/.55; cam.ty=cur.y-H/2/.55; cam.tz=.55; cam.x=cam.tx; cam.y=cam.ty; cam.z=.55; clampWorld(); cur=null; document.getElementById('sceneBack').style.display='none'; document.getElementById('sceneTitle').textContent='跳級之島'; document.getElementById('sceneHint').textContent='拖曳看整座島，點一個村子進去，可以認識裡面的島民：）村子越是繁榮，代表這一區的村民們很認真的跟上任務喔！'; }
   document.getElementById('sceneBack').addEventListener('click',leaveVillage);
   // zoom: buttons, wheel, pinch
   function zoomBy(f,cx,cy){ const nz=Math.max(.3,Math.min(2.5,cam.tz*f)); const r=cv.getBoundingClientRect(); const sx=(cx??r.width/2)*W/r.width, sy=(cy??r.height/2)*H/r.height; const wx=sx/cam.z+cam.x, wy=sy/cam.z+cam.y; cam.tz=nz; cam.tx=wx-sx/nz; cam.ty=wy-sy/nz; clampWorld(); }
@@ -748,12 +769,15 @@ function openDecorChoice(taskCode){ const opts=TASK_DECOR[taskCode]||[]; const m
   document.getElementById('sheet').classList.add('open'); }
 async function saveDecor(taskCode){ const picked=[...document.querySelectorAll('#decorList input:checked')].map(i=>i.value); const opts=TASK_DECOR[taskCode]||[]; if(picked.filter(k=>opts.includes(k)).length>2){ toast('這個任務最多選兩個'); return; } const mv=myV(); mv.decor=(mv.decor||[]).filter(k=>!opts.includes(k)).concat(picked); if(LIVE){ try{ await DB.saveProfile({decor:mv.decor}); DB.event('choose_decor',{task:taskCode,picked}); }catch(e){ toast('存不進去：'+e.message); return; } } closeSheet(); toast('院子長出東西了'); renderVillage(); renderDecorCard(); }
 function renderDecorCard(){ const el=document.getElementById('decorCard'); if(!el) return; const mv=myV(); const unlocked=me.task.done; el.innerHTML= unlocked? `<div class="flag">🌱</div><div style="flex:1"><div class="lbl">解鎖任務 1/50，可以升級房子的繁榮</div><div class="sub">任選一到兩個擺設放進院子${(mv.decor||[]).length?'（已選 '+(mv.decor||[]).map(k=>DECOR[k]?.n).join('、')+'）':''}</div></div><div class="chev">›</div>` : `<div class="flag">🔒</div><div style="flex:1"><div class="lbl">交出任務 1/50，就能升級房子</div><div class="sub">交了之後可以挑擺設，院子會開始長東西</div></div><div class="chev">›</div>`; el.onclick=()=>{ if(unlocked) openDecorChoice('T1'); else go('task'); }; }
+function panelPeople(v){ if(v.wander) return villagers.filter(p=>p.v===v.k); return villagers.filter(p=>p.v===v.k&&(p.mentor||p.sign||p.about||(p.name&&p.name!=='我'&&p.name!=='示範島民'))); }
+function showVillageChip(v){ const c=document.getElementById('vchip'); if(!c) return; c.textContent= v.wander? '還沒出發的島民 '+(v.count??panelPeople(v).filter(p=>!p.me).length)+' 位・看名單 ›' : '繁華度 '+Math.round(v.prog*100)+'%・島民 '+panelPeople(v).length+' 位・看名單 ›'; c.style.display='inline-flex'; c.onclick=()=>{ if(LIVE) DB.event('open_village_list',{village:v.k}); openVillagePanel(v); }; }
+function hideVillageChip(){ const c=document.getElementById('vchip'); if(c) c.style.display='none'; }
 function openVillagePanel(v){
-  const ps=villagers.filter(p=>p.v===v.k&&(p.mentor||p.sign||p.about||(p.name&&p.name!=='我'&&p.name!=='示範島民'))); const p=document.getElementById('panel');
+  const ps=panelPeople(v); const p=document.getElementById('panel');
   p.innerHTML=`<div class="en">${v.en} VILLAGE</div><h4 class="serif">${v.name}</h4><p>${v.desc}</p>
-   <div class="line" style="font-size:12px;color:var(--stone)">繁華度 ${Math.round(v.prog*100)}%（這一區任務完成率）・島民 ${ps.length} 位</div>
+   <div class="line" style="font-size:12px;color:var(--stone)">${v.wander?`還沒有房子・${v.count??ps.length} 位還沒出發`:`繁華度 ${Math.round(v.prog*100)}%（這一區任務完成率）・島民 ${ps.length} 位`}</div>
    <div style="margin-top:8px">${ps.map(x=>`<div class="islander"><span class="dot" style="background:${x.color}"></span><div><b>${x.name}</b><div>${x.tags.map(tg=>`<span class="tagchip">${tg}</span>`).join('')}</div></div></div>`).join('')||'<div class="sub">還沒有人搬進來。</div>'}</div>
-   <div class="rowb"><button class="btn ghost pill" onclick="closeSheet()">進村看看</button></div>`;
+   <div class="rowb"><button class="btn ghost pill" onclick="closeSheet()">關閉</button></div>`;
   document.getElementById('sheet').classList.add('open');
 }
 function openIslander(x){
@@ -773,7 +797,7 @@ const threads=[{who:'艾兒莎',last:WELCOME,elsa:true,welcome:true},{who:'我�
 const groupMsgs=[{who:'深夜寫字的人',text:'第二篇，199 字，醜的也發。'},{who:'高原上的 PM',text:'@深夜寫字的人 我看了，第二段那句很好。'},{who:'艾兒莎',text:'這村這週交任務的比例 70%，是全島最高。'}];
 async function openGroup(){ if(LIVE) DB.event('open_village_chat',{}); const p=document.getElementById('panel'); if(LIVE){ const rows=await DB.villageChat(me.vkey); groupMsgs.length=0; rows.forEach(r=>groupMsgs.push({who:r.people?.nickname||r.people?.name||'島民',text:r.body})); } p.innerHTML=`<div class="en">VILLAGE CHAT</div><h4 class="serif">${(VILLAGES.find(v=>v.k===(me.vkey||myV().v))||{}).name||'我的村'}・全村對話</h4><div class="sub" style="color:var(--stone);font-size:12px">同村的人都看得到。打 @ 可以點名。</div><div class="log" id="glog" style="margin:10px 0 0">${groupMsgs.map(m=>`<div class="bub ${m.who==='艾兒莎'?'elsa':''}"><b style="font-size:12px;color:var(--red)">${m.who}</b><br>${m.text.replace(/@([^\s]+)/g,'<span style="color:var(--red);font-weight:700">@$1</span>')}</div>`).join('')}</div><form class="chatform" style="margin:10px 0 0" onsubmit="return sendGroup(event)"><input id="gmsg" placeholder="寫給全村，@ 可以點名"><button class="btn pill" type="submit">送出</button></form><div class="rowb"><button class="btn ghost pill" onclick="closeSheet()">關閉</button></div>`; document.getElementById('sheet').classList.add('open'); }
 async function sendGroup(e){ e.preventDefault(); const i=document.getElementById('gmsg'); const t=i.value.trim(); if(!t) return false; if(LIVE){ try{ await DB.sendVillage(me.vkey,t); DB.event('send_village',{}); }catch(err){ toast('送不出去：'+err.message); return false; } } groupMsgs.push({who:myV().name==='我'?'我':myV().name,text:t}); threads.find(x=>x.group).last=(myV().name==='我'?'我':myV().name)+'：'+t; openGroup(); renderThreads(); return false; }
-function openWelcome(){ const p=document.getElementById('panel'); p.innerHTML=`<div class="en">FROM ELSA</div><h4 class="serif">歡迎登島</h4><p class="serif" style="font-size:16px;line-height:1.8">${WELCOME}</p><div class="rowb"><button class="btn pill" onclick="closeSheet();go('mentor')">回她一句</button><button class="btn ghost pill" onclick="closeSheet()">關閉</button></div>`; document.getElementById('sheet').classList.add('open'); }
+function openWelcome(){ const p=document.getElementById('panel'); p.innerHTML=`<div class="en">FROM ELSA</div><h4 class="serif">歡迎登島</h4><p class="serif" style="font-size:16px;line-height:1.8">${WELCOME}</p><div class="rowb"><button class="btn pill" onclick="closeSheet();go('mentor')">跟艾兒莎說話</button><button class="btn ghost pill" onclick="closeSheet()">關閉</button></div>`; document.getElementById('sheet').classList.add('open'); }
 function startThread(name){ if(!threads.find(t=>t.who===name)) threads.unshift({who:name,last:'（你們還沒講過話）'}); closeSheet(); go('msgs'); renderThreads(); toast('開了一個跟 '+name+' 的對話'); }
 function renderThreads(){ const el=document.getElementById('threads'); if(!el) return; el.innerHTML=''; threads.forEach(t=>{ const d=document.createElement('div'); d.className='thread'; const locked=t.lock&&me.lv<5; d.style.opacity=locked?'.6':'1'; d.style.cursor=locked?'default':'pointer';
     d.innerHTML=`<div class="ic" style="width:40px;height:40px;border-radius:50%;background:${t.elsa?'#B5382C':t.group?'#5C7A6E':'#DCE0DD'};display:grid;place-items:center;color:#fff">${t.elsa?'✦':t.group?'⌂':t.lock?'🔒':'✉'}</div><div style="flex:1"><div class="who">${t.who}</div><div class="last">${t.last}</div></div>${locked?'<span style="font-size:11px;background:#1F2430;color:#fff;border-radius:999px;padding:2px 8px">🔑 LV.5</span>':''}`;
@@ -841,7 +865,7 @@ me.values=[
 ];
 function renderValues(){
   const v=document.getElementById('vals'); v.innerHTML='';
-  me.values.forEach(x=>{ const el=document.createElement('div'); el.className='val'; el.innerHTML=`<div class="rank">${x.rank}</div><div class="vn">${x.name}</div><div class="line"><span>目前狀態</span><b>${x.now}</b></div><div class="line"><span>實踐與執行的對齊度</span><b>${x.align}%</b></div><div class="meter"><i style="width:${x.align}%"></i></div><div class="why">依據：${x.evidence}</div>`; v.appendChild(el); });
+  me.values.forEach(x=>{ const el=document.createElement('div'); el.className='val'; el.innerHTML=`<div class="vhead"><div class="vrank">${x.rank}</div><div class="vn">${x.name}</div></div><div class="line"><span>目前狀態</span><b>${x.now}</b></div><div class="line"><span>實踐與執行的對齊度</span><b>${x.align}%</b></div><div class="meter"><i style="width:${x.align}%"></i></div><div class="why">依據：${x.evidence}</div>`; v.appendChild(el); });
 
 }
 
@@ -849,9 +873,9 @@ function renderValues(){
 
 // ====== 資料層（LIVE 時才用）======
 const DB={
-  async signIn(email){ const {error}=await sb.auth.signInWithOtp({email, options:{emailRedirectTo: location.origin+location.pathname}}); if(error) throw error; },
+  async signIn(email,code){ const {error}=await sb.auth.signInWithPassword({email, password:'grow-'+code}); if(error) throw error; },
   async session(){ const {data}=await sb.auth.getSession(); return data.session; },
-  async loadMe(){ const ses=await this.session(); if(!ses) return null; const {data,error}=await sb.from('people').select('*').eq('email',ses.user.email.toLowerCase()).maybeSingle(); if(error) throw error; return data; },
+  async loadMe(){ const ses=await this.session(); if(!ses) return null; const {data,error}=await sb.rpc('my_person'); if(error) throw error; return Array.isArray(data)?(data[0]||null):data; },
   async saveProfile(fields){ const {error}=await sb.from('people').update(fields).eq('id',me.id); if(error) throw error; },
   async villagers(vkey){ const {data}=await sb.from('people').select('id,nickname,name,house_color,signboard,about,village_key,role,decor').eq('village_key',vkey); return data||[]; },
   async villages(){ const {data}=await sb.from('villages').select('*'); return data||[]; },
@@ -864,15 +888,17 @@ const DB={
   async sendVillage(vkey,text){ const {error}=await sb.from('messages').insert({thread_type:'village',thread_key:'village:'+vkey,from_person:me.id,body:text,state:'visible'}); if(error) throw error; },
   async sendMentor(to,text){ const {error}=await sb.from('messages').insert({thread_type:'mentor',thread_key:'mentor:'+to,from_person:me.id,body:text,state:'pending'}); if(error) throw error; },
   async myMentorThread(to){ const {data}=await sb.from('messages').select('*').eq('thread_key','mentor:'+to).eq('from_person',me.id).order('created_at'); return data||[]; },
-  async pending(){ const {data}=await sb.from('messages').select('*, people:from_person(nickname,name,email)').eq('thread_type','mentor').order('created_at',{ascending:false}).limit(100); return data||[]; },
+  async pending(){ const {data}=await sb.from('messages').select('*, people:from_person(nickname,name)').eq('thread_type','mentor').order('created_at',{ascending:false}).limit(100); return data||[]; },
   async approve(id,body){ const {error}=await sb.from('messages').update({state:'approved',approved_body:body,approved_at:new Date().toISOString(),approved_by:me.id}).eq('id',id); if(error) throw error; },
   async broadcast(){ const {data}=await sb.from('broadcasts').select('*').eq('active',true).order('created_at',{ascending:false}).limit(10); return data||[]; },
   async postBroadcast(text){ const {error}=await sb.from('broadcasts').insert({body:text}); if(error) throw error; },
+  async notifs(){ const {data}=await sb.from('notifications').select('id,kind,title,body,created_at,read_at').eq('person_id',me.id).order('created_at',{ascending:false}).limit(40); return data||[]; },
+  async markNotifsRead(){ const {error}=await sb.from('notifications').update({read_at:new Date().toISOString()}).eq('person_id',me.id).is('read_at',null); if(error) throw error; },
   async event(kind,value){ try{ await sb.from('events').insert({person_id:me.id,kind,value}); }catch(e){} }
 };
 async function bootLive(){
   const row=await DB.loadMe();
-  if(!row){ document.getElementById('gateMsg').textContent='這個 email 不在島民名單裡。請用你報名時的 email。'; return false; }
+  if(!row){ document.getElementById('gateMsg').textContent='這個 email 不在島民名單裡。請用你報名時的 email。'; try{ await sb.auth.signOut(); }catch(e){} return false; }
   me.id=row.id; me.role=row.role; me.admin=row.role==='admin'; me.vkey=row.village_key; const mv0=villagers.find(v=>v.me); mv0.id=row.id;
   const mv=villagers.find(v=>v.me); mv.name=row.nickname||row.name; mv.color=row.house_color||mv.color; mv.sign=row.signboard||''; mv.about=row.about||''; mv.v=row.village_key||mv.v;
   // 村子人數與繁華度
@@ -880,7 +906,7 @@ async function bootLive(){
   vs.forEach(v=>{ const t=VILLAGES.find(x=>x.k===v.key); if(t){ t.prog=Number(v.prosperity||0); t.desc=v.description||t.desc; t.greeting=v.greeting; t.count=counts[v.key]||0; } });
   // 同村島民換成真人
   const same=await DB.villagers(me.vkey); const keep=villagers.filter(v=>v.me||v.mentor); villagers.length=0; keep.forEach(v=>villagers.push(v));
-  same.filter(r=>r.id!==me.id).forEach(r=>villagers.push({name:r.nickname||r.name,v:r.village_key,tags:[],sign:r.signboard||'',about:r.about||'',color:r.house_color||'#5C7A6E',murmur:[r.signboard||'……'],id:r.id,decor:Array.isArray(r.decor)?r.decor:[]}));
+  same.filter(r=>r.id!==me.id).forEach(r=>villagers.push({name:(r.village_key==='W'&&!r.nickname)?'還沒出發的島民':(r.nickname||r.name),v:r.village_key,tags:[],sign:r.signboard||'',about:r.about||'',color:r.house_color||'#5C7A6E',murmur:[r.signboard||'……'],id:r.id,decor:Array.isArray(r.decor)?r.decor:[]}));
   loadDMs();
   // 任務
   const as=await DB.assignments(); me.live_assignments=as;
@@ -888,11 +914,16 @@ async function bootLive(){
   // 小語
   const ns=await DB.notes(); if(ns.length){ me.note=ns[0].body; }
   // 廣播
-  await refreshBroadcast();
+  await refreshBroadcast(); refreshNotifs();
   if(me.admin){ document.getElementById('reviewTab').style.display='grid'; renderReviewLive(); }
   DB.event('login',{});
   return true;
 }
+async function refreshNotifs(){ if(!LIVE||!me.id) return; try{ me.notifs=await DB.notifs(); }catch(e){ me.notifs=[]; } const n=(me.notifs||[]).filter(x=>!x.read_at).length; const bar=document.getElementById('notifBar'); if(bar){ bar.style.display=n?'flex':'none'; document.getElementById('notifCount').textContent='你有 '+n+' 件還沒看的事'; } }
+async function openNotifs(){ const p=document.getElementById('panel'); const list=(me.notifs||[]).map(x=>`<div class="hrec" style="cursor:default${x.read_at?';opacity:.55':''}"><div class="when">${(x.created_at||'').slice(0,16).replace('T',' ')}</div><div style="font-size:15px;margin-top:2px"><b>${esc(x.title)}</b></div>${x.body?`<div style="font-size:13px;color:var(--ink-2);margin-top:2px">${esc(x.body)}</div>`:''}</div>`).join('')||'<div class="sub">目前沒有新的事。</div>';
+  p.innerHTML=`<div class="en">FOR YOU</div><h4 class="serif">島上等你的事</h4><div style="margin-top:8px">${list}</div><div class="rowb"><button class="btn ghost pill" onclick="closeSheet()">關閉</button></div>`; document.getElementById('sheet').classList.add('open');
+  if(LIVE){ DB.event('view_notifications',{}); try{ await DB.markNotifsRead(); }catch(e){} (me.notifs||[]).forEach(x=>x.read_at=x.read_at||new Date().toISOString()); const bar=document.getElementById('notifBar'); if(bar) bar.style.display='none'; } }
+document.addEventListener('visibilitychange',()=>{ if(!document.hidden) refreshNotifs(); });
 async function refreshBroadcast(){ if(!LIVE) return; const bs=await DB.broadcast(); me.broadcasts=bs; const el=document.getElementById('bcastText'); if(el) el.textContent= bs.length? bs[0].body : '建島人還沒廣播。'; }
 function openBroadcasts(){ if(LIVE) DB.event('view_broadcast',{}); const p=document.getElementById('panel'); const list=(me.broadcasts||[]).map(b=>`<div class="hrec" style="cursor:default"><div class="when">${(b.created_at||'').slice(0,16).replace('T',' ')}</div><div style="font-size:15px;margin-top:2px">${esc(b.body)}</div></div>`).join('')||'<div class="sub">還沒有廣播。</div>';
   p.innerHTML=`<div class="en">ISLAND BROADCAST</div><h4 class="serif">島上廣播</h4><div style="margin-top:8px">${list}</div>${me.admin?`<div class="lbl serif" style="font-size:14px;margin-top:10px">發一則廣播</div><textarea id="bcNew" placeholder="例如：9/28 教師節派對在浪漫屋，18:30 開門。"></textarea><div class="rowb"><button class="btn pill" onclick="postBroadcast()">廣播出去</button><button class="btn ghost pill" onclick="closeSheet()">關閉</button></div>`:`<div class="rowb"><button class="btn ghost pill" onclick="closeSheet()">關閉</button></div>`}`;
@@ -925,7 +956,7 @@ const MENTORS=[
 ];
 function renderMentors(){ const g=document.getElementById('mgrid'); if(!g) return; g.innerHTML=''; MENTORS.forEach(m=>{ const d=document.createElement('div'); d.className='mcard'+(me.lv<5?' locked':''); d.innerHTML=`<div class="av">${m.n.slice(0,1)}</div><div class="mn">${m.n}</div><div class="mr">${m.r}</div>`; if(me.lv>=5) d.addEventListener('click',()=>openMentor(m)); else d.style.cursor='default'; g.appendChild(d); }); }
 function openMentor(m){ if(LIVE) DB.event('view_mentor',{who:m.n}); const p=document.getElementById('panel'); const locked=me.lv<5; p.innerHTML=`<div class="en">MENTOR</div><h4 class="serif">${m.n}</h4><div class="sub" style="color:var(--stone);font-size:12px">${m.r}</div><p style="margin-top:10px">${m.bio}</p><div class="lbl serif" style="font-size:15px;margin-top:8px">可以問她的方向</div><ul style="margin:6px 0 0 18px;padding:0;font-size:14px">${m.ask.map(a=>`<li>${a}</li>`).join('')}</ul>${locked?'<p class="sub" style="color:var(--red);font-size:13px;margin-top:10px">任務做到 LV.5 之後就可以跟她對話。現在 LV.'+me.lv+'。</p>':''}<div class="rowb">${locked?'':`<button class="btn pill" onclick="startThread('${m.n}')">開始對話</button>`}<button class="btn ghost pill" onclick="closeSheet()">關閉</button></div>`; document.getElementById('sheet').classList.add('open'); }
-function renderRank(){ const el=document.getElementById('rank'); if(!el) return; el.innerHTML=''; VILLAGES.filter(v=>!v.mentor).slice().sort((a,b)=>b.prog-a.prog).forEach((v,i)=>{ const d=document.createElement('div'); d.className='rrow'; d.innerHTML=`<div class="pos">${i+1}</div><div class="rb"><div class="rn">${v.name} <span class="en">${v.en}</span></div><div class="meter"><i style="width:${Math.round(v.prog*100)}%"></i></div></div><div class="pct">${Math.round(v.prog*100)}%</div>`; d.addEventListener('click',()=>{ go('village'); window.__enterVillage(v); }); el.appendChild(d); }); }
+function renderRank(){ const el=document.getElementById('rank'); if(!el) return; el.innerHTML=''; VILLAGES.filter(v=>!v.mentor&&!v.wander).slice().sort((a,b)=>b.prog-a.prog).forEach((v,i)=>{ const d=document.createElement('div'); d.className='rrow'; d.innerHTML=`<div class="pos">${i+1}</div><div class="rb"><div class="rn">${v.name} <span class="en">${v.en}</span></div><div class="meter"><i style="width:${Math.round(v.prog*100)}%"></i></div></div><div class="pct">${Math.round(v.prog*100)}%</div>`; d.addEventListener('click',()=>{ go('village'); window.__enterVillage(v); }); el.appendChild(d); }); }
 // 地圖併入成長
 (function mergeMap(){ const art=document.getElementById('mapArt'); const growth=document.getElementById('v-growth'); if(art&&growth){ const head=growth.querySelector('.subhead'); const wrap=document.createElement('div'); wrap.style.margin='0 0 6px'; wrap.appendChild(art); head.insertAdjacentElement('afterend',wrap); const mapSec=document.getElementById('v-map'); if(mapSec) mapSec.remove(); } })();
 
