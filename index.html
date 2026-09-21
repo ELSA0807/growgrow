@@ -124,7 +124,7 @@ svg.art{width:100%;height:auto;display:block}
 @media (prefers-reduced-motion: reduce){.smoke,.busy{animation:none}}
 .mine{margin:22px 20px 0;background:var(--paper);border:1px solid var(--red);border-radius:14px;padding:14px 16px}
 .mine .lbl{font-family:"Noto Serif TC",serif;font-weight:700;font-size:16px}
-.mine textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px;font-family:inherit;font-size:14px;background:#fff;min-height:56px;margin-top:8px}
+.mine textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px;font-family:inherit;font-size:16px;background:#fff;min-height:56px;margin-top:8px}
 .districts{margin:12px 20px 0;display:grid;gap:10px}
 .district{display:flex;align-items:center;gap:12px;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:12px 14px;cursor:pointer}
 .district .ic{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-size:22px;flex:none}
@@ -213,23 +213,28 @@ svg.art{width:100%;height:auto;display:block}
 .gate .zh{display:inline-block;letter-spacing:.08em;margin-right:-.08em}
 .gate .box .logoin{display:inline-block;text-align:left}
 
-.swatches{display:flex;gap:8px;margin-top:6px}
+.swatches{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
 .sw{width:26px;height:26px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px #1F2430;cursor:pointer}
 .sw.on{box-shadow:0 0 0 3px #1F2430}
 
-.mine-grid{display:grid;grid-template-columns:150px 1fr;gap:14px;align-items:start}
+.mine-grid{display:grid;grid-template-columns:150px minmax(0,1fr);gap:14px;align-items:start}
+.mine,.mine *{box-sizing:border-box}
+.mine-form{min-width:0}
 .preview{background:#F3EEE3;border:1px solid var(--line);border-radius:12px;padding:6px;min-height:150px}
 .preview svg{width:100%;height:auto;display:block}
 .mine .k{font-size:12px;color:var(--stone)}
-.mine input{width:100%;border:1px solid var(--line);border-radius:999px;padding:8px 12px;font-family:inherit;font-size:14px;background:#fff;margin-top:6px}
-@media (max-width:380px){.mine-grid{grid-template-columns:120px 1fr}}
+.mine input{width:100%;max-width:100%;border:1px solid var(--line);border-radius:999px;padding:9px 14px;font-family:inherit;font-size:16px;background:#fff;margin-top:6px}
+@media (max-width:480px){.mine-grid{grid-template-columns:112px minmax(0,1fr);gap:12px}.preview{min-height:0}}
 
 .bcast{margin:10px 20px 0;display:flex;align-items:center;gap:10px;background:#1F2430;color:#F3EEE3;border-radius:14px;padding:10px 14px;cursor:pointer}
 .bcast .bc-ic{font-size:18px}.bcast .bc-t{flex:1;font-size:13px;line-height:1.5}.bcast .bc-t b{display:block;font-family:"Noto Serif TC",serif;font-size:14px;color:#F6D66B}.bcast .chev{color:#F3EEE3}
 .nbar{margin:8px 20px 0;display:none;align-items:center;gap:10px;background:#FAF7F0;color:#1F2430;border:1.5px solid #B5382C;border-radius:14px;padding:9px 14px;cursor:pointer;font-size:13px}
 .nbar b{font-family:"Noto Serif TC",serif;font-size:14px;color:#B5382C}.nbar .nt{flex:1}
-.dpad{position:absolute;left:10px;bottom:12px;z-index:2;display:grid;justify-items:center;gap:4px;user-select:none}
-.dpad button{width:44px;height:44px;border-radius:12px;border:1px solid #1F2430;background:rgba(250,247,240,.92);font-size:16px;cursor:pointer;touch-action:none}
+.dpad{position:absolute;left:10px;bottom:12px;z-index:2;display:grid;justify-items:center;gap:4px}
+.scenewrap,.scenewrap *{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
+.dpad button{width:46px;height:46px;border-radius:12px;border:1px solid #1F2430;background:rgba(250,247,240,.92);cursor:pointer;touch-action:none;display:grid;place-items:center;padding:0}
+.dpad button svg{width:16px;height:16px;fill:#1F2430;pointer-events:none}
+.dpad button:active{background:#F6D66B}
 .dpad .mid{display:flex;gap:44px}
 .walkhint{position:absolute;right:10px;bottom:16px;z-index:2;font-size:11px;background:rgba(31,36,48,.8);color:#F3EEE3;border-radius:999px;padding:4px 10px}
 .pulse{animation:pulse 1.8s ease-in-out infinite;transform-origin:center;transform-box:fill-box}
@@ -265,7 +270,7 @@ svg.art{width:100%;height:auto;display:block}
       <button class="btn ghost pill scene-back" id="sceneBack" style="display:none">‹ 回到島</button>
       <button class="vchip" id="vchip" type="button"></button>
       <div class="zoomctl"><button id="zin" aria-label="放大">＋</button><button id="zout" aria-label="縮小">－</button></div>
-      <div class="dpad" id="dpad"><button data-d="up">▲</button><div class="mid"><button data-d="left">◀</button><button data-d="right">▶</button></div><button data-d="down">▼</button></div>
+      <div class="dpad" id="dpad"><button data-d="up" aria-label="上"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2 L15 14 H1 Z"/></svg></button><div class="mid"><button data-d="left" aria-label="左"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8 L14 1 V15 Z"/></svg></button><button data-d="right" aria-label="右"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8 L2 1 V15 Z"/></svg></button></div><button data-d="down" aria-label="下"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 14 L15 2 H1 Z"/></svg></button></div>
       <button class="btn pill" id="knock" style="position:absolute;left:50%;transform:translateX(-50%);bottom:14px;z-index:3;display:none">敲門</button>
       <div class="walkhint" id="walkhint">用方向鍵走到村名招牌就進村</div>
     </div>
@@ -721,6 +726,7 @@ const villagers=[
     });
   }
   const keys={up:false,down:false,left:false,right:false};
+  document.querySelector('.scenewrap').addEventListener('contextmenu',e=>e.preventDefault()); document.querySelector('.scenewrap').addEventListener('selectstart',e=>e.preventDefault());
   document.querySelectorAll('#dpad button').forEach(b=>{ const d=b.dataset.d; const on=e=>{e.preventDefault();keys[d]=true;}; const off=e=>{e.preventDefault();keys[d]=false;}; b.addEventListener('pointerdown',on); b.addEventListener('pointerup',off); b.addEventListener('pointercancel',off); b.addEventListener('pointerleave',off); });
   window.addEventListener('keydown',e=>{ if(mode!=='village'&&mode!=='world') return; const m={ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',w:'up',s:'down',a:'left',d:'right'}[e.key]; if(m){ keys[m]=true; e.preventDefault(); } });
   window.addEventListener('keyup',e=>{ const m={ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',w:'up',s:'down',a:'left',d:'right'}[e.key]; if(m) keys[m]=false; });
@@ -837,7 +843,7 @@ function openDistrict(d){ const v=VILLAGES.find(v=>v.k===d.k); if(v){ go('villag
   document.getElementById('sheet').classList.add('open');
 }
 function myV(){ return villagers.find(v=>v.me); }
-const COLORS=['#B5382C','#5C7A6E','#3A4150','#C6A44E','#8A8F99','#B9C6C9','#E9A3B3'];
+const COLORS=['#B5382C','#D98E73','#E9A3B3','#C6A44E','#F0D98A','#A8C3A0','#5C7A6E','#7FA6B8','#B9C6C9','#9B86B5','#3A4150','#8A8F99','#6B4E3D','#F3EEE3'];
 function esc(t){return (t||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
 function wrapLines(t,n,max){ const out=[]; let s=(t||''); while(s.length&&out.length<max){ out.push(s.slice(0,n)); s=s.slice(n);} if(s.length&&out.length===max){ out[max-1]=out[max-1].slice(0,n-1)+'…'; } return out; }
 function renderSwatches(){ const el=document.getElementById('swatches'); if(!el) return; const mv=myV(); el.innerHTML=''; COLORS.forEach(c=>{ const d=document.createElement('div'); d.className='sw'+(mv.color===c?' on':''); d.style.background=c; d.addEventListener('click',async()=>{ mv.color=c; renderSwatches(); renderMyHouse(); if(LIVE){ await DB.saveProfile({house_color:c}); DB.event('set_color',{c}); } }); el.appendChild(d); }); }
